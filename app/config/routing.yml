@@ -1,0 +1,3 @@
+jaccob:
+    resource: "@JaccobBundle/Resources/config/routing.yml"
+    prefix:   /
