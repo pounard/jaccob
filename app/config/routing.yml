@@ -1,3 +1,7 @@
+jaccob_account:
+    resource: "@JaccobAccountBundle/Resources/config/routing.yml"
+    prefix:   /
+
 jaccob:
     resource: "@JaccobBundle/Resources/config/routing.yml"
     prefix:   /

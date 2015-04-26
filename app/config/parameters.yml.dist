@@ -1,13 +1,29 @@
 # This file is a "template" of what your parameters.yml file should look like
 parameters:
-    database_driver:   pdo_mysql
-    database_host:     127.0.0.1
-    database_port:     ~
-    database_name:     symfony
-    database_user:     root
-    database_password: ~
-    # You should uncomment this if you want use pdo_sqlite
-    # database_path: "%kernel.root_dir%/data.db3"
+
+    # I am sorry we have to keep doctrine for now
+    database_driver: pdo_pgsql
+    database_host: 127.0.0.1
+    database_port: 5432
+    database_name: my_db
+    database_user: my_user
+    database_password: my_password
+
+    # POMM configuration, the real database connection
+    # First database is the account service
+    account_db_host: "%database_host%"
+    account_db_port: "%database_port%"
+    account_db_name: "%database_name%"
+    account_db_user: "%database_user%"
+    account_db_password: "%database_password%"
+    # Then describe your business databases if necessary, per default a single
+    # one is defined and inherits from the account service database, suitable
+    # for most applications
+    business1_db_host: "%account_db_host%"
+    business1_db_port: "%account_db_port%"
+    business1_db_name: "%account_db_name%"
+    business1_db_user: "%account_db_user%"
+    business1_db_password: "%account_db_password%"
 
     mailer_transport:  smtp
     mailer_host:       127.0.0.1

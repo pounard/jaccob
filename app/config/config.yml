@@ -64,6 +64,18 @@ doctrine:
         auto_generate_proxy_classes: "%kernel.debug%"
         auto_mapping: true
 
+# POMM Configuration
+pomm:
+    configuration:
+        account:
+            dsn: "pgsql://%account_db_user%:%account_db_password%@%account_db_host%:%account_db_port%/%account_db_name%"
+            pomm:default: true
+        business1:
+            dsn: "pgsql://%business1_db_user%:%business1_db_password%@%business1_db_host%:%business1_db_port%/%business1_db_name%"
+            pomm:default: true
+    logger:
+        service: '@logger'
+
 # Swiftmailer Configuration
 swiftmailer:
     transport: "%mailer_transport%"
