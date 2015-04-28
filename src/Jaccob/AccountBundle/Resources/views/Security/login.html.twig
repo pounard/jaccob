@@ -1,0 +1,16 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+  <div id="login">
+    <h3>Please login</h3>
+      <form action="{{ path('jaccob_account_login_check') }}" method="post">
+          <label for="username">Username:</label>
+          <input type="text" id="username" name="_username"/>
+          <label for="password">Password:</label>
+          <input type="password" id="password" name="_password" />
+          <!-- <input type="hidden" name="_target_path" value="account" /> -->
+          <input type="submit" value="Mets la moi en allemand!" />
+      </form>
+      <a href="{{ path('jaccob_account_request_password') }}">Forgotten password&nbsp;?</a>
+  </div>
+{% endblock %}

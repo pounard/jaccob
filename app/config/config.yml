@@ -70,9 +70,11 @@ pomm:
         account:
             dsn: "pgsql://%account_db_user%:%account_db_password%@%account_db_host%:%account_db_port%/%account_db_name%"
             pomm:default: true
+            class:session_builder: '\PommProject\ModelManager\SessionBuilder'
         business1:
             dsn: "pgsql://%business1_db_user%:%business1_db_password%@%business1_db_host%:%business1_db_port%/%business1_db_name%"
             pomm:default: true
+            class:session_builder: '\PommProject\ModelManager\SessionBuilder'
     logger:
         service: '@logger'
 

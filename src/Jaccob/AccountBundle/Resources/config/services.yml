@@ -1,4 +1,4 @@
 services:
-#    jaccob_account.example:
-#        class: Jaccob\AccountBundle\Example
-#        arguments: [@service_id, "plain_value", %parameter%]
+    jaccob_account_provider:
+        class: 'Jaccob\AccountBundle\Security\User\JaccobAccountProvider'
+        arguments: ["@=service('pomm').getSession('account')"]

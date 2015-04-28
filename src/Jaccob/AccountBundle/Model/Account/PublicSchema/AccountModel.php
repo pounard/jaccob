@@ -1,19 +1,41 @@
 <?php
 
-namespace Wps\Security;
+namespace Jaccob\AccountBundle\Model\Account\PublicSchema;
 
-use Account\Security\Crypt;
+use PommProject\Foundation\Where;
+use PommProject\ModelManager\Model\Model;
+use PommProject\ModelManager\Model\ModelTrait\WriteQueries;
+use PommProject\ModelManager\Model\Projection;
 
-use Smvc\Core\AbstractApplicationAware;
-use Smvc\Error\NotFoundError;
-use Smvc\Security\Account;
-use Smvc\Security\AccountProviderInterface;
-use Smvc\Security\Auth\AuthProviderInterface;
-use Smvc\Error\LogicError;
+use Jaccob\AccountBundle\Model\Account\PublicSchema\AutoStructure\Account as AccountStructure;
+use Jaccob\AccountBundle\Model\Account\PublicSchema\Account;
 
-class DatabaseAccountProvider extends AbstractApplicationAware implements
-    AccountProviderInterface
+/**
+ * AccountModel
+ *
+ * Model class for table account.
+ *
+ * @see Model
+ */
+class AccountModel extends Model
 {
+    use WriteQueries;
+
+    /**
+     * __construct()
+     *
+     * Model constructor
+     *
+     * @access public
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->structure = new AccountStructure;
+        $this->flexible_entity_class = "\Jaccob\AccountBundle\Model\Account\PublicSchema\Account";
+    }
+
+    /*
     public function getAccount($username)
     {
         $db = $this->getApplication()->getDatabase();
@@ -76,27 +98,28 @@ class DatabaseAccountProvider extends AbstractApplicationAware implements
 
             return $account;
     }
+     */
 
-    public function authenticate($username, $password)
+    public function findUserByMail($mail)
     {
-        $db = $this->getApplication()->getDatabase();
+        $where = new Where('mail = $*', [$mail]);
 
-        $account = $this->getAccount($username);
-        if (!$account) {
-            return false;
+        $accounts = $this
+            ->query(
+                strtr("SELECT user_name, password_hash, salt FROM :relation WHERE :conditions", [
+                    ':relation'   => $this->getStructure()->getRelation(),
+                    ':conditions' => $where,
+                ]),
+                $where->getValues()
+            )
+        ;
+
+        foreach ($accounts as $account) {
+            return $account;
         }
-
-        $st = $db->prepare("SELECT 1 FROM account WHERE mail = ? AND password_hash = ? AND is_active = 1");
-        $st->setFetchMode(\PDO::FETCH_COLUMN, 0);
-        $st->execute(array($username, Crypt::getPasswordHash($password, $account->getSalt())));
-
-        foreach ($st as $exists) {
-            return true;
-        }
-
-        return false;
     }
 
+    /*
     public function createAccount($username, $displayName = null, $active = false, $validateToken = null)
     {
         $db = $this->getApplication()->getDatabase();
@@ -146,4 +169,5 @@ class DatabaseAccountProvider extends AbstractApplicationAware implements
             $st->execute(array(Crypt::getPasswordHash($password, $salt), $salt, $id));
         }
     }
+     */
 }

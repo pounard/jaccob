@@ -1,9 +1,9 @@
 # you can read more about security in the related section of the documentation
 # http://symfony.com/doc/current/book/security.html
 security:
-    # http://symfony.com/doc/current/book/security.html#encoding-the-user-s-password
+
     encoders:
-        Symfony\Component\Security\Core\User\User: plaintext
+        Symfony\Component\Security\Core\User\User: bcrypt
 
     # http://symfony.com/doc/current/book/security.html#hierarchical-roles
     role_hierarchy:
@@ -12,45 +12,32 @@ security:
 
     # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
     providers:
-        in_memory:
-            memory:
-                users:
-                    user:  { password: userpass, roles: [ 'ROLE_USER' ] }
-                    admin: { password: adminpass, roles: [ 'ROLE_ADMIN' ] }
+        jaccob:
+            id: jaccob_account_provider
 
     # the main part of the security, where you can set up firewalls
     # for specific sections of your app
     firewalls:
-        # disables authentication for assets and the profiler, adapt it according to your needs
+
+        # disables authentication for assets and the profiler,
+        # adapt it according to your needs
         dev:
-            pattern:  ^/(_(profiler|wdt)|css|images|js)/
-            security: false
+            pattern:                  ^/(_(profiler|wdt)|css|images|js)/
+            security:                 false
 
-        # public site section
-        jaccob_public:
-          pattern:   /home
-          security:  false
-
-        # the login page has to be accessible for everybody
+        # disables security on login page
         jaccob_login:
-            pattern:  ^/u/login$
-            security: false
+            pattern:                  ^(/u/login|/u/login/request-password)$
+            security:                 false
 
-        # secures part of the application
-        jaccob_namespace:
-            pattern:    ^/
+        # enforce security on everything that needs security
+        jaccob:
+            pattern:                  ^/
             form_login:
-                check_path: jcb_sec_login_check
-                login_path: jcb_sec_login
+                check_path:           jaccob_account_login_check
+                login_path:           jaccob_account_login
+                default_target_path:  _welcome
             logout:
-                path:   jcb_sec_logout
-                target: /
-            #anonymous: ~
-            #http_basic:
-            #    realm: "Secured Demo Area"
-
-    # with these settings you can restrict or allow access for different parts
-    # of your application based on roles, ip, host or methods
-    # http://symfony.com/doc/current/cookbook/security/access_control.html
-    access_control:
-        #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+                path:                 jaccob_account_logout
+                target:               _welcome
+            anonymous:                false

@@ -1,3 +1,17 @@
-jaccob_account_homepage:
-    path:     /hello/{name}
-    defaults: { _controller: JaccobAccountBundle:Default:index }
+_welcome:
+    path:     /
+    defaults: {_controller: 'JaccobAccountBundle:Default:index'}
+
+jaccob_account_login:
+    path:     /login
+    defaults: { _controller: 'JaccobAccountBundle:Security:login' }
+
+jaccob_account_request_password:
+    path:     /login/request-password
+    defaults: { _controller: 'JaccobAccountBundle:Security:requestPassword' }
+
+jaccob_account_login_check:
+    path:     /login/go
+
+jaccob_account_logout:
+    path:     /logout
