@@ -8,22 +8,12 @@ use Symfony\Component\Intl\Exception\NotImplementedException;
 
 use PommProject\Foundation\Session\Session as PommSession;
 
+use Jaccob\AccountBundle\AccountModelAware;
 use Jaccob\AccountBundle\Security\Crypt;
 
 class SecurityController extends Controller
 {
-    /**
-     * Get pomm session
-     *
-     * @return \Jaccob\AccountBundle\Model\Account\PublicSchema\AccountModel
-     */
-    protected function getAccountModel()
-    {
-        return $this
-            ->get('pomm')
-            ->getSession('account')
-            ->getModel('\Jaccob\AccountBundle\Model\Account\PublicSchema\AccountModel');
-    }
+    use AccountModelAware;
 
     /**
      * Login form.
@@ -49,15 +39,15 @@ class SecurityController extends Controller
     {
         $form = $this
             ->createFormBuilder(null, [
-                'method'    => Request::METHOD_POST,
-                'attr'      => ['novalidate' => 'novalidate'],
+                'method' => Request::METHOD_POST,
+                'attr' => ['novalidate' => 'novalidate'],
             ])
             ->add('email', 'email', [
-                'label'     => "Email",
-                'required'  => true,
+                'label' => "Email",
+                'required' => true,
             ])
             ->add('submit', 'submit', [
-                'label'     => "Request new password",
+                'label' => "Request new password",
             ])
             ->getForm()
         ;

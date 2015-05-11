@@ -2,6 +2,7 @@
 
 namespace Jaccob\AccountBundle\Security\User;
 
+use Jaccob\AccountBundle\AccountModelAware;
 use Jaccob\AccountBundle\Security;
 
 use PommProject\Foundation\Session\Session as PommSession;
@@ -13,30 +14,15 @@ use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 
 class JaccobAccountProvider implements UserProviderInterface
 {
-    /**
-     * @var \PommProject\Foundation\Session\Session
-     */
-    protected $pommSession;
-
-    /**
-     * Default constructor
-     *
-     * @param \PommProject\Foundation\Session\Session $pommSession
-     */
-    public function __construct(PommSession $pommSession)
-    {
-        $this->pommSession = $pommSession;
-    }
+    use AccountModelAware;
 
     /**
      * {inheritdoc}
      */
     public function loadUserByUsername($username)
     {
-        /* @var $account \Jaccob\AccountBundle\Model\Account\PublicSchema\Account */
         $account = $this
-            ->pommSession
-            ->getModel('\Jaccob\AccountBundle\Model\Account\PublicSchema\AccountModel')
+            ->getAccountModel()
             ->findUserByMail($username)
         ;
 

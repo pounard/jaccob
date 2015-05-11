@@ -1,4 +1,5 @@
 services:
     jaccob_account_provider:
         class: 'Jaccob\AccountBundle\Security\User\JaccobAccountProvider'
-        arguments: ["@=service('pomm').getSession('account')"]
+        calls:
+          - [setAccountSession, ["@=service('pomm').getSession('account')"]]

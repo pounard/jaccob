@@ -101,6 +101,13 @@ class AccountModel extends Model
     }
      */
 
+    /**
+     * Find a single user per its mail address
+     *
+     * @param string $mail
+     *
+     * @return \Jaccob\AccountBundle\Model\Account\PublicSchema\Account
+     */
     public function findUserByMail($mail)
     {
         $accounts = $this
