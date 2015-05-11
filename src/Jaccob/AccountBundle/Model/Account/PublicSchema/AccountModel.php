@@ -2,14 +2,14 @@
 
 namespace Jaccob\AccountBundle\Model\Account\PublicSchema;
 
+use Jaccob\AccountBundle\Model\Account\PublicSchema\Account;
+use Jaccob\AccountBundle\Model\Account\PublicSchema\AutoStructure\Account as AccountStructure;
+use Jaccob\AccountBundle\Security\Crypt;
+
 use PommProject\Foundation\Where;
 use PommProject\ModelManager\Model\Model;
 use PommProject\ModelManager\Model\ModelTrait\WriteQueries;
 use PommProject\ModelManager\Model\Projection;
-
-use Jaccob\AccountBundle\Model\Account\PublicSchema\AutoStructure\Account as AccountStructure;
-use Jaccob\AccountBundle\Model\Account\PublicSchema\Account;
-use Jaccob\AccountBundle\Security\Crypt;
 
 /**
  * AccountModel
@@ -36,71 +36,6 @@ class AccountModel extends Model
         $this->flexible_entity_class = "\Jaccob\AccountBundle\Model\Account\PublicSchema\Account";
     }
 
-    /*
-    public function getAccount($username)
-    {
-        $db = $this->getApplication()->getDatabase();
-
-        $st = $db->prepare("SELECT * FROM account WHERE mail = :mail");
-        $st->setFetchMode(\PDO::FETCH_OBJ);
-        $st->execute(array(':mail' => $username));
-
-        foreach ($st as $object) {
-            $account = new Account();
-            $account->fromArray(array(
-                'id'          => $object->id,
-                'username'    => $object->mail,
-                'displayName' => $object->user_name,
-                'salt'        => $object->salt,
-                'publicKey'   => $object->key_public,
-                'privateKey'  => $object->key_private,
-                'keyType'     => $object->key_type
-            ));
-
-            return $account;
-        }
-
-        throw new NotFoundError(sprintf("Account with name '%s' does not exist", $username));
-    }
-
-    public function getAccountById($id)
-    {
-        $db = $this->getApplication()->getDatabase();
-
-        $st = $db->prepare("SELECT * FROM account WHERE id = :id");
-        $st->setFetchMode(\PDO::FETCH_OBJ);
-        $st->execute(array(':id' => $id));
-
-        foreach ($st as $object) {
-            $account = new Account();
-            $account->fromArray(array(
-                'id'          => $object->id,
-                'username'    => $object->mail,
-                'displayName' => $object->user_name,
-                'salt'        => $object->salt,
-                'publicKey'   => $object->key_public,
-                'privateKey'  => $object->key_private,
-                'keyType'     => $object->key_type
-            ));
-
-            return $account;
-        }
-
-        throw new NotFoundError(sprintf("Account with id '%s' does not exist", $id));
-    }
-
-    public function getAnonymousAccount()
-    {
-            $account = new Account();
-            $account->fromArray(array(
-                'id'       => 0,
-                'username' => "Anonymous",
-            ));
-
-            return $account;
-    }
-     */
-
     /**
      * Find a single user per its mail address
      *
@@ -119,6 +54,12 @@ class AccountModel extends Model
         }
     }
 
+    /**
+     * Update the user password, update salt accordingly
+     *
+     * @param \Jaccob\AccountBundle\Model\Account\PublicSchema\Account $account
+     * @param string $password
+     */
     public function updatePassword(Account $account, $password)
     {
         $salt = Crypt::createSalt();
@@ -130,6 +71,17 @@ class AccountModel extends Model
     }
 
     /*
+    public function getAnonymousAccount()
+    {
+        $account = new Account();
+        $account->fromArray(array(
+            'id'       => 0,
+            'username' => "Anonymous",
+        ));
+
+        return $account;
+    }
+
     public function createAccount($username, $displayName = null, $active = false, $validateToken = null)
     {
         $db = $this->getApplication()->getDatabase();
@@ -164,20 +116,6 @@ class AccountModel extends Model
             $type,
             $id
         ));
-    }
-
-    public function setAccountPassword($id, $password, $salt = null)
-    {
-        $db = $this->getApplication()->getDatabase();
-
-        if (null === $salt) {
-            $account = $this->getAccountById($id);
-            $st = $db->prepare("UPDATE account SET password_hash = ? WHERE id = ?");
-            $st->execute(array(Crypt::getPasswordHash($password, $account->getSalt()), $id));
-        } else {
-            $st = $db->prepare("UPDATE account SET password_hash = ?, salt = ? WHERE id = ?");
-            $st->execute(array(Crypt::getPasswordHash($password, $salt), $salt, $id));
-        }
     }
      */
 }

@@ -15,13 +15,23 @@ use PommProject\ModelManager\Model\FlexibleEntity;
 class Account extends FlexibleEntity
 {
     /**
-     * Get account username
+     * Get username
      *
      * @return string
      */
     public function getUsername()
     {
         return $this->get('user_name');
+    }
+
+    /**
+     * Set username
+     *
+     * @param string $username
+     */
+    public function setUsername($username)
+    {
+        $this->set('user_name');
     }
 
     /**
@@ -34,18 +44,28 @@ class Account extends FlexibleEntity
         return $this->get('mail');
     }
 
+    /**
+     * Get password hash
+     *
+     * @return string
+     */
     public function getPasswordHash()
     {
         return $this->get('password_hash');
     }
 
+    /**
+     * Set password hash
+     *
+     * @param string $value
+     */
     public function setPasswordHash($value)
     {
         return $this->set('password_hash', $value);
     }
 
     /**
-     * Get account salt
+     * Get salt
      *
      * @return string
      */
@@ -54,8 +74,13 @@ class Account extends FlexibleEntity
         return $this->get('salt');
     }
 
+    /**
+     * Set salt
+     *
+     * @param string $value
+     */
     public function setSalt($value)
     {
-        return $this->set('salt', $value);
+        $this->set('salt', $value);
     }
 }

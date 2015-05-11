@@ -2,14 +2,14 @@
 
 namespace Jaccob\AccountBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Intl\Exception\NotImplementedException;
+use Jaccob\AccountBundle\AccountModelAware;
+use Jaccob\AccountBundle\Security\Crypt;
 
 use PommProject\Foundation\Session\Session as PommSession;
 
-use Jaccob\AccountBundle\AccountModelAware;
-use Jaccob\AccountBundle\Security\Crypt;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Intl\Exception\NotImplementedException;
 
 class SecurityController extends Controller
 {
@@ -62,7 +62,7 @@ class SecurityController extends Controller
                     $password = Crypt::createPassword();
                     $model->updatePassword($account, $password);
 
-                    if (true /* In devel mode */) {
+                    if (true /* FIXME In devel mode */) {
                         $this->addFlash('success', "Password is: " . $password);
                     }
                 }
