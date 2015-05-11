@@ -16,7 +16,7 @@ trait AccountModelAware
      *
      * @param \PommProject\Foundation\Session\Session $pommSession
      */
-    protected function setAccountSession(Session $pommSession)
+    public function setAccountSession(Session $pommSession)
     {
         $this->pommSession = $pommSession;
     }
