@@ -3,7 +3,7 @@
 security:
 
     encoders:
-        Symfony\Component\Security\Core\User\User: bcrypt
+        Jaccob\AccountBundle\Security\User\JaccobUser: bcrypt
 
     # http://symfony.com/doc/current/book/security.html#hierarchical-roles
     role_hierarchy:

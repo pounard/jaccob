@@ -33,6 +33,7 @@ class JaccobAccountProvider implements UserProviderInterface
      */
     public function loadUserByUsername($username)
     {
+        /* @var $account \Jaccob\AccountBundle\Model\Account\PublicSchema\Account */
         $account = $this
             ->pommSession
             ->getModel('\Jaccob\AccountBundle\Model\Account\PublicSchema\AccountModel')
@@ -43,7 +44,7 @@ class JaccobAccountProvider implements UserProviderInterface
             throw new UsernameNotFoundException();
         }
 
-        return new JaccobUser($account->user_name, $account->password_hash, $account->salt);
+        return new JaccobUser($account->getUsername(), $account->getPasswordHash(), $account->getSalt());
     }
 
     /**

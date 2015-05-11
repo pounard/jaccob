@@ -9,6 +9,7 @@ use PommProject\ModelManager\Model\Projection;
 
 use Jaccob\AccountBundle\Model\Account\PublicSchema\AutoStructure\Account as AccountStructure;
 use Jaccob\AccountBundle\Model\Account\PublicSchema\Account;
+use Jaccob\AccountBundle\Security\Crypt;
 
 /**
  * AccountModel
@@ -102,21 +103,23 @@ class AccountModel extends Model
 
     public function findUserByMail($mail)
     {
-        $where = new Where('mail = $*', [$mail]);
-
         $accounts = $this
-            ->query(
-                strtr("SELECT user_name, password_hash, salt FROM :relation WHERE :conditions", [
-                    ':relation'   => $this->getStructure()->getRelation(),
-                    ':conditions' => $where,
-                ]),
-                $where->getValues()
-            )
+            ->findWhere('mail = $*', [$mail])
         ;
 
         foreach ($accounts as $account) {
             return $account;
         }
+    }
+
+    public function updatePassword(Account $account, $password)
+    {
+        $salt = Crypt::createSalt();
+
+        $account->setSalt($salt);
+        $account->setPasswordHash(Crypt::getPasswordHash($password, $salt));
+
+        $this->updateOne($account, ['password_hash', 'salt']);
     }
 
     /*

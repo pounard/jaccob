@@ -110,7 +110,7 @@ class Crypt
      */
     static public function encrypt($text, $key = null)
     {
-        throw new \NotImplementedError();
+        throw new \Exception("Not implemented yet");
     }
 
     /**
@@ -123,7 +123,7 @@ class Crypt
      */
     static public function decrypt($text, $key = null)
     {
-        throw new \NotImplementedError();
+        throw new \Exception("Not implemented yet");
     }
 
     /**
