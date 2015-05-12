@@ -25,6 +25,6 @@ CREATE TABLE session (
     id VARCHAR(255) NOT NULL,
     created TIMESTAMP NOT NULL DEFAULT NOW(),
     touched TIMESTAMP NOT NULL DEFAULT NOW(),
-    data BYTEA,
+    data TEXT,
     PRIMARY KEY (id)
 );

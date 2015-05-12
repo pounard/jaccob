@@ -47,26 +47,18 @@ class JaccobSessionHandler implements \SessionHandlerInterface
      */
     public function write($sessionId, $sessionData)
     {
-        // FIXME This should merge gracefully (multiple threads in //).
+        // FIXME This must merge gracefully (multiple threads in //).
         $this
             ->getAccountSession()
             ->getQueryManager()
             ->query("
-                MERGE INTO session AS s
-                    ON s.id = $*
-                WHEN MATCH THEN
-                    UPDATE SET
-                        data = $*,
-                        touched = NOW()
-                WHEN NOT MATCHED
-                    THEN INSERT (id, created, touched, data)
-                        VALUES ($*, NOW(), NOW(), $*)
-                )
+                WITH upsert AS (UPDATE session SET touched = NOW(), data = $* WHERE id = $* RETURNING *)
+                    INSERT INTO session (id, data) SELECT $*, $* WHERE NOT EXISTS (SELECT * FROM upsert)
             ", [
-                $sessionId,
                 $sessionData,
                 $sessionId,
-                $sessionData
+                $sessionId,
+                $sessionData,
             ])
         ;
     }
