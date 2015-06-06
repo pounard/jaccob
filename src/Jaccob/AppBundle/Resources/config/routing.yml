@@ -1,0 +1,3 @@
+jaccob_app_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: JaccobAppBundle:Default:index }
