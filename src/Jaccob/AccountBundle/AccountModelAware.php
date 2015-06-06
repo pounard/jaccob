@@ -45,6 +45,7 @@ trait AccountModelAware
     {
         return $this
             ->getAccountSession()
-            ->getModel('\Jaccob\AccountBundle\Model\Account\PublicSchema\AccountModel');
+            ->getModel('\Jaccob\AccountBundle\Model\Account\PublicSchema\AccountModel')
+        ;
     }
 }
