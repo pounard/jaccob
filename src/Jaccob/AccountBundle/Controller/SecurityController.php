@@ -5,8 +5,6 @@ namespace Jaccob\AccountBundle\Controller;
 use Jaccob\AccountBundle\AccountModelAware;
 use Jaccob\AccountBundle\Security\Crypt;
 
-use PommProject\Foundation\Session\Session as PommSession;
-
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Intl\Exception\NotImplementedException;

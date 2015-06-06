@@ -10,7 +10,7 @@
 	},
 	"require" : {
 		"php" : ">=5.3.3",
-		"symfony/symfony" : "2.6.*",
+		"symfony/symfony" : "2.7.*",
 		"doctrine/orm" : "~2.2,>=2.2.3,<2.5",
 		"doctrine/dbal" : "<2.5",
 		"doctrine/doctrine-bundle" : "~1.2",
@@ -24,7 +24,7 @@
 		"pomm-project/cli" : "2.0.*@dev",
 		"pomm-project/model-manager" : "2.0.*@dev",
 		"pomm-project/foundation" : "2.0.*@dev",
-		"pomm-project/pomm-symfony-bridge": "2.0.*@dev",
+		"pomm-project/pomm-symfony-bridge" : "2.0.*@dev",
 		"pomm-project/pomm-bundle" : "2.0.*@dev"
 	},
 	"require-dev" : {

@@ -17,9 +17,7 @@ class JaccobSessionHandler implements \SessionHandlerInterface
     }
 
     /**
-     * Close the session
-     * @link http://www.php.net/manual/en/sessionhandlerinterface.close.php
-     * @return bool The return value (usually true on success, false on failure). Note this value is returned internally to PHP for processing.
+     * {@inheritdoc}
      */
     public function close()
     {
@@ -52,8 +50,18 @@ class JaccobSessionHandler implements \SessionHandlerInterface
             ->getAccountSession()
             ->getQueryManager()
             ->query("
-                WITH upsert AS (UPDATE session SET touched = NOW(), data = $* WHERE id = $* RETURNING *)
-                    INSERT INTO session (id, data) SELECT $*, $* WHERE NOT EXISTS (SELECT * FROM upsert)
+                WITH upsert AS (
+                    UPDATE session
+                    SET
+                        touched = NOW(),
+                        data = $* WHERE id = $*
+                    RETURNING *
+                )
+                INSERT INTO session (id, data)
+                SELECT $*, $*
+                WHERE NOT EXISTS (
+                    SELECT * FROM upsert
+                )
             ", [
                 $sessionData,
                 $sessionId,
@@ -61,6 +69,8 @@ class JaccobSessionHandler implements \SessionHandlerInterface
                 $sessionData,
             ])
         ;
+
+        return true;
     }
 
     /**

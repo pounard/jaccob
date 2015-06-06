@@ -4,8 +4,7 @@ namespace Jaccob\AccountBundle\Security\User;
 
 use Jaccob\AccountBundle\AccountModelAware;
 use Jaccob\AccountBundle\Security;
-
-use PommProject\Foundation\Session\Session as PommSession;
+use Jaccob\AccountBundle\Security\AccessRole;
 
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -30,7 +29,14 @@ class JaccobAccountProvider implements UserProviderInterface
             throw new UsernameNotFoundException();
         }
 
-        return new JaccobUser($account->getUsername(), $account->getPasswordHash(), $account->getSalt());
+        // @todo Better than this
+        if ($account->get('is_admin')) {
+            $roles = [AccessRole::ROLE_NORMAL, AccessRole::ROLE_ADMIN];
+        } else {
+            $roles = [AccessRole::ROLE_NORMAL];
+        }
+
+        return new JaccobUser($account->getUsername(), $account->getPasswordHash(), $account->getSalt(), $roles);
     }
 
     /**

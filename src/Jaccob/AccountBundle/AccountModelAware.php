@@ -2,19 +2,19 @@
 
 namespace Jaccob\AccountBundle;
 
-use PommProject\Foundation\Session\Session;
+use PommProject\Foundation\Session;
 
 trait AccountModelAware
 {
     /**
-     * @var \PommProject\Foundation\Session\Session
+     * @var \PommProject\Foundation\Session
      */
     private $pommSession;
 
     /**
      * Set session
      *
-     * @param \PommProject\Foundation\Session\Session $pommSession
+     * @param \PommProject\Foundation\Session $pommSession
      */
     public function setAccountSession(Session $pommSession)
     {
@@ -24,7 +24,7 @@ trait AccountModelAware
     /**
      * Get pomm account session
      *
-     * @return \PommProject\Foundation\Session\Session
+     * @return \PommProject\Foundation\Session
      */
     protected function getAccountSession()
     {
