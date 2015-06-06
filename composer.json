@@ -8,6 +8,19 @@
 			"SymfonyStandard" : "app/"
 		}
 	},
+	"repositories" : [{
+			"type" : "package",
+			"package" : {
+				"name" : "twitter/bootstrap",
+				"version" : "3.3.4",
+				"source" : {
+					"type" : "git",
+					"url" : "https://github.com/twitter/bootstrap",
+					"reference" : "v3.3.4"
+				}
+			}
+		}
+	],
 	"require" : {
 		"php" : ">=5.3.3",
 		"symfony/symfony" : "2.7.*",
@@ -25,7 +38,9 @@
 		"pomm-project/model-manager" : "2.0.*@dev",
 		"pomm-project/foundation" : "2.0.*@dev",
 		"pomm-project/pomm-symfony-bridge" : "2.0.*@dev",
-		"pomm-project/pomm-bundle" : "2.0.*@dev"
+		"pomm-project/pomm-bundle" : "2.0.*@dev",
+		"twitter/bootstrap" : "v3.3.4",
+		"oyejorge/less.php": "~1.5"
 	},
 	"require-dev" : {
 		"sensio/generator-bundle" : "~2.3"

@@ -1,22 +1,26 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8" />
-    <title>{% block title %}Welcome!{% endblock %}</title>
-    {% block stylesheets %}{% endblock %}
-    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
-  </head>
-  <body>
-    {% if app.session.flashbag.peekAll %}
-      <div id="flashes">
-        {% for type, messages in app.session.flashbag.all %}
-          <div class="flash {{ type }}">
-            {{ messages|join(', ') }}
-          </div>
-        {% endfor %}
-      </div>
-    {% endif %}
-    {% block body %}{% endblock %}
-    {% block javascripts %}{% endblock %}
-  </body>
+<head>
+<meta charset="UTF-8" />
+<title>{% block title %}Welcome!{% endblock %}</title>
+{% block stylesheets %}
+{% stylesheets '%kernel.root_dir%/../vendor/twitter/bootstrap/less/bootstrap.less' filter='lessphp,cssrewrite' %} 
+<link rel="stylesheet" href="{{ asset_url }}" />
+{% endstylesheets %}
+{% endblock %}
+{# <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" /> #}
+</head>
+<body>
+  {% if app.session.flashbag.peekAll %}
+  <div id="flashes">
+    {% for type, messages in app.session.flashbag.all %}
+    <div class="flash {{ type }}">
+      {{ messages|join(', ') }}
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+  {% block body %}{% endblock %}
+  {% block javascripts %}{% endblock %}
+</body>
 </html>
