@@ -5,3 +5,7 @@ jaccob_app:
 jaccob_account:
     resource: "@JaccobAccountBundle/Resources/config/routing.yml"
     prefix:   /u
+
+jaccob_vet_survey:
+    resource: "@JaccobVetSurveyBundle/Resources/config/routing.yml"
+    prefix:   /v/survey

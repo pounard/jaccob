@@ -1,0 +1,4 @@
+services:
+#    jaccob_vet_survey.example:
+#        class: Jaccob\VetSurveyBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]

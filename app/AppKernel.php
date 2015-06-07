@@ -19,6 +19,7 @@ class AppKernel extends Kernel
             new PommProject\PommBundle\PommBundle(),
             new Jaccob\AppBundle\JaccobAppBundle(),
             new Jaccob\AccountBundle\JaccobAccountBundle(),
+            new Jaccob\VetSurveyBundle\JaccobVetSurveyBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
