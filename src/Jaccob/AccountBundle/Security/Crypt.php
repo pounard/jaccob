@@ -91,7 +91,7 @@ class Crypt
      */
     static public function getPasswordHash($password, $salt = null)
     {
-        $options = array();
+        $options = [];
 
         if (null !== $salt) {
             $options['salt'] = $salt;
@@ -134,11 +134,11 @@ class Crypt
      */
     static public function generateRsaKeys()
     {
-        $config = array(
+        $config = [
             "digest_alg" => self::HASH_ALGORITHM,
             "private_key_bits" => 4096,
             "private_key_type" => OPENSSL_KEYTYPE_RSA,
-        );
+        ];
 
         $privKey = '';
         $pubKey = '';
@@ -153,6 +153,6 @@ class Crypt
         // Extract the public key
         $pubKey = openssl_pkey_get_details($res);
 
-        return array($privKey, $pubKey['key'], $type);
+        return [$privKey, $pubKey['key'], $type];
     }
 }

@@ -53,7 +53,7 @@ class JaccobUser implements AdvancedUserInterface
      */
     private $roles;
 
-    public function __construct(Account $account, array $roles = array())
+    public function __construct(Account $account, array $roles = [])
     {
         $this->account = $account;
 
