@@ -36,7 +36,7 @@ class JaccobAccountProvider implements UserProviderInterface
             $roles = [AccessRole::ROLE_NORMAL];
         }
 
-        return new JaccobUser($account->getUsername(), $account->getPasswordHash(), $account->getSalt(), $roles);
+        return new JaccobUser($account, $roles);
     }
 
     /**

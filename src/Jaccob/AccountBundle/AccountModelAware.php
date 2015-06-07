@@ -39,13 +39,13 @@ trait AccountModelAware
     /**
      * Get pomm account model
      *
-     * @return \Jaccob\AccountBundle\Model\Account\PublicSchema\AccountModel
+     * @return \Jaccob\AccountBundle\Model\AccountModel
      */
     protected function getAccountModel()
     {
         return $this
             ->getAccountSession()
-            ->getModel('\Jaccob\AccountBundle\Model\Account\PublicSchema\AccountModel')
+            ->getModel('\Jaccob\AccountBundle\Model\AccountModel')
         ;
     }
 }

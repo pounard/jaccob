@@ -2,33 +2,79 @@
 
 namespace Jaccob\AccountBundle\Security\User;
 
+use Jaccob\AccountBundle\Model\Account;
+
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 
 class JaccobUser implements AdvancedUserInterface
 {
+    /**
+     * @var \Jaccob\AccountBundle\Model\Account
+     */
+    private $account;
+
+    /**
+     * @var string
+     */
     private $username;
+
+    /**
+     * @var string
+     */
     private $password;
+
+    /**
+     * @var string
+     */
     private $salt;
+
+    /**
+     * @var boolean
+     */
     private $enabled;
+
+    /**
+     * @var boolean
+     */
     private $accountNonExpired;
+
+    /**
+     * @var boolean
+     */
     private $credentialsNonExpired;
+
+    /**
+     * @var boolean
+     */
     private $accountNonLocked;
+
+    /**
+     * @var string[]
+     */
     private $roles;
 
-    public function __construct($username, $password, $salt, array $roles = array(), $enabled = true, $userNonExpired = true, $credentialsNonExpired = true, $userNonLocked = true)
+    public function __construct(Account $account, array $roles = array())
     {
-        if (empty($username)) {
-            throw new \InvalidArgumentException('The username cannot be empty.');
-        }
+        $this->account = $account;
 
-        $this->username = $username;
-        $this->password = $password;
-        $this->salt = $salt;
-        $this->enabled = $enabled;
-        $this->accountNonExpired = $userNonExpired;
-        $this->credentialsNonExpired = $credentialsNonExpired;
-        $this->accountNonLocked = $userNonLocked;
+        $this->username = $account->getUsername();
+        $this->password = $account->getPasswordHash();
+        $this->salt = $account->getSalt();
+        $this->enabled = true; // FIXME
+        $this->accountNonExpired = true; // FIXME
+        $this->credentialsNonExpired = true; // FIXME
+        $this->accountNonLocked = true; // FIXME
         $this->roles = $roles;
+    }
+
+    /**
+     * Get user account
+     *
+     * @return \Jaccob\AccountBundle\Model\Account
+     */
+    public function getAccount()
+    {
+        return $this->account;
     }
 
     /**

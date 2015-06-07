@@ -1,6 +1,6 @@
 <?php
 
-namespace Jaccob\AccountBundle\Model\Account\PublicSchema;
+namespace Jaccob\AccountBundle\Model;
 
 use PommProject\ModelManager\Model\FlexibleEntity;
 

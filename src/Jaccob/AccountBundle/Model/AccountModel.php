@@ -1,9 +1,8 @@
 <?php
 
-namespace Jaccob\AccountBundle\Model\Account\PublicSchema;
+namespace Jaccob\AccountBundle\Model;
 
-use Jaccob\AccountBundle\Model\Account\PublicSchema\Account;
-use Jaccob\AccountBundle\Model\Account\PublicSchema\AutoStructure\Account as AccountStructure;
+use Jaccob\AccountBundle\Model\Structure\Account as AccountStructure;
 use Jaccob\AccountBundle\Security\Crypt;
 
 use PommProject\Foundation\Where;
@@ -33,7 +32,7 @@ class AccountModel extends Model
     public function __construct()
     {
         $this->structure = new AccountStructure;
-        $this->flexible_entity_class = "\Jaccob\AccountBundle\Model\Account\PublicSchema\Account";
+        $this->flexible_entity_class = "\Jaccob\AccountBundle\Model\Account";
     }
 
     /**
@@ -41,7 +40,7 @@ class AccountModel extends Model
      *
      * @param string $mail
      *
-     * @return \Jaccob\AccountBundle\Model\Account\PublicSchema\Account
+     * @return \Jaccob\AccountBundle\Model\Account
      */
     public function findUserByMail($mail)
     {
@@ -57,7 +56,7 @@ class AccountModel extends Model
     /**
      * Update the user password, update salt accordingly
      *
-     * @param \Jaccob\AccountBundle\Model\Account\PublicSchema\Account $account
+     * @param \Jaccob\AccountBundle\Model\Account $account
      * @param string $password
      */
     public function updatePassword(Account $account, $password)

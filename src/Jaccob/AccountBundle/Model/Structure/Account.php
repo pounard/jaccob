@@ -5,7 +5,7 @@
  * generation.
  */
 
-namespace Jaccob\AccountBundle\Model\Account\PublicSchema\AutoStructure;
+namespace Jaccob\AccountBundle\Model\Structure;
 
 use PommProject\ModelManager\Model\RowStructure;
 
