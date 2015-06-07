@@ -24,7 +24,7 @@ class SecurityController extends Controller
         ;
 
         if ($error) {
-            $this->addFlash('error', $error->getMessage());
+            $this->addFlash('danger', $error->getMessage());
         }
 
         return $this->render('JaccobAccountBundle:Security:login.html.twig');
@@ -71,7 +71,7 @@ class SecurityController extends Controller
                 return $this->redirectToRoute('_welcome');
 
             } else {
-                $this->addFlash('error', "Invalid email address");
+                $this->addFlash('danger', "Invalid email address");
             }
         }
 
