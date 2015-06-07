@@ -15,6 +15,16 @@ use PommProject\ModelManager\Model\FlexibleEntity;
 class Account extends FlexibleEntity
 {
     /**
+     * Get identifier
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->get('id');
+    }
+
+    /**
      * Get username
      *
      * @return string

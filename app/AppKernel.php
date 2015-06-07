@@ -20,6 +20,7 @@ class AppKernel extends Kernel
             new Jaccob\AppBundle\JaccobAppBundle(),
             new Jaccob\AccountBundle\JaccobAccountBundle(),
             new Jaccob\VetSurveyBundle\JaccobVetSurveyBundle(),
+            new Jaccob\TaskBundle\JaccobTaskBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

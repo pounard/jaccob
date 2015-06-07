@@ -1,0 +1,32 @@
+{% extends 'JaccobTaskBundle:Task:layout.html.twig' %}
+
+{% block main %}
+  <div class="container">
+    <div class="row">
+      {% if tasks %}
+        <table class="table table-bordered table-hover table-condensed">
+          <thead>
+            <th>Deadline</th>
+            <th>Task</th>
+            <th>Added</th>
+          </thead>
+          <tbody>
+            {% for task in tasks %}
+              {% if task.ts_dealine|date('Ymd') < "now"|date('Ymd') %}
+              <tr class="danger">
+              {% else if task.ts_dealine|date('Ymd') = "now"|date('Ymd') %}
+              <tr class="warning">
+              {% else  %}
+              <tr>
+              {% endif %}
+                <td>{{ task.ts_dealine|date("m/d/Y") }}</td>
+                <td>{{ task.title }}</td>
+                <td>{{ task.ts_added|date("m/d/Y") }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

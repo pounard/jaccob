@@ -1,0 +1,3 @@
+jaccob_task_list:
+    path:     /
+    defaults: { _controller: "JaccobTaskBundle:Task:list" }
