@@ -9,13 +9,6 @@ use PommProject\ModelManager\Model\RowStructure;
  */
 class Task extends RowStructure
 {
-    /**
-     * __construct
-     *
-     * Structure definition.
-     *
-     * @access public
-     */
     public function __construct()
     {
         $this
@@ -30,7 +23,7 @@ class Task extends RowStructure
             ->addField('priority', 'int4')
             ->addField('ts_added', 'timestamp')
             ->addField('ts_updated', 'timestamp')
-            ->addField('ts_dealine', 'timestamp')
+            ->addField('ts_deadline', 'timestamp')
         ;
     }
 }

@@ -6,20 +6,29 @@
       {% if tasks %}
         <table class="table table-bordered table-hover table-condensed">
           <thead>
+            <th></th>
             <th>Deadline</th>
             <th>Task</th>
             <th>Added</th>
           </thead>
           <tbody>
             {% for task in tasks %}
-              {% if task.ts_dealine|date('Ymd') < "now"|date('Ymd') %}
+              {% if task.is_done %}
+              <tr class="success">
+              {% elseif task.ts_deadline|date('Ymd') < "now"|date('Ymd') %}
               <tr class="danger">
-              {% else if task.ts_dealine|date('Ymd') = "now"|date('Ymd') %}
+              {% elseif task.ts_deadline|date('Ymd') == "now"|date('Ymd') %}
               <tr class="warning">
-              {% else  %}
+              {% else %}
               <tr>
               {% endif %}
-                <td>{{ task.ts_dealine|date("m/d/Y") }}</td>
+                <td>
+                  {% if task.is_starred %}
+                    <span aria-hidden="true" class="glyphicon glyphicon-star"></span>
+                    <span class="sr-only">Starred</span>
+                  {% endif %}
+                </td>
+                <td>{{ task.ts_deadline|date("m/d/Y") }}</td>
                 <td>{{ task.title }}</td>
                 <td>{{ task.ts_added|date("m/d/Y") }}</td>
               </tr>

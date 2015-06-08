@@ -9,7 +9,7 @@ CREATE TABLE task (
     priority INTEGER NOT NULL DEFAULT 0,
     ts_added TIMESTAMP NOT NULL DEFAULT NOW(),
     ts_updated TIMESTAMP NOT NULL DEFAULT NOW(),
-    ts_dealine TIMESTAMP DEFAULT NULL,
+    ts_deadline TIMESTAMP DEFAULT NULL,
     FOREIGN KEY (id_account) REFERENCES account (id) ON DELETE CASCADE
 );
 

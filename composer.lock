@@ -4,8 +4,53 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "7fe7b07cf7f9a6b3070c7d5b573dbfe1",
+    "hash": "ed97784cf1db2cfb405c2d016d89a85d",
     "packages": [
+        {
+            "name": "components/jquery",
+            "version": "1.11.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/components/jquery.git",
+                "reference": "923b3973ed5b6e465a621d3032106fc6832a9a3c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/components/jquery/zipball/923b3973ed5b6e465a621d3032106fc6832a9a3c",
+                "reference": "923b3973ed5b6e465a621d3032106fc6832a9a3c",
+                "shasum": ""
+            },
+            "require": {
+                "robloach/component-installer": "*"
+            },
+            "type": "component",
+            "extra": {
+                "component": {
+                    "scripts": [
+                        "jquery.js"
+                    ],
+                    "files": [
+                        "jquery.min.js",
+                        "jquery-migrate.js",
+                        "jquery-migrate.min.js",
+                        "jquery.min.map"
+                    ]
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "John Resig",
+                    "email": "jeresig@gmail.com"
+                }
+            ],
+            "description": "jQuery JavaScript Library",
+            "homepage": "http://jquery.com",
+            "time": "2014-10-10 05:49:59"
+        },
         {
             "name": "doctrine/annotations",
             "version": "v1.2.4",
@@ -1015,12 +1060,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/pomm-project/Cli.git",
-                "reference": "42a4886776d1a99f35fe63ff9bfa1b6946b60b4f"
+                "reference": "616e41cd20db05114723a54ae11e316c2ef00423"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pomm-project/Cli/zipball/42a4886776d1a99f35fe63ff9bfa1b6946b60b4f",
-                "reference": "42a4886776d1a99f35fe63ff9bfa1b6946b60b4f",
+                "url": "https://api.github.com/repos/pomm-project/Cli/zipball/616e41cd20db05114723a54ae11e316c2ef00423",
+                "reference": "616e41cd20db05114723a54ae11e316c2ef00423",
                 "shasum": ""
             },
             "require": {
@@ -1067,7 +1112,7 @@
                 "pomm",
                 "postgresql"
             ],
-            "time": "2015-05-29 08:33:50"
+            "time": "2015-06-06 14:53:08"
         },
         {
             "name": "pomm-project/foundation",
@@ -1187,12 +1232,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/pomm-project/pomm-bundle.git",
-                "reference": "cf58d5dec1ebf90e36604d645fa928a508166510"
+                "reference": "261e587deab8596bcd12283e9f8e5048423ef192"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pomm-project/pomm-bundle/zipball/cf58d5dec1ebf90e36604d645fa928a508166510",
-                "reference": "cf58d5dec1ebf90e36604d645fa928a508166510",
+                "url": "https://api.github.com/repos/pomm-project/pomm-bundle/zipball/261e587deab8596bcd12283e9f8e5048423ef192",
+                "reference": "261e587deab8596bcd12283e9f8e5048423ef192",
                 "shasum": ""
             },
             "require": {
@@ -1245,7 +1290,7 @@
                 "postgresql",
                 "symfony"
             ],
-            "time": "2015-06-01 08:10:05"
+            "time": "2015-06-08 08:01:28"
         },
         {
             "name": "pomm-project/pomm-symfony-bridge",
@@ -1345,6 +1390,54 @@
                 "psr-3"
             ],
             "time": "2012-12-21 11:40:51"
+        },
+        {
+            "name": "robloach/component-installer",
+            "version": "0.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/RobLoach/component-installer.git",
+                "reference": "f249264ea72390ea68f480984ab705cb68c92148"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/RobLoach/component-installer/zipball/f249264ea72390ea68f480984ab705cb68c92148",
+                "reference": "f249264ea72390ea68f480984ab705cb68c92148",
+                "shasum": ""
+            },
+            "require": {
+                "composer-plugin-api": "1.0.0",
+                "kriswallsmith/assetic": "1.*",
+                "php": ">=5.3.2"
+            },
+            "require-dev": {
+                "composer/composer": "1.*@alpha",
+                "phpunit/phpunit": "4.*"
+            },
+            "type": "composer-plugin",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                },
+                "class": "ComponentInstaller\\ComponentInstallerPlugin"
+            },
+            "autoload": {
+                "psr-0": {
+                    "ComponentInstaller": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Rob Loach",
+                    "homepage": "http://robloach.net"
+                }
+            ],
+            "description": "Allows installation of Components via Composer.",
+            "time": "2015-05-29 20:57:02"
         },
         {
             "name": "sensio/distribution-bundle",
@@ -1508,23 +1601,23 @@
         },
         {
             "name": "swiftmailer/swiftmailer",
-            "version": "v5.4.0",
+            "version": "v5.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/swiftmailer/swiftmailer.git",
-                "reference": "31454f258f10329ae7c48763eb898a75c39e0a9f"
+                "reference": "0697e6aa65c83edf97bb0f23d8763f94e3f11421"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/31454f258f10329ae7c48763eb898a75c39e0a9f",
-                "reference": "31454f258f10329ae7c48763eb898a75c39e0a9f",
+                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/0697e6aa65c83edf97bb0f23d8763f94e3f11421",
+                "reference": "0697e6aa65c83edf97bb0f23d8763f94e3f11421",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
             "require-dev": {
-                "mockery/mockery": "~0.9.1"
+                "mockery/mockery": "~0.9.1,<0.9.4"
             },
             "type": "library",
             "extra": {
@@ -1553,10 +1646,11 @@
             "description": "Swiftmailer, free feature-rich PHP mailer",
             "homepage": "http://swiftmailer.org",
             "keywords": [
+                "email",
                 "mail",
                 "mailer"
             ],
-            "time": "2015-03-14 06:06:39"
+            "time": "2015-06-06 14:19:39"
         },
         {
             "name": "symfony/assetic-bundle",
@@ -1915,16 +2009,16 @@
         },
         {
             "name": "twig/twig",
-            "version": "v1.18.1",
+            "version": "v1.18.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "9f70492f44398e276d1b81c1b43adfe6751c7b7f"
+                "reference": "e8e6575abf6102af53ec283f7f14b89e304fa602"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/9f70492f44398e276d1b81c1b43adfe6751c7b7f",
-                "reference": "9f70492f44398e276d1b81c1b43adfe6751c7b7f",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/e8e6575abf6102af53ec283f7f14b89e304fa602",
+                "reference": "e8e6575abf6102af53ec283f7f14b89e304fa602",
                 "shasum": ""
             },
             "require": {
@@ -1968,7 +2062,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2015-04-19 08:30:27"
+            "time": "2015-06-06 23:31:24"
         },
         {
             "name": "twitter/bootstrap",

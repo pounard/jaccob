@@ -39,8 +39,9 @@
 		"pomm-project/foundation" : "2.0.*@dev",
 		"pomm-project/pomm-symfony-bridge" : "2.0.*@dev",
 		"pomm-project/pomm-bundle" : "2.0.*@dev",
+		"components/jquery": "1.11.1",
 		"twitter/bootstrap" : "v3.3.4",
-		"oyejorge/less.php": "~1.5"
+		"oyejorge/less.php" : "~1.5"
 	},
 	"require-dev" : {
 		"sensio/generator-bundle" : "~2.3"

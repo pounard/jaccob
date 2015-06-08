@@ -25,7 +25,8 @@
           <a href="#" class="navbar-brand">{% block brandname %}Jaccob{% endblock %}</a>
         </div>
         <div class="navbar-collapse collapse" id="navbar">
-          <ul class="nav navbar-nav">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="{{ path('jaccob_task_list') }}">Tasks</a></li>
             <li class="active"><a href="{{ path('_welcome') }}">Home</a></li>
           </ul>
         </div><!--/.nav-collapse -->
@@ -44,12 +45,11 @@
     {% endif %}
     </div>
     {% block body %}{% endblock %}
-    {% block javascripts %}{% endblock %}
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <!--
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed
-    <script src="js/bootstrap.min.js"></script>
-      -->
+    {% block javascripts %}
+      <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.16/angular.min.js"></script>
+      {% javascripts '@jquery' '@bootstrap_js' %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+      {% endjavascripts %}
+    {% endblock %}
   </body>
 </html>
