@@ -1,3 +1,15 @@
 jaccob_task_list:
     path:     /
     defaults: { _controller: "JaccobTaskBundle:Task:list" }
+
+jaccob_task_list_starred:
+    path:     /starred
+    defaults: { _controller: "JaccobTaskBundle:Task:listStarred" }
+
+jaccob_task_list_deadline:
+    path:     /deadline
+    defaults: { _controller: "JaccobTaskBundle:Task:listDeadline" }
+
+jaccob_task_list_archive:
+    path:     /archives
+    defaults: { _controller: "JaccobTaskBundle:Task:listArchive" }

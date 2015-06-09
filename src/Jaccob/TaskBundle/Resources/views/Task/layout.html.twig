@@ -1,5 +1,30 @@
 {% extends '::base.html.twig' %}
 
 {% block body %}
+  <nav class="navbar navbar-default navbar-inverse">
+    <div class="container">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="{{ path('jaccob_task_list') }}">All tasks</a>
+      </div>
+       <ul class="nav navbar-nav">
+        <li>
+          <a href="{{ path('jaccob_task_list_deadline') }}">
+            <span aria-hidden="true" class="glyphicon glyphicon-exclamation-sign"></span>
+            Deadline
+            <span class="badge">42</span>
+          </a>
+        </li>
+        <li>
+          <a href="{{ path('jaccob_task_list_starred') }}">
+            <span aria-hidden="true" class="glyphicon glyphicon-star"></span>
+            Starred
+          </a>
+        </li>
+        <li>
+          <a href="{{ path('jaccob_task_list_archive') }}">Archives</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
   {% block main %}{% endblock %}
 {% endblock %}

@@ -14,44 +14,62 @@ class TaskController extends AbstractUserAwareController
     use TaskModelAware;
 
     /**
-     * List action
+     * List
      */
     public function listAction()
     {
         $account = $this->getCurrentUserAccount();
 
-        $where = new Where();
-        $where->addWhere("id_account = $*", [$account->getId()], '=');
+        $where = (new Where())
+            ->andWhere("id_account = $*", [$account->getId()])
+        ;
 
         $taskList = $this
             ->getTaskModel()
-            ->paginateFindWhere($where,50)
+            ->paginateFindWhere($where, 50)
         ;
 
         return $this->render('JaccobTaskBundle:Task:list.html.twig', ['tasks' => $taskList->getIterator()]);
     }
 
     /**
-     * Post action
+     * Starred
      */
-    public function postAction()
+    public function listStarredAction()
     {
-        // @todo
+        $account = $this->getCurrentUserAccount();
+
+        $where = (new Where())
+            ->andWhere("id_account = $*", [$account->getId()])
+            ->andWhere("is_starred = $*", [1])
+        ;
+
+        $taskList = $this
+            ->getTaskModel()
+            ->paginateFindWhere($where, 50)
+        ;
+
+        return $this->render('JaccobTaskBundle:Task:list.html.twig', ['tasks' => $taskList->getIterator()]);
     }
 
     /**
-     * Delete action
+     * Deadline
      */
-    public function deleteAction()
+    public function listDeadlineAction()
     {
-        // @todo
-    }
+        $account = $this->getCurrentUserAccount();
 
-    /**
-     * Update action
-     */
-    public function updateAction()
-    {
-        // @todo
+        $where = (new Where())
+            ->andWhere("id_account = $*", [$account->getId()])
+            ->andWhere("is_done = $*", [0])
+            ->andWhere("ts_deadline < $*", [(new \DateTime())->format('Y-m-d H:i:s')])
+        ;
+
+        $taskList = $this
+            ->getTaskModel()
+            ->paginateFindWhere($where, 50)
+        ;
+
+        return $this->render('JaccobTaskBundle:Task:list.html.twig', ['tasks' => $taskList->getIterator()]);
     }
 }
