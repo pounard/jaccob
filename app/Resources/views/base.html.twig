@@ -24,12 +24,7 @@
           </button>
           <a href="#" class="navbar-brand">{% block brandname %}Jaccob{% endblock %}</a>
         </div>
-        <div class="navbar-collapse collapse" id="navbar">
-          <ul class="nav navbar-nav navbar-right">
-            <li><a href="{{ path('jaccob_task_list') }}">Tasks</a></li>
-            <li class="active"><a href="{{ path('_welcome') }}">Home</a></li>
-          </ul>
-        </div><!--/.nav-collapse -->
+        {{ knp_menu_render('JaccobAppBundle:Builder:mainMenu', {'template': '::menu/mainMenu.html.twig'}) }}
       </div>
     </nav>
     {% if app.session.flashbag.peekAll %}
@@ -46,7 +41,7 @@
     </div>
     {% block body %}{% endblock %}
     {% block javascripts %}
-      <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.16/angular.min.js"></script>
+      {# <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.16/angular.min.js"></script> #}
       {% javascripts '@jquery' '@bootstrap_js' %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
       {% endjavascripts %}

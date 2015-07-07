@@ -19,7 +19,6 @@ class AppKernel extends Kernel
             new PommProject\PommBundle\PommBundle(),
             new Jaccob\AppBundle\JaccobAppBundle(),
             new Jaccob\AccountBundle\JaccobAccountBundle(),
-            new Jaccob\VetSurveyBundle\JaccobVetSurveyBundle(),
             new Jaccob\TaskBundle\JaccobTaskBundle(),
             new Knp\Bundle\MenuBundle\KnpMenuBundle(),
         ];

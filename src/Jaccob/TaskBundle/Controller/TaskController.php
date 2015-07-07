@@ -14,6 +14,16 @@ class TaskController extends AbstractUserAwareController
     use TaskModelAware;
 
     /**
+     * Menu
+     */
+    public function menuAction()
+    {
+        $items = [];
+
+        return $this->render('JaccobTaskBundle:Task:menu.html.twig', ['items' => $items]);
+    }
+
+    /**
      * List
      */
     public function listAction()
