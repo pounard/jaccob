@@ -33,7 +33,7 @@ trait AccountModelAware
         }
 
         // When we are working with an object plugged to the DIC.
-        return $this->get('pomm')->getSession('account');
+        return $this->get('pomm')->getSession('default');
     }
 
     /**
