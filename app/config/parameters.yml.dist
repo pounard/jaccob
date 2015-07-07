@@ -11,12 +11,6 @@ parameters:
     database_user: my_user
     database_password: my_password
 
-    account_db_host: "%database_host%"
-    account_db_port: "%database_port%"
-    account_db_name: "%database_name%"
-    account_db_user: "%database_user%"
-    account_db_password: "%database_password%"
-
     mailer_transport:  smtp
     mailer_host:       127.0.0.1
     mailer_user:       ~

@@ -41,7 +41,8 @@
 		"pomm-project/pomm-bundle" : "2.0.*@dev",
 		"components/jquery": "1.11.1",
 		"twitter/bootstrap" : "v3.3.4",
-		"oyejorge/less.php" : "~1.5"
+		"oyejorge/less.php" : "~1.5",
+		"knplabs/knp-menu-bundle": "~2"
 	},
 	"require-dev" : {
 		"sensio/generator-bundle" : "~2.3"
