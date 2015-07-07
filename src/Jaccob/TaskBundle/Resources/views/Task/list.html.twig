@@ -1,41 +1,44 @@
 {% extends 'JaccobTaskBundle:Task:layout.html.twig' %}
 
 {% block main %}
-  <div class="container">
-    <div class="row">
-      {% if tasks %}
-        <table class="table table-bordered table-hover table-condensed">
-          <thead>
-            <th></th>
-            <th>Deadline</th>
-            <th>Task</th>
-            <th>Added</th>
-          </thead>
-          <tbody>
-            {% for task in tasks %}
-              {% if task.is_done %}
-              <tr class="success">
-              {% elseif task.ts_deadline|date('Ymd') < "now"|date('Ymd') %}
-              <tr class="danger">
-              {% elseif task.ts_deadline|date('Ymd') == "now"|date('Ymd') %}
-              <tr class="warning">
-              {% else %}
-              <tr>
+  {% if tasks %}
+    <table class="table table-bordered table-hover table-condensed">
+      <thead>
+        <th></th>
+        <th>Deadline</th>
+        <th>Task</th>
+        <th>Added</th>
+      </thead>
+      <tbody>
+        {% for task in tasks %}
+          {% if task.is_done %}
+          <tr class="success">
+          {% elseif task.ts_deadline|date('Ymd') < "now"|date('Ymd') %}
+          <tr class="danger">
+          {% elseif task.ts_deadline|date('Ymd') == "now"|date('Ymd') %}
+          <tr class="warning">
+          {% else %}
+          <tr>
+          {% endif %}
+            <td>
+              {% if task.is_starred %}
+                <span aria-hidden="true" class="glyphicon glyphicon-star"></span>
+                <span class="sr-only">Starred</span>
               {% endif %}
-                <td>
-                  {% if task.is_starred %}
-                    <span aria-hidden="true" class="glyphicon glyphicon-star"></span>
-                    <span class="sr-only">Starred</span>
-                  {% endif %}
-                </td>
-                <td>{{ task.ts_deadline|date("m/d/Y") }}</td>
-                <td>{{ task.title }}</td>
-                <td>{{ task.ts_added|date("m/d/Y") }}</td>
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      {% endif %}
-    </div>
-  </div>
+            </td>
+            {% if task.ts_deadline %}
+            <td>{{ task.ts_deadline|date("d/m/Y - H:i") }}</td>
+            {% else  %}
+            <td></td>
+            {% endif %}
+            <td><a href="{{ path('jaccob_task_view', {'id': task.id}) }}" title="Voir {{ task.title }}">{{ task.title }}</a></td>
+            <td>{{ task.ts_added|date("d/m/Y - H:i") }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <p><a class="btn btn-primary" href="{{ path('jaccob_task_add') }}">Create task</a></p>
+  {% else %}
+    <p>You have no tasks. <a class="btn btn-primary" href="{{ path('jaccob_task_add') }}">Create one</a></p>
+  {% endif %}
 {% endblock %}

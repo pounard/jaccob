@@ -1,3 +1,19 @@
+jaccob_task_add:
+    path:     /add
+    defaults: { _controller: "JaccobTaskBundle:Task:add" }
+
+jaccob_task_view:
+    path:     /{id}
+    defaults: { _controller: "JaccobTaskBundle:Task:view" }
+    requirements:
+        id: \d+
+
+jaccob_task_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "JaccobTaskBundle:Task:edit" }
+    requirements:
+        id: \d+
+
 jaccob_task_list:
     path:     /
     defaults: { _controller: "JaccobTaskBundle:Task:list" }

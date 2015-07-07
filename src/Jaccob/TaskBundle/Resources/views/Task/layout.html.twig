@@ -9,5 +9,9 @@
       {{ render_esi(controller('JaccobTaskBundle:Task:menu')) }}
     </div>
   </nav>
-  {% block main %}{% endblock %}
+  <div class="container">
+    <div class="row">
+      {% block main %}{% endblock %}
+    </div>
+  </div>
 {% endblock %}
