@@ -3,6 +3,7 @@
 namespace Jaccob\TaskBundle;
 
 use PommProject\Foundation\Session;
+use Symfony\Component\DependencyInjection\ContainerAware;
 
 trait TaskModelAware
 {
@@ -32,8 +33,13 @@ trait TaskModelAware
             return $this->pommSession;
         }
 
-        // When we are working with an object plugged to the DIC.
-        return $this->get('pomm')->getSession('default');
+        if ($this instanceof ContainerAware) {
+            return $this->container->get('pomm')->getSession('default');
+        }
+
+        if (method_exists($this, 'get')) {
+            return $this->get('pomm')->getSession('default');
+        }
     }
 
     /**

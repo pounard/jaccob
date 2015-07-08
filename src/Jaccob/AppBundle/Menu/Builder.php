@@ -10,10 +10,14 @@ class Builder extends AbstractMenu
     {
         $menu = $factory->createItem('root');
 
-        $account = $this->getAccount();
+        $account = $this->getCurrentAccount();
 
         if ($account) {
-            $menu->addChild('Tasks', ['route' => 'jaccob_task_list']);
+            // @todo If account can access tasks and if account is in one of
+            // task pages, build submenu, else drop it because it's terrible
+            // it does SQL queries and all.
+            $taskChild = $menu->addChild('Tasks', ['route' => 'jaccob_task_list']);
+
             $menu->addChild($account->getUsername(), ['route' => 'jaccob_account_login']);
             $menu->addChild('Logout', ['route' => 'jaccob_account_logout']);
         }

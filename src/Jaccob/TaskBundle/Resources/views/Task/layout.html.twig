@@ -3,8 +3,14 @@
 {% block body %}
   <div class="container">
     <div class="row">
-      {{ knp_menu_render('JaccobTaskBundle:Builder:sideMenu', {'template': 'JaccobTaskBundle:Task:sideMenu.html.twig'}) }}
-      {% block main %}{% endblock %}
+      <div class="col-md-12">
+        {{ knp_menu_render('JaccobTaskBundle:Builder:sideMenu', {'template': 'JaccobTaskBundle:Task:sideMenu.html.twig', 'currentClass': 'active', 'ancestorClass': 'active'}) }}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        {% block main %}{% endblock %}
+      </div>
     </div>
   </div>
 {% endblock %}

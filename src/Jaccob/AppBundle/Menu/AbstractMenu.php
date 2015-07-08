@@ -2,6 +2,8 @@
 
 namespace Jaccob\AppBundle\Menu;
 
+use Jaccob\AccountBundle\Security\User\JaccobUser;
+
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 
@@ -20,7 +22,7 @@ abstract class AbstractMenu extends ContainerAware
      */
     protected function isLoggedIn()
     {
-        return null === $this->getAccount();
+        return null === $this->getCurrentUser();
     }
 
     /**
@@ -34,7 +36,7 @@ abstract class AbstractMenu extends ContainerAware
     }
 
     /**
-     * Get current logged in user account
+     * Get current logged in security user
      *
      * @return \Jaccob\AccountBundle\Security\User\JaccobUser
      *   Note that this bundle is not dependent upon the AccountBundle so it
@@ -44,12 +46,28 @@ abstract class AbstractMenu extends ContainerAware
      *   If there is no logged in user, this returns null with no other kind
      *   of warning or error, please us isLoggedIn() or isAnonymous() before
      */
-    protected function getAccount()
+    protected function getCurrentUser()
     {
         /* @var $currentUser \Jaccob\AccountBundle\Security\User\JaccobUser */
         $token = $this->container->get('security.context')->getToken();
         if ($token && !$token instanceof AnonymousToken) {
             return $token->getUser();
+        }
+    }
+
+    /**
+     * Get current logged in security user
+     *
+     * @return \Jaccob\AccountBundle\Model\Account
+     *   If there is no logged in user, this returns null with no other kind
+     *   of warning or error, please us isLoggedIn() or isAnonymous() before
+     */
+    protected function getCurrentAccount()
+    {
+        $user = $this->getCurrentUser();
+
+        if ($user instanceof JaccobUser) {
+            return $user->getAccount();
         }
     }
 }
