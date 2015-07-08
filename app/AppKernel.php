@@ -17,10 +17,11 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new PommProject\PommBundle\PommBundle(),
+            new Knp\Bundle\MenuBundle\KnpMenuBundle(),
             new Jaccob\AppBundle\JaccobAppBundle(),
             new Jaccob\AccountBundle\JaccobAccountBundle(),
             new Jaccob\TaskBundle\JaccobTaskBundle(),
-            new Knp\Bundle\MenuBundle\KnpMenuBundle(),
+            new Jaccob\MediaBundle\JaccobMediaBundle(),
         ];
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

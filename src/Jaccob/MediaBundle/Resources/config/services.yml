@@ -1,0 +1,4 @@
+services:
+#    jaccob_media.example:
+#        class: Jaccob\MediaBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]
