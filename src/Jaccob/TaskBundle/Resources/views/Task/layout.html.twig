@@ -1,16 +1,9 @@
 {% extends '::base.html.twig' %}
 
 {% block body %}
-  <nav class="navbar navbar-default navbar-inverse">
-    <div class="container">
-      <div class="navbar-header">
-        <a class="navbar-brand" href="{{ path('jaccob_task_list') }}">All tasks</a>
-      </div>
-      {{ render_esi(controller('JaccobTaskBundle:Task:menu')) }}
-    </div>
-  </nav>
   <div class="container">
     <div class="row">
+      {{ knp_menu_render('JaccobTaskBundle:Builder:sideMenu', {'template': 'JaccobTaskBundle:Task:sideMenu.html.twig'}) }}
       {% block main %}{% endblock %}
     </div>
   </div>
