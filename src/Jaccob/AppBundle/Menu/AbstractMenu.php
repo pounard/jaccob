@@ -11,7 +11,7 @@ use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
  * Classes implement this must implement the
  * \Symfony\Component\DependencyInjectionContainerAwareInterface interface
  */
-trait SecurityAwareMenuTrait
+abstract class AbstractMenu extends ContainerAware
 {
     /**
      * Is current user logged in

@@ -4,12 +4,8 @@ namespace Jaccob\AppBundle\Menu;
 
 use Knp\Menu\FactoryInterface;
 
-use Symfony\Component\DependencyInjection\ContainerAware;
-
-class Builder extends ContainerAware
+class Builder extends AbstractMenu
 {
-    use SecurityAwareMenuTrait;
-
     public function mainMenu(FactoryInterface $factory, array $options)
     {
         $menu = $factory->createItem('root');
