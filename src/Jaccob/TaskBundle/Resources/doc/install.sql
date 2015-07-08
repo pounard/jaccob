@@ -13,6 +13,8 @@ CREATE TABLE task (
     FOREIGN KEY (id_account) REFERENCES account (id) ON DELETE CASCADE
 );
 
+CREATE INDEX task_account_done_deadline_idx ON task (id_account, is_done, ts_deadline);
+
 -- Task tags table
 CREATE TABLE task_tag (
     id SERIAL PRIMARY KEY,
