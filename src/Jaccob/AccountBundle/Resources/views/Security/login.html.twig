@@ -3,7 +3,7 @@
 {% block title %}Please log-in{% endblock %}
 
 {% block form %}
-  <form class="form-horizontal" action="{{ path('jaccob_account_login_check') }}" method="post">
+  <form class="form-horizontal" action="{{ path('jaccob_account.login_check') }}" method="post">
     <div class="form-group">
       <label class="col-sm-2 control-label" for="username">Username</label>
       <div class="col-sm-10">
@@ -28,7 +28,7 @@
     <!-- <input type="hidden" name="_target_path" value="account" /> -->
     <div class="row">
       <div class="col-sm-12">
-        <a class="btn btn-link" href="{{ path('jaccob_account_request_password') }}">Forgotten password&nbsp;?</a>
+        <a class="btn btn-link" href="{{ path('jaccob_account.request_password') }}">Forgotten password&nbsp;?</a>
         <input class="btn btn-primary pull-right" type="submit" value="Sign in" />
       </div>
     </div>

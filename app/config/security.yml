@@ -13,7 +13,7 @@ security:
     # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
     providers:
         jaccob:
-            id: jaccob_account_provider
+            id: jaccob_account.account_provider
 
     # the main part of the security, where you can set up firewalls
     # for specific sections of your app
@@ -34,10 +34,10 @@ security:
         jaccob:
             pattern:                  ^/
             form_login:
-                check_path:           jaccob_account_login_check
-                login_path:           jaccob_account_login
+                check_path:           jaccob_account.login_check
+                login_path:           jaccob_account.login
                 default_target_path:  _welcome
             logout:
-                path:                 jaccob_account_logout
+                path:                 jaccob_account.logout
                 target:               _welcome
             anonymous:                false

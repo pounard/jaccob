@@ -4,7 +4,9 @@ namespace Jaccob\TaskBundle\EventListener;
 
 use Jaccob\AppBundle\Event\ConfigureMenuEvent;
 
-class ConfigureMenuListener
+use Jaccob\AccountBundle\EventListener\AbstractSecurityAwareMenuListener;
+
+class ConfigureMenuListener extends AbstractSecurityAwareMenuListener
 {
     /**
      * @param \Jaccob\AppBundle\Event\ConfigureMenuEvent $event
@@ -13,6 +15,10 @@ class ConfigureMenuListener
     {
         $menu = $event->getMenu();
 
-        $menu->addChild('Tasks', ['route' => 'jaccob_task_list']);
+        $account = $this->getCurrentAccount();
+
+        if ($account) {
+            $menu->addChild('Tasks', ['route' => 'jaccob_task.list']);
+        }
     }
 }

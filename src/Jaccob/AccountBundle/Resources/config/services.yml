@@ -1,11 +1,18 @@
 services:
 
-    jaccob_account_provider:
+    jaccob_account.account_provider:
         class: 'Jaccob\AccountBundle\Security\User\JaccobAccountProvider'
         calls:
           - [setAccountSession, ["@=service('pomm').getSession('default')"]]
 
-    jaccob_session_storage:
+    jaccob_account.session_storage:
         class: 'Jaccob\AccountBundle\Session\Storage\Handler\JaccobSessionHandler'
         calls:
           - [setAccountSession, ["@=service('pomm').getSession('default')"]]
+
+    jaccob_account.menu_listener:
+        class: Jaccob\AccountBundle\EventListener\ConfigureMenuListener
+        calls:
+            - [setContainer, ["@service_container"]]
+        tags:
+          - { name: kernel.event_listener, event: jaccob.menu_configure, method: onMenuConfigure }

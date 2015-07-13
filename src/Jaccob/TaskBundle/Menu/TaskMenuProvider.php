@@ -22,8 +22,8 @@ class TaskMenuProvider extends AbstractSecurityAwareMenuProvider
                 $account = $this->getCurrentAccount();
 
                 if ($account) {
-                    $menu = $this->factory->createItem('Tasks', ['route' => 'jaccob_task_list']);
-                    $menu->addChild('All tasks', ['route' => 'jaccob_task_list']);
+                    $menu = $this->factory->createItem('Tasks', ['route' => 'jaccob_task.list']);
+                    $menu->addChild('All tasks', ['route' => 'jaccob_task.list']);
 
                     $where = (new Where())
                         ->andWhere("id_account = $*", [$account->getId()])
@@ -35,7 +35,7 @@ class TaskMenuProvider extends AbstractSecurityAwareMenuProvider
                         ->countWhere($where)
                     ;
                     $menu
-                        ->addChild('Deadline', ['route' => 'jaccob_task_list_deadline'])
+                        ->addChild('Deadline', ['route' => 'jaccob_task.list_deadline'])
                         ->setExtras(['count' => $count])
                     ;
 
@@ -48,11 +48,11 @@ class TaskMenuProvider extends AbstractSecurityAwareMenuProvider
                         ->countWhere($where)
                     ;
                     $menu
-                        ->addChild('Starred', ['route' => 'jaccob_task_list_starred'])
+                        ->addChild('Starred', ['route' => 'jaccob_task.list_starred'])
                         ->setExtras(['count' => $count])
                     ;
 
-                    $menu->addChild('Archives', ['route' => 'jaccob_task_list_archive']);
+                    $menu->addChild('Archives', ['route' => 'jaccob_task.list_archive']);
 
 
                     return $menu;

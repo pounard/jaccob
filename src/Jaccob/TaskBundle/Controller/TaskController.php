@@ -58,7 +58,7 @@ class TaskController extends AbstractUserAwareController
             null,
             [
                 // Change the action when not the same page
-                'action' => $this->generateUrl('jaccob_task_add', ['id' => $task->getId()]),
+                'action' => $this->generateUrl('jaccob_task.add', ['id' => $task->getId()]),
                 // We also can change the request method
                 'method' => Request::METHOD_POST,
                 // Example of adding the HTML5 "novalidate" attribute on the form
@@ -123,7 +123,7 @@ class TaskController extends AbstractUserAwareController
 
                 $this->addFlash('success', "Wesh cimère dude!");
 
-                return $this->redirectToRoute('jaccob_task_list');
+                return $this->redirectToRoute('jaccob_task.list');
 
             } else {
                 $this->addFlash('danger', "Something wrong happened, please check form data!");

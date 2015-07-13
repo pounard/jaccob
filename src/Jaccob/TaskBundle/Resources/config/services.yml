@@ -1,5 +1,5 @@
 parameters:
-    jaccob.form.task.class: Jaccob\TaskBundle\Form\TaskType
+    jaccob_task.form.task.class: Jaccob\TaskBundle\Form\TaskType
 
 services:
 
@@ -10,12 +10,14 @@ services:
             - [setContainer, ["@service_container"]]
         tags: [{ name: knp_menu.provider }]
 
-    jaccob.form.task:
-        class: "%jaccob.form.task.class%"
+    jaccob_account.form.task:
+        class: "%jaccob_task.form.task.class%"
         tags:
             - { name: form.type, alias: jaccob_taskbundle_task }
 
     jaccob_task.menu_listener:
         class: Jaccob\TaskBundle\EventListener\ConfigureMenuListener
+        calls:
+            - [setContainer, ["@service_container"]]
         tags:
           - { name: kernel.event_listener, event: jaccob.menu_configure, method: onMenuConfigure }

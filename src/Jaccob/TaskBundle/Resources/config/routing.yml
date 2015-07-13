@@ -1,31 +1,31 @@
-jaccob_task_add:
+jaccob_task.add:
     path:     /add
     defaults: { _controller: "JaccobTaskBundle:Task:add" }
 
-jaccob_task_view:
+jaccob_task.view:
     path:     /{id}
     defaults: { _controller: "JaccobTaskBundle:Task:view" }
     requirements:
         id: \d+
 
-jaccob_task_edit:
+jaccob_task.edit:
     path:     /{id}/edit
     defaults: { _controller: "JaccobTaskBundle:Task:edit" }
     requirements:
         id: \d+
 
-jaccob_task_list:
+jaccob_task.list:
     path:     /
     defaults: { _controller: "JaccobTaskBundle:Task:list" }
 
-jaccob_task_list_starred:
+jaccob_task.list_starred:
     path:     /starred
     defaults: { _controller: "JaccobTaskBundle:Task:listStarred" }
 
-jaccob_task_list_deadline:
+jaccob_task.list_deadline:
     path:     /deadline
     defaults: { _controller: "JaccobTaskBundle:Task:listDeadline" }
 
-jaccob_task_list_archive:
+jaccob_task.list_archive:
     path:     /archives
     defaults: { _controller: "JaccobTaskBundle:Task:listArchive" }

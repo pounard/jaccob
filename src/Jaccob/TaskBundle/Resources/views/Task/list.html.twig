@@ -31,17 +31,17 @@
             {% else  %}
             <td></td>
             {% endif %}
-            <td><a href="{{ path('jaccob_task_view', {'id': task.id}) }}" title="Voir {{ task.title }}">{{ task.title }}</a></td>
+            <td><a href="{{ path('jaccob_task.view', {'id': task.id}) }}" title="Voir {{ task.title }}">{{ task.title }}</a></td>
             <td>{{ task.ts_added|date("d/m/Y - H:i") }}</td>
           </tr>
         {% endfor %}
       </tbody>
     </table>
-    <p><a class="btn btn-primary" href="{{ path('jaccob_task_add') }}">Create task</a></p>
+    <p><a class="btn btn-primary" href="{{ path('jaccob_task.add') }}">Create task</a></p>
   {% else %}
     <div class="jumbotron">
       <p>You have no tasks.</p>
-      <p><a class="btn btn-primary" href="{{ path('jaccob_task_add') }}">Create one</a></p>
+      <p><a class="btn btn-primary" href="{{ path('jaccob_task.add') }}">Create one</a></p>
     </div>
   {% endif %}
 {% endblock %}

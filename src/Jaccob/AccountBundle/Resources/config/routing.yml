@@ -2,21 +2,21 @@ _welcome:
     path:     /
     defaults: {_controller: 'JaccobAccountBundle:Default:index'}
 
-jaccob_account_login:
+jaccob_account.login:
     path:     /login
     defaults: { _controller: 'JaccobAccountBundle:Security:login' }
 
-jaccob_account_request_password:
+jaccob_account.request_password:
     path:     /login/request-password
     defaults: { _controller: 'JaccobAccountBundle:Security:requestPassword' }
 
-jaccob_account_login_check:
+jaccob_account.login_check:
     path:     /login/go
 
-jaccob_account_logout:
+jaccob_account.logout:
     path:     /logout
 
-jaccob_account_profile_view:
+jaccob_account.profile_view:
     path:     /{id}
     defaults: { _controller: 'JaccobAccountBundle:Account:view' }
     requirements:
