@@ -24,7 +24,14 @@
           </button>
           <a href="#" class="navbar-brand">{% block brandname %}Jaccob{% endblock %}</a>
         </div>
-        {{ knp_menu_render('JaccobAppBundle:Builder:mainMenu', {'template': '::menu/mainMenu.html.twig', 'currentClass': 'active', 'ancestorClass': 'active'}) }}
+        {{ knp_menu_render('main',
+          {
+            'template': '::menu/mainMenu.html.twig',
+            'currentClass': 'active',
+            'ancestorClass': 'active',
+            'depth': 1
+          })
+        }}
       </div>
     </nav>
     {% if app.session.flashbag.peekAll %}

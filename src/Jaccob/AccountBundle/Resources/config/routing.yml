@@ -15,3 +15,9 @@ jaccob_account_login_check:
 
 jaccob_account_logout:
     path:     /logout
+
+jaccob_account_profile_view:
+    path:     /{id}
+    defaults: { _controller: 'JaccobAccountBundle:Account:view' }
+    requirements:
+        id: \d+

@@ -2,10 +2,20 @@ parameters:
     jaccob.form.task.class: Jaccob\TaskBundle\Form\TaskType
 
 services:
+
 #    jaccob_task.example:
 #        class: Jaccob\TaskBundle\Example
 #        arguments: [@service_id, "plain_value", %parameter%]
+
     jaccob.form.task:
         class: "%jaccob.form.task.class%"
         tags:
             - { name: form.type, alias: jaccob_taskbundle_task }
+
+    jaccob.task.menu_provider:
+        class: Jaccob\TaskBundle\Menu\MenuProvider
+        tags:
+            -  { name: app.menu_provider }
+        calls:
+            # We need this for the SecurityAware trait
+            - [setContainer, ["@service_container"]]

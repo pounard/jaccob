@@ -1,6 +1,6 @@
 <?php
 
-namespace Jaccob\AppBundle\Menu;
+namespace Jaccob\AccountBundle;
 
 use Jaccob\AccountBundle\Security\User\JaccobUser;
 
@@ -13,7 +13,7 @@ use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
  * Classes implement this must implement the
  * \Symfony\Component\DependencyInjectionContainerAwareInterface interface
  */
-abstract class AbstractMenu extends ContainerAware
+trait SecurityAware
 {
     /**
      * Is current user logged in

@@ -1,8 +1,10 @@
 services:
+
     jaccob_account_provider:
         class: 'Jaccob\AccountBundle\Security\User\JaccobAccountProvider'
         calls:
           - [setAccountSession, ["@=service('pomm').getSession('default')"]]
+
     jaccob_session_storage:
         class: 'Jaccob\AccountBundle\Session\Storage\Handler\JaccobSessionHandler'
         calls:

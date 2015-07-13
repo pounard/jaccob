@@ -2,12 +2,14 @@
 
 namespace Jaccob\TaskBundle\Menu;
 
-use Jaccob\AppBundle\Menu\AbstractMenu;
+use Jaccob\AppBundle\Menu\AbstractMenuProvider;
 use Jaccob\TaskBundle\TaskModelAware;
 
-use Knp\Menu\FactoryInterface;
+use Knp\Menu\ItemInterface;
 
 use PommProject\Foundation\Where;
+
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /*
 <ul class="nav navbar-nav">
@@ -29,20 +31,23 @@ use PommProject\Foundation\Where;
   </li>
 </ul>
  */
-class Builder extends AbstractMenu
+class MenuProvider extends AbstractMenuProvider
 {
     use TaskModelAware;
 
-    public function sideMenu(FactoryInterface $factory, array $options)
+    public function attachMainMenuChildren(ItemInterface $root, RequestStack $requestStack)
     {
-        $menu = $factory->createItem('root');
-
         $account = $this->getCurrentAccount();
 
         if ($account) {
 
-            $menu->addChild('All tasks', ['route' => 'jaccob_task_list']);
+            // @todo If account can access tasks and if account is in one of
+            // task pages, build submenu, else drop it because it's terrible
+            // it does SQL queries and all.
+            $menu = $root->addChild('Tasks', ['route' => 'jaccob_task_list']);
 
+            $menu->addChild('All tasks', ['route' => 'jaccob_task_list']);
+return;
             $where = (new Where())
                 ->andWhere("id_account = $*", [$account->getId()])
                 ->andWhere("is_done = $*", [0])
@@ -72,7 +77,5 @@ class Builder extends AbstractMenu
 
             $menu->addChild('Archives', ['route' => 'jaccob_task_list_archive']);
         }
-
-        return $menu;
     }
 }
