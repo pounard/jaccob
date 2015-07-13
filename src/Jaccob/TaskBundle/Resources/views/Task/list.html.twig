@@ -1,7 +1,7 @@
 {% extends 'JaccobTaskBundle:Task:layout.html.twig' %}
 
 {% block main %}
-  {% if tasks %}
+  {% if tasks|length %}
     <table class="table table-bordered table-hover table-condensed">
       <thead>
         <th></th>
@@ -39,6 +39,9 @@
     </table>
     <p><a class="btn btn-primary" href="{{ path('jaccob_task_add') }}">Create task</a></p>
   {% else %}
-    <p>You have no tasks. <a class="btn btn-primary" href="{{ path('jaccob_task_add') }}">Create one</a></p>
+    <div class="jumbotron">
+      <p>You have no tasks.</p>
+      <p><a class="btn btn-primary" href="{{ path('jaccob_task_add') }}">Create one</a></p>
+    </div>
   {% endif %}
 {% endblock %}

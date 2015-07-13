@@ -114,23 +114,25 @@ class TaskController extends AbstractUserAwareController
         $task = $this->getTaskModel()->createEntity(['id' => null]);
         $form = $this->getTaskForm($task);
 
-        if ($form->handleRequest($request)->isValid()) {
+        if (Request::METHOD_POST === $request->getMethod()) {
+            if ($form->handleRequest($request)->isValid()) {
 
-            $this->getTaskModel()->createAndSave([
-                'id_account' => $this->getCurrentUserAccount()->getId()
-            ] + iterator_to_array($form->getData()));
+                $this->getTaskModel()->createAndSave([
+                    'id_account' => $this->getCurrentUserAccount()->getId()
+                ] + iterator_to_array($form->getData()));
 
-            $this->addFlash('success', "Wesh cimère dude!");
+                $this->addFlash('success', "Wesh cimère dude!");
 
-            return $this->redirectToRoute('jaccob_task_list');
+                return $this->redirectToRoute('jaccob_task_list');
 
-        } else {
-            $this->addFlash('danger', "C'est pas bon (pour le moral)");
-
-            return $this->render('JaccobTaskBundle:Task:add.html.twig', [
-                'form' => $form->createView(),
-            ]);
+            } else {
+                $this->addFlash('danger', "Something wrong happened, please check form data!");
+            }
         }
+
+        return $this->render('JaccobTaskBundle:Task:add.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 
     /**
