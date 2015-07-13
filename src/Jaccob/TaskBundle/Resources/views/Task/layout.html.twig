@@ -4,9 +4,7 @@
   <div class="container">
     <div class="row">
       <div class="col-md-12">
-        {#
-        {{ knp_menu_render('JaccobTaskBundle:Builder:sideMenu', {'template': 'JaccobTaskBundle:Task:sideMenu.html.twig', 'currentClass': 'active', 'ancestorClass': 'active'}) }}
-        #}
+        {{ knp_menu_render('main.task', {'template': 'JaccobTaskBundle:Task:sideMenu.html.twig', 'currentClass': 'active', 'ancestorClass': 'active'}) }}
       </div>
     </div>
     <div class="row">

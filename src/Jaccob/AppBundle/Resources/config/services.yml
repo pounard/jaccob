@@ -1,15 +1,8 @@
 services:
 
-    app.menu_builder:
-        class: Jaccob\AppBundle\Menu\MenuBuilder
+    jaccob.menu_provider:
+        class: Jaccob\AppBundle\Menu\MainMenuProvider
         arguments: ["@knp_menu.factory"]
         calls:
-            # We need this for the SecurityAware trait
             - [setContainer, ["@service_container"]]
-
-    app.main_menu:
-        class: Knp\Menu\MenuItem
-        factory: ["@app.menu_builder", createMainMenu]
-        arguments: ["@request_stack"]
-        tags:
-            - { name: knp_menu.menu, alias: main }
+        tags: [{ name: knp_menu.provider }]

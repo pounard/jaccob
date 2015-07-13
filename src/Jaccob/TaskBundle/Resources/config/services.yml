@@ -3,19 +3,19 @@ parameters:
 
 services:
 
-#    jaccob_task.example:
-#        class: Jaccob\TaskBundle\Example
-#        arguments: [@service_id, "plain_value", %parameter%]
+    jaccob_task.menu_provider:
+        class: Jaccob\TaskBundle\Menu\TaskMenuProvider
+        arguments: ["@knp_menu.factory"]
+        calls:
+            - [setContainer, ["@service_container"]]
+        tags: [{ name: knp_menu.provider }]
 
     jaccob.form.task:
         class: "%jaccob.form.task.class%"
         tags:
             - { name: form.type, alias: jaccob_taskbundle_task }
 
-    jaccob.task.menu_provider:
-        class: Jaccob\TaskBundle\Menu\MenuProvider
+    jaccob_task.menu_listener:
+        class: Jaccob\TaskBundle\EventListener\ConfigureMenuListener
         tags:
-            -  { name: app.menu_provider }
-        calls:
-            # We need this for the SecurityAware trait
-            - [setContainer, ["@service_container"]]
+          - { name: kernel.event_listener, event: jaccob.menu_configure, method: onMenuConfigure }
