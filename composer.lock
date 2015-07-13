@@ -1,7 +1,7 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
     "hash": "5e40978330c3842e0a1ef07d93c4b74c",
@@ -1042,16 +1042,16 @@
         },
         {
             "name": "monolog/monolog",
-            "version": "1.14.0",
+            "version": "1.15.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "b287fbbe1ca27847064beff2bad7fb6920bf08cc"
+                "reference": "dc5150cc608f2334c72c3b6a553ec9668a4156b0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/b287fbbe1ca27847064beff2bad7fb6920bf08cc",
-                "reference": "b287fbbe1ca27847064beff2bad7fb6920bf08cc",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/dc5150cc608f2334c72c3b6a553ec9668a4156b0",
+                "reference": "dc5150cc608f2334c72c3b6a553ec9668a4156b0",
                 "shasum": ""
             },
             "require": {
@@ -1088,7 +1088,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.14.x-dev"
+                    "dev-master": "1.15.x-dev"
                 }
             },
             "autoload": {
@@ -1114,7 +1114,7 @@
                 "logging",
                 "psr-3"
             ],
-            "time": "2015-06-19 13:29:54"
+            "time": "2015-07-12 13:54:09"
         },
         {
             "name": "oyejorge/less.php",
@@ -1296,12 +1296,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/pomm-project/ModelManager.git",
-                "reference": "f22a7ef3d5167ece8431df51929101af5c89f042"
+                "reference": "788deddc5f8b050df198032f4de8d8c555f58ebd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pomm-project/ModelManager/zipball/f22a7ef3d5167ece8431df51929101af5c89f042",
-                "reference": "f22a7ef3d5167ece8431df51929101af5c89f042",
+                "url": "https://api.github.com/repos/pomm-project/ModelManager/zipball/788deddc5f8b050df198032f4de8d8c555f58ebd",
+                "reference": "788deddc5f8b050df198032f4de8d8c555f58ebd",
                 "shasum": ""
             },
             "require": {
@@ -1346,7 +1346,7 @@
                 "pomm",
                 "postgresql"
             ],
-            "time": "2015-06-29 14:32:39"
+            "time": "2015-07-02 15:28:21"
         },
         {
             "name": "pomm-project/pomm-bundle",
