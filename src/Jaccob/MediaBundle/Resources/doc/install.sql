@@ -37,10 +37,18 @@ CREATE TABLE album_acl (
     FOREIGN KEY (id_account) REFERENCES account (id) ON DELETE CASCADE
 );
 
+CREATE TABLE device (
+    id SERIAL PRIMARY KEY,
+    id_account INTEGER NOT NULL,
+    name VARCHAR(1024) NOT NULL,
+    FOREIGN KEY (id_account) REFERENCES account (id)
+);
+
 CREATE TABLE media (
     id SERIAL PRIMARY KEY,
     id_album INTEGER NOT NULL,
     id_account INTEGER NOT NULL,
+    id_device INTEGER NOT NULL,
     access_level INTEGER DEFAULT 0,
     name VARCHAR(1024) NOT NULL,
     path VARCHAR(1024) NOT NULL,
@@ -56,7 +64,8 @@ CREATE TABLE media (
     ts_updated TIMESTAMP NOT NULL DEFAULT NOW(),
     ts_user_date TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (id_album) REFERENCES album(id),
-    FOREIGN KEY (id_account) REFERENCES account(id)
+    FOREIGN KEY (id_account) REFERENCES account(id),
+    FOREIGN KEY (id_device) REFERENCES device(id)
 );
 
 CREATE TABLE media_metadata (

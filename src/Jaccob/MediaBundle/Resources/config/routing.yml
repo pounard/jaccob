@@ -1,3 +1,16 @@
-# jaccob_media_homepage:
-#    path:     /hello/{name}
-#    defaults: { _controller: JaccobMediaBundle:Default:index }
+jaccob_media.home:
+    path:     /
+    defaults: { _controller: "JaccobMediaBundle:Home:home" }
+
+jaccob_media.album.list:
+    path:     /{albumId}
+    defaults: { _controller: "JaccobMediaBundle:Album:list" }
+    requirements:
+        albumId: \s+
+
+jaccob_media.media.view:
+    path:     /{albumId}/{mediaId}
+    defaults: { _controller: "JaccobMediaBundle:Media:view" }
+    requirements:
+        albumId: \s+
+        mediaId: \s+
