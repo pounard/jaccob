@@ -273,12 +273,8 @@ class DefaultImporter extends ContainerAware
      */
     final public function import(Media $media, Album $album = null)
     {
-        /*
-        if (!$this->typeFactory->isSupported($media->getMimetype())) {
-            // @todo Log ignored file
-            return;
-        }
-         */
+        /* @var $typeFinder \Jaccob\MediaBundle\Type\TypeFinderService */
+        $typeFinder = $this->container->get('jaccob_media.type_finder');
 
         if (!$album) {
             $album = $this->findAlbum($media);
@@ -287,6 +283,7 @@ class DefaultImporter extends ContainerAware
         $device     = $this->findDevice($media);
         $owner      = $this->getOwner();
         $mediaModel = $this->getMediaModel();
+        $source     = FileSystem::pathJoin($this->getWorkingDirectory(), $media->path, $media->name);
 
         $media->id_album    = $album->getId();
         $media->id_account  = $owner->getId();
@@ -303,10 +300,15 @@ class DefaultImporter extends ContainerAware
             )
         ;
 
+        $type = $typeFinder->getTypeFor($media->mimetype);
+        if ($type->isValid()) {
+            /* $metadata = */ $type->findMetadata($media, $source);
+            // @todo Save metadata later after update
+        }
+
         if (!count($existing)) {
 
             // Get physical target (needs the data dir)
-            $source = FileSystem::pathJoin($this->getWorkingDirectory(), $media->path, $media->name);
             $target = FileSystem::pathJoin($this->getDestinationDirectory(), 'full', $media->physical_path);
             // Everything is relative find the real file path and create it
             // if necessary
@@ -320,32 +322,27 @@ class DefaultImporter extends ContainerAware
             $mediaModel->insertOne($media);
 
         } else {
+
             // FIXME Why does the fouque reset() not working on Iterator?
             foreach ($existing as $item) {
                 $existing = $item;
                 break;
             }
 
-            if ($media->md5_hash !== $existing->md5_hash) {
-                $mediaModel->updateOne($existing, $media);
-            }
-            // In case it wasn't really changed, do nothing.
+            // FIXME: type handler might have populated stuff
+            // if ($media->md5_hash !== $existing->md5_hash) {
+                $values = $media->extract();
+                $existing->hydrate($values);
+                $mediaModel->updateOne($existing, array_keys($values));
+            // }
+            // @todo In case it wasn't really changed, do nothing.
 
             $media = $existing;
         }
 
-        /*
-        $metadata = $this
-            ->typeFactory
-            ->getInstance($media->getMimetype())
-            ->findMetadata($media);
-         */
-
         if (!$album->id_media_preview) {
             $album->id_media_preview = $media->id;
-            $this->getAlbumModel()->updateOne($album, [
-                'id_media_preview',
-            ]);
+            $this->getAlbumModel()->updateOne($album, ['id_media_preview']);
         }
     }
 }

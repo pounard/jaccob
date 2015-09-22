@@ -11,7 +11,7 @@ trait MediaModelAware
     /**
      * @var \PommProject\Foundation\Session
      */
-    private $pommSession;
+    private $accountPommSession;
 
     /**
      * Set session
@@ -20,7 +20,7 @@ trait MediaModelAware
      */
     public function setMediaSession(Session $pommSession)
     {
-        $this->pommSession = $pommSession;
+        $this->accountPommSession = $pommSession;
     }
 
     /**
@@ -30,8 +30,8 @@ trait MediaModelAware
      */
     protected function getMediaSession()
     {
-        if ($this->pommSession) {
-            return $this->pommSession;
+        if ($this->accountPommSession) {
+            return $this->accountPommSession;
         }
 
         // When we are working with an object plugged to the DIC.

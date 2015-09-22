@@ -2,15 +2,19 @@
 
 namespace Jaccob\MediaBundle\Controller;
 
+use Jaccob\AccountBundle\AccountModelAware;
 use Jaccob\AccountBundle\Controller\AbstractUserAwareController;
 
 use Jaccob\MediaBundle\MediaModelAware;
+
+use PommProject\Foundation\Where;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
 class AlbumController extends AbstractUserAwareController
 {
+    use AccountModelAware;
     use MediaModelAware;
 
     /**
@@ -36,9 +40,16 @@ class AlbumController extends AbstractUserAwareController
         // @todo List (paginated) all medias with thumbnails
         // @todo Request for sorting and filtering
 
-        $owner      = null;
-        $album      = $this->findAlbumOr404($albumId);
-        $mediaList  = [];
+        $album = $this->findAlbumOr404($albumId);
+        $owner = $this->getAccountModel()->findByPK(['id' => $album->id_account]);
+
+        $mediaList = $this
+            ->getMediaModel()
+            ->findWhere(
+                (new Where())
+                    ->andWhere("id_album = $*", [$album->id])
+            )
+        ;
 
         return $this->render('JaccobMediaBundle:Album:list.html.twig', [
             'owner'     => $owner,
@@ -168,48 +179,9 @@ class AlbumController extends AbstractUserAwareController
         return $directories;
     }
 
-    public function postAction(RequestInterface $request, array $args)
-    {
-        $app = $this->getApplication();
-        $account = $app->getSession()->getAccount();
-
-        $importer = new FilesystemImporter($account);
-        $importer->setApplication($app);
-
-        $values = $request->getContent();
-        $errors = array();
-
-        $albumCount = 0;
-        $mediaCount = 0;
-
-        if (is_array($values) && !empty($values['directories'])) {
-            foreach ($values['directories'] as $directory) {
-                $importer->importFromFolder($directory);
-            }
-        } else {
-            $errors[] = "Please select at least one album or click cancel";
-        }
-
-        $messager = $this->getApplication()->getMessager();
-
-        if (!empty($errors)) {
-            foreach ($errors as $error) {
-                $messager->addMessage($error, Message::TYPE_ERROR);
-            }
-
-            return $this->getAction($request, $args);
-
-        } else {
-
-            $messager->addMessage(
-                "Added " . $mediaCount . " file(s) in " . $albumCount . " album(s)",
-                Message::TYPE_SUCCESS
-            );
-
-            return new RedirectResponse();
-        }
-    }
-
+    /**
+     * Create an album from user selection into his upload directory form
+     */
     public function createFromAction(Request $request)
     {
         $directories = $this->listUploadFolder();
@@ -261,6 +233,9 @@ class AlbumController extends AbstractUserAwareController
         ]);
     }
 
+    /**
+     * Import new media into the album form
+     */
     public function importAction($albumId)
     {
         // @todo

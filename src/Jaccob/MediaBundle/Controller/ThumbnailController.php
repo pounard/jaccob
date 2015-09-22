@@ -56,7 +56,7 @@ class ThumbnailController extends AbstractUserAwareController
 
         // Ensure size is valid
         // @todo Configuration would be better here
-        if (!in_array($size, array("100", "200", "230", "300", "600", "900", "1200", "full"))) {
+        if (!in_array($size, array("240", "480", "720", "960", "1200", "1440", "full"))) {
             throw $this->createNotFoundException();
         }
 

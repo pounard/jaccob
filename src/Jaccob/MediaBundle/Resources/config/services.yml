@@ -1,9 +1,19 @@
 parameters:
 
+    # @todo Those next two could be remove or determined
+    # dynamically using the bundle routing prefix to avoid
+    # problems
     jaccob_media.directory.public: /var/www/jaccob/web/media
+    jaccob_media.directory.relative: media
     jaccob_media.directory.upload: /data/private/photos
 
 services:
+
+    jaccob_media.twig.thumbnail:
+        class: Jaccob\MediaBundle\Twig\ThumbnailExtension
+        tags: [{ name: twig.extension }]
+        calls:
+            - [setContainer, ["@service_container"]]
 
     jaccob_media.menu_provider:
         class: Jaccob\MediaBundle\Menu\MediaMenuProvider
@@ -21,5 +31,20 @@ services:
 
     jaccob_media.importer:
         class: Jaccob\MediaBundle\Import\FilesystemImporter
+        calls:
+            - [setContainer, ["@service_container"]]
+
+    jaccob_media.type_finder:
+        class: Jaccob\MediaBundle\Type\TypeFinderService
+
+    jaccob_media.type.image:
+        class: Jaccob\MediaBundle\Type\ImageType
+        arguments:
+            - image/gif
+            - image/jpeg
+            - image/png
+            - image/svg+xml
+            - image/vnd.microsoft.icon
+        tags: [{ name: jaccob_media.type }]
         calls:
             - [setContainer, ["@service_container"]]

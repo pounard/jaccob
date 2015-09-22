@@ -22,4 +22,5 @@ parameters:
     secret:            ThisTokenIsNotSoSecretChangeIt
 
     jaccob_media.directory.public: /var/www/jaccob/web/media
+    jaccob_media.directory.relative: media
     jaccob_media.directory.upload: /data/private/photos

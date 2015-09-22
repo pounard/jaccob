@@ -22,4 +22,8 @@
       </div>
     </div>
   </div>
+
+  {% javascripts '@JaccobMediaBundle/Resources/public/js/*' %}
+    <script src="{{ asset_url }}"></script>
+  {% endjavascripts %}
 {% endblock %}

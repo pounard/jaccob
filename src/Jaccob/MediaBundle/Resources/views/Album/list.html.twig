@@ -10,5 +10,9 @@
 {% endblock %}
 
 {% block main %}
-  An album.
+  {% for media in mediaList %}
+    <div class="col-md-3 media">
+      {{ thumbnail(media, 'w240', true, 'w960')|raw }}
+    </div>
+  {% endfor %}
 {% endblock %}
