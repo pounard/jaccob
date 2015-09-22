@@ -85,7 +85,30 @@ trait MediaModelAware
     /**
      * Get task or throw a 404 or 403 error depending on data
      *
-     * @param int $albumId
+     * @param int $id
+     *   Media identifier
+     *
+     * @return \Jaccob\MediaBundle\Model\Media
+     */
+    protected function findMediaOr404($id)
+    {
+        /* @var $task \Jaccob\MediaBundle\Model\Media */
+        $media = $this->getMediaModel()->findByPK(['id' => $id]);
+
+        if (!$media) {
+            throw $this->createNotFoundException(sprintf(
+                "Album with id '%d' does not exists",
+                $id
+            ));
+        }
+
+        return $media;
+    }
+
+    /**
+     * Get task or throw a 404 or 403 error depending on data
+     *
+     * @param int $id
      *   Album identifier
      *
      * @return \Jaccob\MediaBundle\Model\Album

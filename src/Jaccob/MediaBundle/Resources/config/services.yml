@@ -7,6 +7,10 @@ parameters:
     jaccob_media.directory.relative: media
     jaccob_media.directory.upload: /data/private/photos
 
+    # Allowed media sizes
+    jaccob_media.sizes: [240, 480,  720, 960, 1200, 1440, full]
+    jaccob_media.default_size: 960
+
 services:
 
     jaccob_media.twig.thumbnail:

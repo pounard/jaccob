@@ -1,5 +1,7 @@
 <?php
 
+namespace Wps\View\Helper\Template;
+
 namespace Jaccob\MediaBundle\Twig;
 
 use Jaccob\MediaBundle\Model\Media;
@@ -8,6 +10,10 @@ use Jaccob\MediaBundle\Util\FileSystem;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+/**
+ * Provides the thumbnail_grid() function that builds a nice media grid by
+ * computing various image heights and arranging them into columns 
+ */
 class ThumbnailExtension extends \Twig_Extension implements ContainerAwareInterface
 {
     protected $container;
@@ -26,7 +32,14 @@ class ThumbnailExtension extends \Twig_Extension implements ContainerAwareInterf
     public function getFunctions()
     {
         return [
-            new \Twig_SimpleFunction('thumbnail', [$this, 'createThumbnail']),
+            new \Twig_SimpleFunction('media_grid', [$this, 'createGrid'], [
+                'is_safe' => ['html'],
+                'needs_environment' => true,
+            ]),
+            new \Twig_SimpleFunction('media_thumbnail', [$this, 'createThumbnail'], [
+                'is_safe' => ['html'],
+                'needs_environment' => true,
+            ]),
         ];
     }
 
@@ -54,12 +67,12 @@ class ThumbnailExtension extends \Twig_Extension implements ContainerAwareInterf
      *
      * @return string
      */
-    public function createThumbnail(Media $media, $size = 100, $withLink = true, $toSize = 600)
+    public function createThumbnail(\Twig_Environment $twig, Media $media, $size = 100, $withLink = true, $toSize = 600)
     {
+        // Better be safe than sorry.
         if (!$media->physical_path) {
-            return ''; // Never crash on display
+            return '';
         }
-
         if (!$media->width || !$media->height) {
             return '';
         }
@@ -91,13 +104,13 @@ class ThumbnailExtension extends \Twig_Extension implements ContainerAwareInterf
         $href   = null;
         if ($withLink) {
             if ('full' === $toSize) {
-                $href = $this->url(FileSystem::pathJoin($publicDirectory, $toSize, $media->physical_path));
+                $href = $this->url(FileSystem::pathJoin($publicDirectory, 'full', $media->physical_path));
             } else if (is_string($withLink)) {
                 // @todo URL with base path
                 $href = '/' . $withLink;
             } else {
                 // @todo URL with base path
-                $href = '/' . FileSystem::pathJoin('media', $media->id, $toSize);
+                $href = '/' . FileSystem::pathJoin('media/view', $media->id, $toSize);
             }
         }
 
@@ -108,6 +121,58 @@ class ThumbnailExtension extends \Twig_Extension implements ContainerAwareInterf
         } else {
             return $imgTag;
         }
-    
+    }
+
+    /**
+     * Generate thumbnail grid
+     *
+     * @param \Jaccob\MediaBundle\Model\Media[] $mediaList
+     * @param int $columns
+     * @param int $width
+     * @param string $withLink
+     * @param int|string $toSize
+     *
+     * @return string
+     */
+    public function createGrid(\Twig_Environment $twig, $mediaList, $columns = 3, $width = 240, $withLink = true, $toSize = 960)
+    {
+        $columnsData = array_fill(0, $columns, []);
+        $columnsSize = array_fill(0, $columns, 0);
+
+        foreach ($mediaList as $media) {
+
+            // Better be safe than sorry.
+            if (!$media instanceof Media) {
+                continue; 
+            }
+            if (!$media->physical_path) {
+                continue;
+            }
+            if (!$media->width || !$media->height) {
+                continue;
+            }
+
+            $currentColumn = 0;
+            $currentSize = null;
+
+            for ($i = 0; $i < $columns; ++$i) {
+                if (null === $currentSize || $columnsSize[$i] < $currentSize) {
+                    $currentColumn = $i;
+                    $currentSize = $columnsSize[$i];
+                }
+            }
+
+            $height = floor(($width / $media->getWidth()) * $media->getHeight());
+
+            $columnsSize[$currentColumn] += $height;
+            $columnsData[$currentColumn][] = $media;
+        }
+
+        return $twig->render('JaccobMediaBundle:Helper:thumbnailGrid.html.twig', [
+            'columns'   => $columnsData,
+            'width'     => $width,
+            'withLink'  => $withLink,
+            'toSize'    => $toSize,
+        ]);
     }
 }

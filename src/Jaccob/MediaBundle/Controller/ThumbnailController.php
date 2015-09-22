@@ -49,14 +49,19 @@ class ThumbnailController extends AbstractUserAwareController
         } else if ('m' === $sizeId[0]) {
             $mode = 'm';
             $size = substr($sizeId, 1);
-        } else {
+        } else if ('s' === $sizeId[0]) {
             $mode = 's'; // Square
             $size = substr($sizeId, 1);
+        } else {
+            $mode = 's';
+            $size = (int)$sizeId;
         }
 
         // Ensure size is valid
         // @todo Configuration would be better here
-        if (!in_array($size, array("240", "480", "720", "960", "1200", "1440", "full"))) {
+        $allowedSizes = $this->getParameter('jaccob_media.sizes');
+
+        if (!in_array($size, $allowedSizes)) {
             throw $this->createNotFoundException();
         }
 
