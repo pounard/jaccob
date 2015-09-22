@@ -1,5 +1,14 @@
-{% extends '::base.html.twig' %}
+{% extends 'JaccobMediaBundle:Home:layout.html.twig' %}
 
-{% block body %}
+{% block title %}{{ album.user_name }}{% endblock %}
+
+{% block actions %}
+  <a href="{{ path('jaccob_media.album.import', {albumId: album.id}) }}" class="btn btn-default">
+    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+    Import
+  </a>
+{% endblock %}
+
+{% block main %}
   An album.
 {% endblock %}

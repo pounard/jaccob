@@ -6,11 +6,31 @@ jaccob_media.album.list:
     path:     /{albumId}
     defaults: { _controller: "JaccobMediaBundle:Album:list" }
     requirements:
-        albumId: \s+
+        albumId: \d+
+
+jaccob_media.album.add:
+    path:     /new-album
+    defaults: { _controller: "JaccobMediaBundle:Album:create" }
+
+jaccob_media.album.create_from:
+    path:     /import
+    defaults: { _controller: "JaccobMediaBundle:Album:createFrom" }
+
+jaccob_media.album.import:
+    path:     /{albumId}/import
+    defaults: { _controller: "JaccobMediaBundle:Album:import" }
+    requirements:
+        albumId: \d+
 
 jaccob_media.media.view:
     path:     /{albumId}/{mediaId}
     defaults: { _controller: "JaccobMediaBundle:Media:view" }
     requirements:
-        albumId: \s+
-        mediaId: \s+
+        albumId: \d+
+        mediaId: \d+
+
+jaccob_media.media.thumbnail:
+    path:     /{path}
+    defaults: { _controller: "JaccobMediaBundle:Thumbnail:create" }
+    requirements:
+        path: "^.+"

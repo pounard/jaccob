@@ -15,7 +15,7 @@ class Device extends RowStructure
     public function __construct()
     {
         $this
-            ->setRelation('public.media')
+            ->setRelation('public.device')
             ->setPrimaryKey(['id'])
             ->addField('id', 'int4')
             ->addField('id_account', 'int4')

@@ -1,0 +1,13 @@
+{% extends 'JaccobMediaBundle:Home:layout.html.twig' %}
+
+{% block title %}New album{% endblock %}
+
+{% block actions %}
+  <a href="{{ path('jaccob_media.home') }}" class="btn btn-danger">
+    Cancel
+  </a>
+{% endblock %}
+
+{% block main %}
+  {{ form(form) }}
+{% endblock %}

@@ -4,6 +4,8 @@ namespace Jaccob\MediaBundle;
 
 use PommProject\Foundation\Session;
 
+use Symfony\Component\DependencyInjection\ContainerAware;
+
 trait MediaModelAware
 {
     /**
@@ -33,6 +35,11 @@ trait MediaModelAware
         }
 
         // When we are working with an object plugged to the DIC.
+        if ($this instanceof ContainerAware) {
+            return $this->container->get('pomm')->getSession('default');
+        }
+
+        // When we are working with a controller.
         return $this->get('pomm')->getSession('default');
     }
 
@@ -44,7 +51,7 @@ trait MediaModelAware
     protected function getMediaModel()
     {
         return $this
-            ->getAccountSession()
+            ->getMediaSession()
             ->getModel('\Jaccob\MediaBundle\Model\MediaModel')
         ;
     }
@@ -57,7 +64,7 @@ trait MediaModelAware
     protected function getAlbumModel()
     {
         return $this
-            ->getAccountSession()
+            ->getMediaSession()
             ->getModel('\Jaccob\MediaBundle\Model\AlbumModel')
         ;
     }
@@ -70,8 +77,31 @@ trait MediaModelAware
     protected function getDeviceModel()
     {
         return $this
-            ->getAccountSession()
+            ->getMediaSession()
             ->getModel('\Jaccob\MediaBundle\Model\DeviceModel')
         ;
+    }
+
+    /**
+     * Get task or throw a 404 or 403 error depending on data
+     *
+     * @param int $albumId
+     *   Album identifier
+     *
+     * @return \Jaccob\MediaBundle\Model\Album
+     */
+    protected function findAlbumOr404($id)
+    {
+        /* @var $task \Jaccob\MediaBundle\Model\Album */
+        $album = $this->getAlbumModel()->findByPK(['id' => $id]);
+
+        if (!$album) {
+            throw $this->createNotFoundException(sprintf(
+                "Album with id '%d' does not exists",
+                $id
+            ));
+        }
+
+        return $album;
     }
 }

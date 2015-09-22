@@ -20,6 +20,7 @@ class Media extends RowStructure
             ->addField('id', 'int4')
             ->addField('id_album', 'int4')
             ->addField('id_account', 'int4')
+            ->addField('id_device', 'int4')
             ->addField('access_level', 'int4')
             ->addField('name', 'varchar')
             ->addField('path', 'varchar')

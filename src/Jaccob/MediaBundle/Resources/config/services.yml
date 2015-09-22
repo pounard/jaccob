@@ -1,3 +1,8 @@
+parameters:
+
+    jaccob_media.directory.public: /var/www/jaccob/web/media
+    jaccob_media.directory.upload: /data/private/photos
+
 services:
 
     jaccob_media.menu_provider:
@@ -13,3 +18,8 @@ services:
             - [setContainer, ["@service_container"]]
         tags:
           - { name: kernel.event_listener, event: jaccob.menu_configure, method: onMenuConfigure }
+
+    jaccob_media.importer:
+        class: Jaccob\MediaBundle\Import\FilesystemImporter
+        calls:
+            - [setContainer, ["@service_container"]]
