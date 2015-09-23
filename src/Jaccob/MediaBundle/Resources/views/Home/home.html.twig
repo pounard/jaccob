@@ -9,28 +9,28 @@
 
 {% block main %}
   <div id="albums" class="centered">
-  <h1>Albums</h1>
-  {% for album in albums %}
-    {#
-    <?php if ($album->isShared() && $album->getSharePassword()): ?>
-    <div class="album shared password">
-    <?php elseif ($album->isShared()): ?>
-    <div class="album shared">
-    <?php else: ?>
-    <div class="album">
-    <?php endif; ?>
-    #}
-    <div class="album">
-      <a href="{{ path('jaccob_media.album.list', {albumId: album.id}) }}">
-        {{ album.user_name }}
-        {#
-        <?php if (isset($previews[$album->getId()])): ?>
-        <?php echo $this->media($previews[$album->getId()], 's200', false); ?><br/>
-        <?php endif; ?>
-        <?php echo $this->esc($album->getDisplayName(), true); ?>
-        #}
-      </a>
-    </div>
-  {% endfor %}
-</div>
+    <h1>Albums</h1>
+    {% for album in albums %}
+      {#
+      <?php if ($album->isShared() && $album->getSharePassword()): ?>
+      <div class="album shared password">
+      <?php elseif ($album->isShared()): ?>
+      <div class="album shared">
+      <?php else: ?>
+      <div class="album">
+      <?php endif; ?>
+      #}
+      <div class="album">
+        <a href="{{ path('jaccob_media.album.list', {albumId: album.id}) }}">
+          {{ album.user_name }}
+          {#
+          <?php if (isset($previews[$album->getId()])): ?>
+          <?php echo $this->media($previews[$album->getId()], 's200', false); ?><br/>
+          <?php endif; ?>
+          <?php echo $this->esc($album->getDisplayName(), true); ?>
+          #}
+        </a>
+      </div>
+    {% endfor %}
+  </div>
 {% endblock %}

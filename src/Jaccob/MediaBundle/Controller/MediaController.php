@@ -15,20 +15,10 @@ class MediaController extends AbstractUserAwareController
     use MediaModelAware;
     use AccountModelAware;
 
-    public function viewAction($mediaId, $size = null)
+    public function viewAction($mediaId)
     {
         // @todo View media in its own page
         // @todo Check rights with albumId
-        // @todo Request for sorting and filtering
-
-        if ($size) {
-            $allowedSizes = $this->getParameter('jaccob_media.sizes');
-            if (!in_array($size, $allowedSizes)) {
-                throw $this->createNotFoundException();
-            }
-        } else {
-            $size = $this->getParameter('jaccob_media.default_size');
-        }
 
         $media    = $this->findMediaOr404($mediaId);
         $device   = $this->getDeviceModel()->findByPK(['id' => $media->id_device]);
@@ -38,10 +28,6 @@ class MediaController extends AbstractUserAwareController
         $next     = null;
         $metadata = [];
 
-        if (!$size) {
-            
-        }
-
         return $this->render('JaccobMediaBundle:Media:view.html.twig', [
             'metadata'  => $metadata,
             'device'    => $device,
@@ -50,7 +36,32 @@ class MediaController extends AbstractUserAwareController
             'media'     => $media,
             'previous'  => $previous,
             'next'      => $next,
-            'size'      => $size,
+            'size'      => 'w' . $this->getParameter('jaccob_media.size.default'),
+        ]);
+    }
+
+    public function viewFullscreenAction($mediaId)
+    {
+        // @todo View media in its own page
+        // @todo Check rights with albumId
+
+        $media    = $this->findMediaOr404($mediaId);
+        $device   = $this->getDeviceModel()->findByPK(['id' => $media->id_device]);
+        $owner    = $this->getAccountModel()->findByPK(['id' => $media->id_account]);
+        $album    = $this->getAlbumModel()->findByPK(['id' => $media->id_album]);
+        $previous = null;
+        $next     = null;
+        $metadata = [];
+
+        return $this->render('JaccobMediaBundle:Media:viewFullscreen.html.twig', [
+            'metadata'  => $metadata,
+            'device'    => $device,
+            'owner'     => $owner,
+            'album'     => $album,
+            'media'     => $media,
+            'previous'  => $previous,
+            'next'      => $next,
+            'size'      => 'w' . $this->getParameter('jaccob_media.size.fullscreen'),
         ]);
     }
 }

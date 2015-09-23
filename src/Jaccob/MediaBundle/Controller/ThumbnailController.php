@@ -59,7 +59,7 @@ class ThumbnailController extends AbstractUserAwareController
 
         // Ensure size is valid
         // @todo Configuration would be better here
-        $allowedSizes = $this->getParameter('jaccob_media.sizes');
+        $allowedSizes = $this->getParameter('jaccob_media.size.list');
 
         if (!in_array($size, $allowedSizes)) {
             throw $this->createNotFoundException();

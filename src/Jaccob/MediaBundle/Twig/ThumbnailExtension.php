@@ -67,7 +67,7 @@ class ThumbnailExtension extends \Twig_Extension implements ContainerAwareInterf
      *
      * @return string
      */
-    public function createThumbnail(\Twig_Environment $twig, Media $media, $size = 100, $withLink = true, $toSize = 600)
+    public function createThumbnail(\Twig_Environment $twig, Media $media, $size = 100, $withLink = true)
     {
         // Better be safe than sorry.
         if (!$media->physical_path) {
@@ -103,14 +103,12 @@ class ThumbnailExtension extends \Twig_Extension implements ContainerAwareInterf
 
         $href   = null;
         if ($withLink) {
-            if ('full' === $toSize) {
-                $href = $this->url(FileSystem::pathJoin($publicDirectory, 'full', $media->physical_path));
-            } else if (is_string($withLink)) {
+            if (is_string($withLink)) {
                 // @todo URL with base path
                 $href = '/' . $withLink;
             } else {
                 // @todo URL with base path
-                $href = '/' . FileSystem::pathJoin('media/view', $media->id, $toSize);
+                $href = '/' . FileSystem::pathJoin('media/view', $media->id);
             }
         }
 
@@ -134,7 +132,7 @@ class ThumbnailExtension extends \Twig_Extension implements ContainerAwareInterf
      *
      * @return string
      */
-    public function createGrid(\Twig_Environment $twig, $mediaList, $columns = 3, $width = 240, $withLink = true, $toSize = 960)
+    public function createGrid(\Twig_Environment $twig, $mediaList, $columns = 3, $width = 240, $withLink = true)
     {
         $columnsData = array_fill(0, $columns, []);
         $columnsSize = array_fill(0, $columns, 0);
@@ -172,7 +170,6 @@ class ThumbnailExtension extends \Twig_Extension implements ContainerAwareInterf
             'columns'   => $columnsData,
             'width'     => $width,
             'withLink'  => $withLink,
-            'toSize'    => $toSize,
         ]);
     }
 }

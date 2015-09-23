@@ -22,9 +22,9 @@ jaccob_media.media.view:
     requirements:
         mediaId: \d+
 
-jaccob_media.media.view:
-    path:     /view/{mediaId}/{size}
-    defaults: { _controller: "JaccobMediaBundle:Media:view" }
+jaccob_media.media.view.full:
+    path:     /view/{mediaId}/fullscreen
+    defaults: { _controller: "JaccobMediaBundle:Media:viewFullscreen" }
     requirements:
         mediaId: \d+
 

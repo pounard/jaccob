@@ -1,5 +1,10 @@
 {% extends 'JaccobMediaBundle:Home:layout.html.twig' %}
 
 {% block main %}
-  {{ media_thumbnail(media, size, false) }}
+  <div class="col-md-9">
+    {{ media_thumbnail(media, size, false) }}
+  </div>
+  <div class="col-md-3">
+    Sidebar
+  </div>
 {% endblock %}
