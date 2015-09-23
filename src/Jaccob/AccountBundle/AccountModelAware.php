@@ -4,6 +4,8 @@ namespace Jaccob\AccountBundle;
 
 use PommProject\Foundation\Session;
 
+use Symfony\Component\DependencyInjection\ContainerAware;
+
 trait AccountModelAware
 {
     /**
@@ -33,6 +35,11 @@ trait AccountModelAware
         }
 
         // When we are working with an object plugged to the DIC.
+        if ($this instanceof ContainerAware) {
+            return $this->container->get('pomm')->getSession('default');
+        }
+
+        // When we are working with a controller.
         return $this->get('pomm')->getSession('default');
     }
 
@@ -47,5 +54,28 @@ trait AccountModelAware
             ->getAccountSession()
             ->getModel('\Jaccob\AccountBundle\Model\AccountModel')
         ;
+    }
+
+    /**
+     * Get account or throw a 404 or 403 error depending on data
+     *
+     * @param int $id
+     *   Account identifier
+     *
+     * @return \Jaccob\AccountBundle\Model\Account
+     */
+    protected function findAccountOr404($id)
+    {
+        /* @var $account \Jaccob\AccountBundle\Model\Account */
+        $account = $this->getAccountModel()->findByPK(['id' => $id]);
+
+        if (!$account) {
+            throw $this->createNotFoundException(sprintf(
+                "Account with id '%d' does not exists",
+                $id
+            ));
+        }
+
+        return $account;
     }
 }

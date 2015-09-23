@@ -7,8 +7,6 @@ use Jaccob\AccountBundle\Controller\AbstractUserAwareController;
 
 use Jaccob\MediaBundle\MediaModelAware;
 
-use PommProject\Foundation\Where;
-
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -40,16 +38,10 @@ class AlbumController extends AbstractUserAwareController
         // @todo List (paginated) all medias with thumbnails
         // @todo Request for sorting and filtering
 
-        $album = $this->findAlbumOr404($albumId);
-        $owner = $this->getAccountModel()->findByPK(['id' => $album->id_account]);
-
-        $mediaList = $this
-            ->getMediaModel()
-            ->findWhere(
-                (new Where())
-                    ->andWhere("id_album = $*", [$album->id])
-            )
-        ;
+        $album      = $this->findAlbumOr404($albumId);
+        $owner      = $this->findAccountOr404($album->id_account);
+        $mediaPager = $this->getMediaModel()->findByAlbum($albumId);
+        $mediaList  = $mediaPager->getIterator();
 
         return $this->render('JaccobMediaBundle:Album:list.html.twig', [
             'owner'     => $owner,
@@ -57,71 +49,6 @@ class AlbumController extends AbstractUserAwareController
             'mediaList' => $mediaList,
         ]);
     }
-
-    /**
-     * Create the creation form
-     *
-     * @return \Symfony\Component\Form\Form
-     *
-    protected function createCreateForm()
-    {
-        return $this
-            ->createFormBuilder()
-            ->add('name', 'text', [
-                'label'     => "Album name",
-                'required'  => true,
-            ])
-            ->add('path', 'text', [
-                'label'     => "Path",
-                'required'  => true,
-            ])
-            ->add('Create', 'submit')
-            ->getForm()
-        ;
-    }
-     */
-
-    /**
-     * Create new album form.
-     *
-    public function createAction(Request $request)
-    {
-        $form = $this->createCreateForm();
-
-        if (Request::METHOD_POST === $request->getMethod()) {
-            if ($form->handleRequest($request)->isValid()) {
-
-                $data = $form->getData();
-
-                $album = $this
-                    ->getAlbumModel()
-                    ->createAndSave([
-                        'id_account'  => $this->getCurrentUserAccount()->getId(),
-                        // @todo access_level
-                        // @todo share_*
-                        // @todo better path handling
-                        'path'        => $data['path'],
-                        'user_name'   => $data['name'],
-                    ])
-                ;
-
-                // Do never tell the user if the mail exist or not
-                $this->addFlash('success', "Your album has been created");
-
-                return $this->redirectToRoute('jaccob_media.album.list', [
-                    'albumId' => $album->id,
-                ]);
-
-            } else {
-                $this->addFlash('danger', "Please check the values you filled");
-            }
-        }
-
-        return $this->render('JaccobMediaBundle:Album:create.html.twig', [
-            'form' => $form->createView(),
-        ]);
-    }
-     */
 
     /**
      * Use the default importer to list available folders in current
@@ -230,20 +157,6 @@ class AlbumController extends AbstractUserAwareController
 
         return $this->render('JaccobMediaBundle:Album:createFrom.html.twig', [
             'form' => $form->createView(),
-        ]);
-    }
-
-    /**
-     * Import new media into the album form
-     */
-    public function importAction($albumId)
-    {
-        // @todo
-        $album = $this->findAlbumOr404($albumId);
-
-        return $this->render('JaccobMediaBundle:Album:import.html.twig', [
-            /* 'form' => $form->createView(), */
-            'album' => $album,
         ]);
     }
 }

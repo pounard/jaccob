@@ -67,7 +67,7 @@ class ThumbnailExtension extends \Twig_Extension implements ContainerAwareInterf
      *
      * @return string
      */
-    public function createThumbnail(\Twig_Environment $twig, Media $media, $size = 100, $withLink = true)
+    public function createThumbnail(\Twig_Environment $twig, Media $media, $size = 100, $withLink = false)
     {
         // Better be safe than sorry.
         if (!$media->physical_path) {
@@ -132,7 +132,7 @@ class ThumbnailExtension extends \Twig_Extension implements ContainerAwareInterf
      *
      * @return string
      */
-    public function createGrid(\Twig_Environment $twig, $mediaList, $columns = 3, $width = 240, $withLink = true)
+    public function createGrid(\Twig_Environment $twig, $mediaList, $columns = 3, $width = 240, $withLink = false)
     {
         $columnsData = array_fill(0, $columns, []);
         $columnsSize = array_fill(0, $columns, 0);

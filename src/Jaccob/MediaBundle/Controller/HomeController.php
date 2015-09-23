@@ -13,6 +13,9 @@ class HomeController extends AbstractUserAwareController
 {
     use MediaModelAware;
 
+    /**
+     * List of user visible albums
+     */
     public function homeAction(Request $request)
     {
         $currentAccount = $this->getCurrentUserAccount();
@@ -22,11 +25,27 @@ class HomeController extends AbstractUserAwareController
 
         $albumList = $this
             ->getAlbumModel()
-            ->findVisibleFor($currentAccount->getId())
+            ->paginateAlbumsFor($currentAccount->getId())
+            ->getIterator()
         ;
 
+        // Fetch media previews
+        $mediaIdList = [];
+        $previewMap = [];
+        foreach ($albumList as $album) {
+            if ($album->id_media_preview) {
+                $mediaIdList[] = $album->id_media_preview;
+            }
+        }
+        if (!empty($mediaIdList)) {
+            foreach ($this->getMediaModel()->findAllByPK($mediaIdList) as $media) {
+                $previewMap[$media->id_album] = $media;
+            }
+        }
+
         return $this->render('JaccobMediaBundle:Home:home.html.twig', [
-            'albums'  => $albumList,
+            'albums'    => $albumList,
+            'previews'  => $previewMap,
         ]);
     }
 }

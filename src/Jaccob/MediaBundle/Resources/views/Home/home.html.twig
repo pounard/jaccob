@@ -23,12 +23,12 @@
       <div class="album">
         <a href="{{ path('jaccob_media.album.list', {albumId: album.id}) }}">
           {{ album.user_name }}
-          {#
-          <?php if (isset($previews[$album->getId()])): ?>
-          <?php echo $this->media($previews[$album->getId()], 's200', false); ?><br/>
-          <?php endif; ?>
-          <?php echo $this->esc($album->getDisplayName(), true); ?>
-          #}
+          {% if (previews[album.id] is defined) %}
+            <a href="{{ path('jaccob_media.album.list', {albumId: album.id}) }}">
+              {{ media_thumbnail(previews[album.id], 's240') }}
+            </a>
+          {% endif %}
+          {# <?php echo $this->esc($album->getDisplayName(), true); ?> #}
         </a>
       </div>
     {% endfor %}

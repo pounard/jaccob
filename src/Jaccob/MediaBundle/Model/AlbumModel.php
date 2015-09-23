@@ -5,10 +5,7 @@ namespace Jaccob\MediaBundle\Model;
 use Jaccob\MediaBundle\Model\Structure\Album as AlbumStructure;
 
 use PommProject\ModelManager\Model\Model;
-use PommProject\ModelManager\Model\Projection;
 use PommProject\ModelManager\Model\ModelTrait\WriteQueries;
-
-use PommProject\Foundation\Where;
 
 /**
  * Album model
@@ -26,7 +23,7 @@ class AlbumModel extends Model
         $this->flexible_entity_class = '\Jaccob\MediaBundle\Model\Album';
     }
 
-    public function findVisibleFor($accountId)
+    public function paginateAlbumsFor($accountId)
     {
         $sql = "
             SELECT DISTINCT(a.id), a.*
@@ -39,11 +36,14 @@ class AlbumModel extends Model
             )
             ORDER BY a.ts_user_date_end DESC
         ";
-
+  
         $sql = strtr($sql, [
             ':table' => $this->getStructure()->getRelation(),
         ]);
 
-        return $this->query($sql, [$accountId, $accountId], $this->createProjection());
+        $values = [$accountId, $accountId];
+        // $total  = $this->fetchSingleValue("SELECT COUNT(*) FROM (" . $sql . ") AS c", '', $values);
+
+        return $this->paginateQuery($sql, $values, /* $total */ 100, 100);
     }
 }
