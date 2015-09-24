@@ -4,20 +4,28 @@
   <div class="container">
     <div class="row">
       <div class="col-md-12">
-        <div class="btn-group pull-right" role="group" aria-label="...">
+        <ul class="pull-right">
           {% block actions %}
-            <a href="{{ path('jaccob_media.album.add') }}" class="btn btn-primary">
-              <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-              New album
-            </a>
+            <li>
+              <a href="{{ path('jaccob_media.album.add') }}" class="btn btn-primary">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                New album
+              </a>
+            </li>
           {% endblock %}
-        </div>
-        {% block title %}Media{% endblock %}
+        </ul>
+        <ol class="breadcrumb">
+          {% block breadcrumb %}
+            <li class="active">Media</li>
+          {% endblock %}
+        </ol>
       </div>
     </div>
+  </div>
+
+  <div class="container">
     <div class="row">
       <div class="col-md-12">
-        <hr/>
         {% block main %}{% endblock %}
       </div>
     </div>

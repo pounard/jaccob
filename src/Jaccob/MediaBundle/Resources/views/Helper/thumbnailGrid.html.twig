@@ -1,7 +1,7 @@
 {% for column in columns %}
   <div class="col-md-3">
     {% for media in column %}
-      {{ media_thumbnail(media, width, withLink) }}
+      {{ media_thumbnail(media, width, withLink, true) }}
     {% endfor %}
   </div>
 {% endfor %}

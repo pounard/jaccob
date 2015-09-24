@@ -46,6 +46,7 @@ class HomeController extends AbstractUserAwareController
         return $this->render('JaccobMediaBundle:Home:home.html.twig', [
             'albums'    => $albumList,
             'previews'  => $previewMap,
+            "size"      => $this->getParameter('jaccob_media.size.thumbnail')
         ]);
     }
 }

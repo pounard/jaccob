@@ -1,6 +1,9 @@
 {% extends 'JaccobMediaBundle:Home:layout.html.twig' %}
 
-{% block title %}Import medias{% endblock %}
+{% block breadcrumb %}
+  <li><a href="{{ path('jaccob_media.home') }}">Media</a></li>
+  <li class="active">Import album</li>
+{% endblock %}
 
 {% block actions %}
   <a href="{{ path('jaccob_media.home') }}" class="btn btn-danger">

@@ -1,0 +1,34 @@
+
+@font-family-sans-serif:  Ubuntu, sans-serif;
+@font-family-serif:       Georgia, "Times New Roman", Times, serif;
+@font-family-monospace:   Monaco, Menlo, Consolas, "Courier New", monospace;
+@font-family-helvetica:   "Helvetica Neue", HelveticaNeueCustom, Helvetica, sans-serif;
+@font-family-arial:       Arial, sans-serif;
+@font-family-base:        @font-family-arial;
+
+@font-size-base:          13px;
+@font-size-large:         ceil(@font-size-base * 1.25); // ~18px
+@font-size-small:         ceil(@font-size-base * 0.85); // ~12px
+
+@font-size-h1:            2.769em; // floor(@font-size-base * 2.6); // ~36px
+@font-size-h2-node:       2.154em; // floor(@font-size-base * 2.15); // ~28px
+@font-size-h2:            1.615em; // ceil(@font-size-base * 1.7); // ~21px
+@font-size-h3:            1.385em; // ceil(@font-size-base * 1.25); // ~18px
+@font-size-h4:            1.231em; // ceil(@font-size-base * 1.25); // ~16px
+@font-size-h5:            1em; //  @font-size-base; ~13px
+@font-size-h6:            0.923em; // 13px
+
+@line-height-base:        1.428571429; // 20/14
+@line-height-computed:    floor(@font-size-base * @line-height-base); // ~20px
+
+@headings-font-family:    @font-family-helvetica;
+@headings-font-weight:    bold;
+@headings-line-height:    1.1;
+@headings-color:          inherit;
+
+/*
+ * Grid system
+ */
+
+// Padding, to be divided by two and applied to the left and right of all columns
+@grid-gutter-width:         0px;

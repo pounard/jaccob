@@ -1,5 +1,10 @@
 {% extends 'JaccobMediaBundle:Home:layout.html.twig' %}
 
+{% block breadcrumb %}
+  <li><a href="{{ path('jaccob_media.home') }}">Media</a></li>
+  <li class="active">{{ album.user_name }}</li>
+{% endblock %}
+
 {% block actions %}
   <a href="{{ path('jaccob_media.album.share', {albumId: album.id}) }}" class="btn btn-success">
     <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
@@ -11,17 +16,6 @@
   </a>
 {% endblock %}
 
-{% block breadcrumb %}
-  <li><a href="{{ path('jaccob_media.home') }}">Media</a></li>
-  <li><a href="{{ path('jaccob_media.album.view', {albumId: album.id}) }}">{{ album.user_name }}</a></li>
-  <li class="active">{{ media.user_name }}</li>
-{% endblock %}
-
 {% block main %}
-  <div class="col-md-9">
-    {{ media_thumbnail(media, size, false) }}
-  </div>
-  <div class="col-md-3">
-    Sidebar
-  </div>
+  {{ media_grid(mediaList, 4, size, true) }}
 {% endblock %}

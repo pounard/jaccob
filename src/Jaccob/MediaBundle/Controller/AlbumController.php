@@ -43,10 +43,11 @@ class AlbumController extends AbstractUserAwareController
         $mediaPager = $this->getMediaModel()->findByAlbum($albumId);
         $mediaList  = $mediaPager->getIterator();
 
-        return $this->render('JaccobMediaBundle:Album:list.html.twig', [
+        return $this->render('JaccobMediaBundle:Album:view.html.twig', [
             'owner'     => $owner,
             'album'     => $album,
             'mediaList' => $mediaList,
+            'size'      => $this->getParameter('jaccob_media.size.thumbnail.grid')
         ]);
     }
 
@@ -146,7 +147,7 @@ class AlbumController extends AbstractUserAwareController
                 // Do never tell the user if the mail exist or not
                 $this->addFlash('success', "Your album has been created");
 
-                return $this->redirectToRoute('jaccob_media.album.list', [
+                return $this->redirectToRoute('jaccob_media.album.view', [
                     'albumId' => $album->id,
                 ]);
 

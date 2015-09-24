@@ -2,9 +2,27 @@ jaccob_media.home:
     path:     /
     defaults: { _controller: "JaccobMediaBundle:Home:home" }
 
-jaccob_media.album.list:
+jaccob_media.album.view:
     path:     /album/{albumId}
     defaults: { _controller: "JaccobMediaBundle:Album:list" }
+    requirements:
+        albumId: \d+
+
+jaccob_media.album.share:
+    path:     /album/{albumId}/share
+    defaults: { _controller: "JaccobMediaBundle:Album:share" }
+    requirements:
+        albumId: \d+
+
+jaccob_media.album.edit:
+    path:     /album/{albumId}/edit
+    defaults: { _controller: "JaccobMediaBundle:Album:edit" }
+    requirements:
+        albumId: \d+
+
+jaccob_media.album.delete:
+    path:     /album/{albumId}/delete
+    defaults: { _controller: "JaccobMediaBundle:Album:delete" }
     requirements:
         albumId: \d+
 
@@ -19,6 +37,18 @@ jaccob_media.album.create_from:
 jaccob_media.media.view:
     path:     /view/{mediaId}
     defaults: { _controller: "JaccobMediaBundle:Media:view" }
+    requirements:
+        mediaId: \d+
+
+jaccob_media.media.edit:
+    path:     /view/{mediaId}/edit
+    defaults: { _controller: "JaccobMediaBundle:Media:edit" }
+    requirements:
+        mediaId: \d+
+
+jaccob_media.media.delete:
+    path:     /view/{mediaId}/delete
+    defaults: { _controller: "JaccobMediaBundle:Media:delete" }
     requirements:
         mediaId: \d+
 

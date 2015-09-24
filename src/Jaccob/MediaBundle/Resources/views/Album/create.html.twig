@@ -1,6 +1,11 @@
 {% extends 'JaccobMediaBundle:Home:layout.html.twig' %}
 
-{% block title %}New album{% endblock %}
+{% block breadcrumb %}
+  <ol class="breadcrumb">
+    <li><a href="{{ path('jaccob_media.home') }}">Media</a></li>
+    <li class="active">Import album</li>
+  </ol>
+{% endblock %}
 
 {% block actions %}
   <a href="{{ path('jaccob_media.home') }}" class="btn btn-danger">

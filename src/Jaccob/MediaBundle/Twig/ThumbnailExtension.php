@@ -61,13 +61,12 @@ class ThumbnailExtension extends \Twig_Extension implements ContainerAwareInterf
      * @param boolean|string $withLink
      *   True and link will be generated automatically, a string and it will
      *   be used as the link
-     * @param int $toSize
-     *   Size the image should be displayed with when fullscreen, only used
-     *   when you set true to the $withLink parameter
+     * @param boolean $lazy
+     *   Lazy load images.
      *
      * @return string
      */
-    public function createThumbnail(\Twig_Environment $twig, Media $media, $size = 100, $withLink = false)
+    public function createThumbnail(\Twig_Environment $twig, Media $media, $size = 100, $withLink = false, $lazy = true)
     {
         // Better be safe than sorry.
         if (!$media->physical_path) {
@@ -113,6 +112,7 @@ class ThumbnailExtension extends \Twig_Extension implements ContainerAwareInterf
         }
 
         $imgTag = '<img class="lazy-load" data-src="' . $src . '" alt="' . $media->user_name . '" width="' . $width . '" height="' . $height . '"/>';
+        // $imgTag = '<img src="' . $src . '" alt="' . $media->user_name . '" width="' . $width . '" height="' . $height . '"/>';
 
         if ($href) {
             return '<a href="' . $href . '" title="View larger">' . $imgTag . '</a>';
@@ -136,6 +136,11 @@ class ThumbnailExtension extends \Twig_Extension implements ContainerAwareInterf
     {
         $columnsData = array_fill(0, $columns, []);
         $columnsSize = array_fill(0, $columns, 0);
+
+        $size = $width;
+        if (!is_int($width[0])) {
+            $width = (int)substr($width, 1);
+        }
 
         foreach ($mediaList as $media) {
 
@@ -168,7 +173,7 @@ class ThumbnailExtension extends \Twig_Extension implements ContainerAwareInterf
 
         return $twig->render('JaccobMediaBundle:Helper:thumbnailGrid.html.twig', [
             'columns'   => $columnsData,
-            'width'     => $width,
+            'width'     => $size,
             'withLink'  => $withLink,
         ]);
     }

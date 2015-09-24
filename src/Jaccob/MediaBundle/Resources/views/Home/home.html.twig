@@ -8,29 +8,22 @@
 {% endblock %}
 
 {% block main %}
-  <div id="albums" class="centered">
-    <h1>Albums</h1>
-    {% for album in albums %}
-      {#
-      <?php if ($album->isShared() && $album->getSharePassword()): ?>
-      <div class="album shared password">
-      <?php elseif ($album->isShared()): ?>
-      <div class="album shared">
-      <?php else: ?>
-      <div class="album">
-      <?php endif; ?>
-      #}
-      <div class="album">
-        <a href="{{ path('jaccob_media.album.list', {albumId: album.id}) }}">
-          {{ album.user_name }}
+  {% for album in albums %}
+    <div class="col-md-3">
+      {% if album.share_enabled and album.share_password %}
+        <div class="album shared password">
+      {% elseif album.share_enabled %}
+        <div class="album shared">
+      {% else %}
+        <div class="album">
+      {% endif %}
+        <a href="{{ path('jaccob_media.album.view', {albumId: album.id}) }}">
           {% if (previews[album.id] is defined) %}
-            <a href="{{ path('jaccob_media.album.list', {albumId: album.id}) }}">
-              {{ media_thumbnail(previews[album.id], 's240') }}
-            </a>
+            {{ media_thumbnail(previews[album.id], size) }}
           {% endif %}
-          {# <?php echo $this->esc($album->getDisplayName(), true); ?> #}
+          {{ album.user_name }}
         </a>
       </div>
-    {% endfor %}
-  </div>
+    </div>
+  {% endfor %}
 {% endblock %}

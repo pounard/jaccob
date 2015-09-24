@@ -8,9 +8,15 @@ parameters:
     jaccob_media.directory.upload: /data/private/photos
 
     # Allowed media sizes
-    jaccob_media.size.list: [240, 480,  720, 960, 1200, 1440, full]
+    jaccob_media.size.list: [250, 285, 570, 855, 1140, 1440, full]
+    # Default full screen width (media view with no sidebar)
     jaccob_media.size.fullscreen: 1440
-    jaccob_media.size.default: 720
+    # Default media view width (media view with sidebar)
+    jaccob_media.size.default: 855
+    # Default thumbnail size used for album list (home)
+    jaccob_media.size.thumbnail: s250
+    # Default thumbnail size used for media grid view
+    jaccob_media.size.thumbnail.grid: w285
 
 services:
 
