@@ -1,0 +1,17 @@
+{% extends 'JaccobMediaBundle:Home:layout.html.twig' %}
+
+{% block breadcrumb %}
+  <li><a href="{{ path('jaccob_media.home') }}">Media</a></li>
+  <li><a href="{{ path('jaccob_media.album.view', {albumId: album.id}) }}">{{ album.displayName }}</a></li>
+  <li class="active">Share settings</li>
+{% endblock %}
+
+{% block actions %}
+  <a href="{{ path('jaccob_media.album.view', {albumId: album.id}) }}" class="btn btn-danger">
+    Cancel
+  </a>
+{% endblock %}
+
+{% block main %}
+  {{ form(form) }}
+{% endblock %}

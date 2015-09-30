@@ -4,6 +4,7 @@ namespace Jaccob\MediaBundle\Controller;
 
 use Jaccob\AccountBundle\AccountModelAware;
 use Jaccob\AccountBundle\Controller\AbstractUserAwareController;
+use Jaccob\AccountBundle\Security\Crypt;
 
 use Jaccob\MediaBundle\MediaModelAware;
 
@@ -158,6 +159,86 @@ class AlbumController extends AbstractUserAwareController
 
         return $this->render('JaccobMediaBundle:Album:createFrom.html.twig', [
             'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * Share form
+     */
+    public function shareFormAction($albumId, Request $request)
+    {
+        $album = $this->findAlbumOr404($albumId);
+
+        $alreadyEnabled = (bool)$album->share_enabled;
+
+        if ($alreadyEnabled) {
+            $saveLabel = "Update";
+        } else {
+            $saveLabel = "Share";
+        }
+
+        $form = $this
+            ->createFormBuilder()
+            ->add('share_enabled', 'checkbox', [
+                'label'     => "Share this album",
+                'required'  => false,
+            ])
+            ->add('share_password', 'text', [
+                'label'     => "Set a password",
+                'required'  => false,
+            ])
+            ->add($saveLabel, 'submit')
+            ->getForm()
+        ;
+
+        if (Request::METHOD_POST === $request->getMethod()) {
+            if ($form->handleRequest($request)->isValid()) {
+
+                $data = $form->getData();
+
+                $album->share_enabled = (bool)$data['share_enabled'];
+
+                if ($data['share_password']) {
+                    $album->share_password = $data['share_password'];
+                } else {
+                    $album->share_password = null;
+                }
+
+                // Generate token if necessary
+                if (!$album->share_token && $album->share_enabled) {
+                    $album->share_token = substr(preg_replace('/[^a-zA-Z0-9]/', '', Crypt::createRandomToken()), 0, 32);
+                }
+
+                $this
+                    ->getAlbumModel()
+                    ->updateOne($album, ['share_enabled', 'share_password', 'share_token'])
+                ;
+
+                // Do never tell the user if the mail exist or not
+                if ($alreadyEnabled === (bool)$album->share_enabled) {
+                    if ($alreadyEnabled) {
+                        $this->addFlash('success', "Share settings have been updated, copy-paste then share this link @todo");
+                    } else {
+                        $this->addFlash('info', "Share is disabled");
+                    }
+                } else if (!$alreadyEnabled) {
+                    $this->addFlash('success', "Album has been shared, copy-paste then share this link @todo");
+                } else {
+                    $this->addFlash('info', "Share has been disabled");
+                }
+
+                return $this->redirectToRoute('jaccob_media.album.view', [
+                    'albumId' => $album->id,
+                ]);
+
+            } else {
+                $this->addFlash('danger', "Please check the values you filled");
+            }
+        }
+
+        return $this->render('JaccobMediaBundle:Album:shareForm.html.twig', [
+            'form'  => $form->createView(),
+            'album' => $album,
         ]);
     }
 }

@@ -10,7 +10,7 @@ jaccob_media.album.view:
 
 jaccob_media.album.share:
     path:     /album/{albumId}/share
-    defaults: { _controller: "JaccobMediaBundle:Album:share" }
+    defaults: { _controller: "JaccobMediaBundle:Album:shareForm" }
     requirements:
         albumId: \d+
 

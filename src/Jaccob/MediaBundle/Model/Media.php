@@ -9,4 +9,12 @@ use PommProject\ModelManager\Model\FlexibleEntity;
  */
 class Media extends FlexibleEntity
 {
+    public function getDisplayName()
+    {
+        if ($this->user_name) {
+            return $this->user_name;
+        }
+
+        return $this->name;
+    }
 }

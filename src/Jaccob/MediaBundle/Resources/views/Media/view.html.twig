@@ -13,8 +13,8 @@
 
 {% block breadcrumb %}
   <li><a href="{{ path('jaccob_media.home') }}">Media</a></li>
-  <li><a href="{{ path('jaccob_media.album.view', {albumId: album.id}) }}">{{ album.user_name }}</a></li>
-  <li class="active">{{ media.user_name }}</li>
+  <li><a href="{{ path('jaccob_media.album.view', {albumId: album.id}) }}">{{ album.displayName }}</a></li>
+  <li class="active">{{ media.displayName }}</li>
 {% endblock %}
 
 {% block main %}

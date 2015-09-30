@@ -9,4 +9,12 @@ use PommProject\ModelManager\Model\FlexibleEntity;
  */
 class Album extends FlexibleEntity
 {
+    public function getDisplayName()
+    {
+        if ($this->user_name) {
+            return $this->user_name;
+        }
+
+        return $this->path;
+    }
 }
