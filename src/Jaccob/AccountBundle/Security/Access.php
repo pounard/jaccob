@@ -23,4 +23,29 @@ final class Access
      * Security level public
      */
     const LEVEL_PUBLIC_VISIBLE = 200;
+
+    /**
+     * Security level private
+     */
+    const ACCESS_READ = 0x0002;
+
+    /**
+     * Security level friends can see
+     */
+    const ACCESS_WRITE = 0x0004;
+
+    /**
+     * Simple visitor
+     */
+    const ROLE_VISITOR = 'visitor';
+
+    /**
+     * Normal user
+     */
+    const ROLE_NORMAL = 'user';
+
+    /**
+     * Admin user
+     */
+    const ROLE_ADMIN = 'admin';
 }

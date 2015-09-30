@@ -4,7 +4,7 @@ namespace Jaccob\AccountBundle\Security\User;
 
 use Jaccob\AccountBundle\AccountModelAware;
 use Jaccob\AccountBundle\Security;
-use Jaccob\AccountBundle\Security\AccessRole;
+use Jaccob\AccountBundle\Security\Access;
 
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
@@ -31,9 +31,9 @@ class JaccobAccountProvider implements UserProviderInterface
 
         // @todo Better than this
         if ($account->get('is_admin')) {
-            $roles = [AccessRole::ROLE_NORMAL, AccessRole::ROLE_ADMIN];
+            $roles = [Access::ROLE_NORMAL, Access::ROLE_ADMIN];
         } else {
-            $roles = [AccessRole::ROLE_NORMAL];
+            $roles = [Access::ROLE_NORMAL];
         }
 
         return new JaccobUser($account, $roles);
