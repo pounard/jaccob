@@ -1,0 +1,11 @@
+_welcome:
+    path:     /
+    defaults: { _controller: "JaccobAppBundle:Default:index" }
+
+jaccob..notFoundError:
+    path:     /404
+    defaults: { _controller: "JaccobAppBundle:Default:notFoundError" }
+
+jaccob.notAuthorizedError:
+    path:     /403
+    defaults: { _controller: "JaccobAppBundle:Default:notAuthorizedError" }

@@ -1,10 +1,10 @@
-jaccob_media:
-    resource: "@JaccobMediaBundle/Resources/config/routing.yml"
-    prefix:   /media
-
 jaccob_app:
     resource: "@JaccobAppBundle/Resources/config/routing.yml"
     prefix:   /
+
+jaccob_media:
+    resource: "@JaccobMediaBundle/Resources/config/routing.yml"
+    prefix:   /media
 
 jaccob_account:
     resource: "@JaccobAccountBundle/Resources/config/routing.yml"

@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}Welcome!{% endblock %}</title>
     {% block stylesheets %}
-    {# {% stylesheets '%kernel.root_dir%/../vendor/twitter/bootstrap/less/bootstrap.less' filter='lessphp,cssrewrite' %} #}
     {% stylesheets '%kernel.root_dir%/Resources/public/less/style.less' filter='lessphp,cssrewrite' %} 
         <link rel="stylesheet" href="{{ asset_url }}" />
       {% endstylesheets %}
@@ -23,7 +22,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a href="#" class="navbar-brand">{% block brandname %}Jaccob{% endblock %}</a>
+          <a href="{{ path('_welcome') }}" class="navbar-brand">{% block brandname %}Jaccob{% endblock %}</a>
         </div>
         {{ knp_menu_render('main',
           {

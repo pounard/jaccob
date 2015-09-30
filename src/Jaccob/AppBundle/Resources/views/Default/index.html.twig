@@ -1,0 +1,14 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+  <div class="container">
+    <div class="row">
+      <div class="jumbotron">
+        <h1>Welcome</h1>
+        <p>Please <a href="{{ path('jaccob_account.login') }}">sign-in</a> to access this great site's features&nbsp;!</p>
+      </div>
+    </div>
+  </div>
+
+  {# {{ render(controller('JaccobAccountBundle:Security:login')) }} #}
+{% endblock %}

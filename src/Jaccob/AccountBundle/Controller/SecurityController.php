@@ -68,7 +68,7 @@ class SecurityController extends Controller
                 // Do never tell the user if the mail exist or not
                 $this->addFlash('success', "A newly generated password has been sent to your e-mail address");
 
-                return $this->redirectToRoute('_welcome');
+                return $this->redirectToRoute('jaccob_account.login');
 
             } else {
                 $this->addFlash('danger', "Invalid email address");
