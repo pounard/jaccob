@@ -20,7 +20,7 @@ class AppKernel extends Kernel
             new Knp\Bundle\MenuBundle\KnpMenuBundle(),
             new Jaccob\AppBundle\JaccobAppBundle(),
             new Jaccob\AccountBundle\JaccobAccountBundle(),
-            new Jaccob\TaskBundle\JaccobTaskBundle(),
+            //new Jaccob\TaskBundle\JaccobTaskBundle(),
             new Jaccob\MediaBundle\JaccobMediaBundle(),
         ];
 

@@ -10,6 +10,6 @@ jaccob_account:
     resource: "@JaccobAccountBundle/Resources/config/routing.yml"
     prefix:   /u
 
-jaccob_task:
-    resource: "@JaccobTaskBundle/Resources/config/routing.yml"
-    prefix:   /task
+# jaccob_task:
+#     resource: "@JaccobTaskBundle/Resources/config/routing.yml"
+#     prefix:   /task
