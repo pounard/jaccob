@@ -1,14 +1,17 @@
 
+@album-padding: 5px;
+
 .album {
     margin: 10px;
     text-align: center;
-    padding: 5px;
-
-    float: left;
-    // max-width: @;
+    padding: @album-padding;
 
     overflow: hidden;
     text-overflow: ellipsis;
+
+    position: relative;
+
+    min-height: 3em; // Fit to title
 
     a {
         color: black;
@@ -19,6 +22,22 @@
     img {
        box-shadow: 1px 1px 2px #ccc;
        display: block;
+       width: 100%;
+    }
+
+    .title {
+        position: absolute;
+        left: @album-padding;
+        right: @album-padding;
+        bottom: @album-padding;
+        margin: 0;
+        padding: @album-padding;
+        max-height: 3em;
+        color: white;
+        font-weight: bold;
+        background: black;
+        opacity: 0.7;
+        text-overflow: ellipsis;
     }
 }
 

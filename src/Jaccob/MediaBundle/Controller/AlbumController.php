@@ -10,6 +10,7 @@ use Jaccob\MediaBundle\MediaModelAware;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class AlbumController extends AbstractUserAwareController
 {
@@ -41,6 +42,9 @@ class AlbumController extends AbstractUserAwareController
 
         $album      = $this->findAlbumOr404($albumId);
         $owner      = $this->findAccountOr404($album->id_account);
+
+        $this->denyAccessUnlessGranted('view', $album);
+
         $mediaPager = $this->getMediaModel()->findByAlbum($albumId);
         $mediaList  = $mediaPager->getIterator();
 
@@ -214,15 +218,22 @@ class AlbumController extends AbstractUserAwareController
                     ->updateOne($album, ['share_enabled', 'share_password', 'share_token'])
                 ;
 
+                if ($album->share_enabled) {
+                    $url = $this->generateUrl('jaccob_media.share.token', [
+                        'albumId' => $albumId,
+                        'token'   => $album->share_token,
+                    ], UrlGeneratorInterface::ABSOLUTE_URL);
+                }
+
                 // Do never tell the user if the mail exist or not
                 if ($alreadyEnabled === (bool)$album->share_enabled) {
                     if ($alreadyEnabled) {
-                        $this->addFlash('success', "Share settings have been updated, copy-paste then share this link @todo");
+                        $this->addFlash('success', "Share settings have been updated, copy-paste then share this link: " . $url);
                     } else {
                         $this->addFlash('info', "Share is disabled");
                     }
                 } else if (!$alreadyEnabled) {
-                    $this->addFlash('success', "Album has been shared, copy-paste then share this link @todo");
+                    $this->addFlash('success', "Album has been shared, copy-paste then share this link: " . $url);
                 } else {
                     $this->addFlash('info', "Share has been disabled");
                 }

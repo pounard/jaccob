@@ -4,6 +4,8 @@ namespace Jaccob\MediaBundle\Model;
 
 use Jaccob\MediaBundle\Model\Structure\Album as AlbumStructure;
 
+use PommProject\Foundation\Exception\SqlException;
+use PommProject\Foundation\Where;
 use PommProject\ModelManager\Model\Model;
 use PommProject\ModelManager\Model\ModelTrait\WriteQueries;
 
@@ -21,6 +23,51 @@ class AlbumModel extends Model
     {
         $this->structure = new AlbumStructure;
         $this->flexible_entity_class = '\Jaccob\MediaBundle\Model\Album';
+    }
+
+    /**
+     * Is album into session
+     *
+     * @param int $albumId
+     * @param string $sessionId
+     */
+    public function isAlbumInSession($albumId, $sessionId)
+    {
+        $sql = "
+            SELECT EXISTS (
+                SELECT TRUE
+                FROM session_share
+                WHERE :condition
+            ) AS result
+        ";
+
+        $where = (new Where())
+            ->andWhere('id_album = $*', [$albumId])
+            ->andWhere('id_session = $*', [$sessionId])
+        ;
+
+        return $this->fetchSingleValue($sql, $where, []);
+    }
+
+    /**
+     * Save album into session, do nothing when already exists
+     *
+     * @param int $albumId
+     * @param string $sessionId
+     */
+    public function saveAlbumInSession($albumId, $sessionId)
+    {
+        $sql = "INSERT INTO session_share (id_session, id_album) SELECT $*, $*";
+
+        try {
+            $this
+                ->getSession()
+                ->getClientUsingPooler('prepared_query', $sql)
+                ->execute([$sessionId, $albumId])
+            ;
+        } catch (SqlException $e) {
+            // FIXME Sorry could not find better way to do insert ignore
+        }
     }
 
     public function paginateAlbumsFor($accountId)

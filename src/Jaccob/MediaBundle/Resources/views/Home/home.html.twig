@@ -21,7 +21,7 @@
           {% if (previews[album.id] is defined) %}
             {{ media_thumbnail(previews[album.id], size) }}
           {% endif %}
-          {{ album.displayName }}
+          <p class="title">{{ album.displayName }}</p>
         </a>
       </div>
     </div>

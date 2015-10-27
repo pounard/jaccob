@@ -34,8 +34,8 @@ security:
             pattern:                  ^/$
             security:                 false
 
-        jaccob_media_share:
-            pattern:                  ^(/media/share/.*)$
+        jaccob_media_view:
+            pattern:                  ^(/media/)
             security:                 false
 
         # enforce security on everything that needs security

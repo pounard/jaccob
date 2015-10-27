@@ -2,6 +2,18 @@ jaccob_media.home:
     path:     /
     defaults: { _controller: "JaccobMediaBundle:Home:home" }
 
+jaccob_media.share.token:
+    path:     /share/{albumId}/{token}
+    defaults: { _controller: "JaccobMediaBundle:Share:token" }
+    requirements:
+        albumId: \d+
+
+jaccob_media.share.token_password:
+    path:     /share/{albumId}/{token}/password
+    defaults: { _controller: "JaccobMediaBundle:Share:tokenPassword" }
+    requirements:
+        albumId: \d+
+
 jaccob_media.album.view:
     path:     /album/{albumId}
     defaults: { _controller: "JaccobMediaBundle:Album:list" }

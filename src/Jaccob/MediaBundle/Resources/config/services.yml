@@ -20,6 +20,15 @@ parameters:
 
 services:
 
+    jaccob_media.security.access.share_voter:
+        class: Jaccob\MediaBundle\Security\Authorization\Voter\AlbumVoter
+        public: false
+        calls:
+            # FIXME This should be the "media" session
+            - [setMediaSession, ["@pomm.default_session"]]
+        tags:
+            - { name: security.voter }
+
     jaccob_media.twig.thumbnail:
         class: Jaccob\MediaBundle\Twig\ThumbnailExtension
         tags: [{ name: twig.extension }]
