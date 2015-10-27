@@ -101,6 +101,31 @@ class ShareController extends AbstractUserAwareController
             return $this->redirectToRoute('jaccob_media.album.view', ['albumId' => $album->id]);
         }
 
-        return $this->render('JaccobMediaBundle:Share:tokenPassword.html.twig', ['album' => $album]);
+        $form = $this
+            ->createFormBuilder()
+            ->add('password', 'text', [
+                'label'     => "Password",
+                'required'  => true,
+            ])
+            ->add("Okay", 'submit')
+            ->getForm()
+        ;
+
+        if (Request::METHOD_POST === $request->getMethod()) {
+            if ($form->handleRequest($request)->isValid()) {
+                $data = $form->getData();
+                if ($data['password'] === $album->share_password) {
+
+                    $this->addFlash('success', "Okay you're granted !");
+                    $this->saveAlbumInSession($album);
+
+                    return $this->redirectToRoute('jaccob_media.album.view', ['albumId' => $album->id]);
+                } else {
+                    $this->addFlash('danger', "Wrong password, sorry.");
+                }
+            }
+        }
+
+        return $this->render('JaccobMediaBundle:Share:tokenPassword.html.twig', ['album' => $album, 'form' => $form->createView()]);
     }
 }
