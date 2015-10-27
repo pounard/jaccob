@@ -7,6 +7,7 @@ use Jaccob\MediaBundle\Model\Album;
 use Jaccob\MediaBundle\Model\Media;
 use Jaccob\MediaBundle\MediaModelAware;
 
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Security\Core\Authorization\Voter\AbstractVoter;
 
 class AlbumVoter extends AbstractVoter
@@ -27,6 +28,21 @@ class AlbumVoter extends AbstractVoter
      * Edit share settings
      */
     const SHARE = 'share';
+
+    /**
+     * @var \Symfony\Component\HttpFoundation\Session\Session
+     */
+    protected $session;
+
+    /**
+     * Set session
+     *
+     * @param \Symfony\Component\HttpFoundation\Session\Session $session
+     */
+    public function setSession(Session $session)
+    {
+        $this->session = $session;
+    }
 
     /**
      * {@inheritdoc}
@@ -76,8 +92,7 @@ class AlbumVoter extends AbstractVoter
                     ->getAlbumModel()
                     ->isAlbumInSession(
                         $album->id,
-                        // Oups
-                        $this->get('session')->getId()
+                        $this->session->getId()
                     );
 
             case self::EDIT:

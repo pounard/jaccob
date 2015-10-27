@@ -76,7 +76,7 @@ class ShareController extends AbstractUserAwareController
             return $this->redirectToRoute('jaccob_media.album.view', ['albumId' => $album->id]);
         }
 
-        if (!$album->share_password) {
+        if ($album->share_password) {
             return $this->redirectToRoute('jaccob_media.share.token_password', ['albumId' => $album->id, 'token' => $token]);
         }
 

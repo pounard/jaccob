@@ -46,7 +46,7 @@ class AlbumModel extends Model
             ->andWhere('id_session = $*', [$sessionId])
         ;
 
-        return $this->fetchSingleValue($sql, $where, []);
+        return (bool)$this->fetchSingleValue($sql, $where, []);
     }
 
     /**

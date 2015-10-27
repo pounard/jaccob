@@ -117,6 +117,8 @@ class AlbumController extends AbstractUserAwareController
      */
     public function createFromAction(Request $request)
     {
+        // $this->denyAccessUnlessGranted('edit', $album);
+
         $directories = $this->listUploadFolder();
 
         if (empty($directories)) {

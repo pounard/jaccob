@@ -34,10 +34,6 @@ security:
             pattern:                  ^/$
             security:                 false
 
-        jaccob_media_view:
-            pattern:                  ^(/media/)
-            security:                 false
-
         # enforce security on everything that needs security
         jaccob:
             pattern:                  ^/
@@ -48,4 +44,12 @@ security:
             logout:
                 path:                 jaccob_account.logout
                 target:               _welcome
-            anonymous:                false
+            # allow both anonymous and authenticated users, knowing that all
+            # access checks needs to be done at the controller level, harsh
+            # but working... we cannot provide more than one firewall else
+            # sessions will be separated
+            anonymous:                ~
+
+    access_control:
+        - { path: ^/media/(view|album|share), roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/, roles: IS_AUTHENTICATED_FULLY }

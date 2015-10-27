@@ -26,6 +26,7 @@ services:
         calls:
             # FIXME This should be the "media" session
             - [setMediaSession, ["@pomm.default_session"]]
+            - [setSession, ["@session"]]
         tags:
             - { name: security.voter }
 

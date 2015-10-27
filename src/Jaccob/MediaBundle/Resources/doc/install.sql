@@ -21,7 +21,6 @@ CREATE TABLE session_share (
     id_session VARCHAR(255) NOT NULL,
     id_album INTEGER NOT NULL,
     PRIMARY KEY (id_session, id_album),
-    FOREIGN KEY (id_session) REFERENCES session (id) ON DELETE CASCADE,
     FOREIGN KEY (id_album) REFERENCES album (id) ON DELETE CASCADE
 );
 
