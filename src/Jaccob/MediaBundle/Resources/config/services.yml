@@ -3,8 +3,8 @@ parameters:
     # @todo Those next two could be remove or determined
     # dynamically using the bundle routing prefix to avoid
     # problems
-    jaccob_media.directory.public: /var/www/jaccob/web/media
-    jaccob_media.directory.relative: media
+    jaccob_media.directory.public: /var/www/jaccob/web/media/th
+    jaccob_media.directory.relative: media/th
     jaccob_media.directory.upload: /data/private/photos
 
     # Allowed media sizes
@@ -16,7 +16,7 @@ parameters:
     # Default thumbnail size used for album list (home)
     jaccob_media.size.thumbnail: s250
     # Default thumbnail size used for media grid view
-    jaccob_media.size.thumbnail.grid: w285
+    jaccob_media.size.thumbnail.grid: w570
 
 services:
 

@@ -77,7 +77,7 @@ jaccob_media.album.import:
         albumId: \d+
 
 jaccob_media.media.thumbnail:
-    path:     /{path}
+    path:     /th/{path}
     defaults: { _controller: "JaccobMediaBundle:Thumbnail:create" }
     requirements:
         path: "^.+"

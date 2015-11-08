@@ -49,7 +49,7 @@ class AlbumVoter extends AbstractVoter
      */
     protected function getSupportedAttributes()
     {
-        return [self::VIEW, self::EDIT];
+        return [self::VIEW, self::EDIT, self::SHARE];
     }
 
     /**
@@ -59,14 +59,13 @@ class AlbumVoter extends AbstractVoter
     {
         return [
             'Jaccob\MediaBundle\Model\Album',
-            'Jaccob\MediaBundle\Model\Media',
         ];
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function isGranted($attribute, $object, $user = null)
+    protected function isGranted($attribute, $album, $user = null)
     {
         $isAnonymous = is_string($user);
 
@@ -74,10 +73,8 @@ class AlbumVoter extends AbstractVoter
             return false;
         }
 
-        if ($object instanceof Album) {
-            $album = $object;
-        } else if ($album instanceof Media) {
-            $album = $this->findAlbumOr404($album->id_album);
+        if (!$album instanceof Album) {
+            return false;
         }
 
         switch ($attribute) {

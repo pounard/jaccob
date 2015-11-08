@@ -37,6 +37,7 @@ class ThumbnailController extends AbstractUserAwareController
             throw $this->createNotFoundException();
         }
 
+        // Prefix.
         $sizeId = array_shift($path);
 
         // Check size is valid
@@ -86,6 +87,9 @@ class ThumbnailController extends AbstractUserAwareController
         if (!$media) {
             throw $this->createNotFoundException();
         }
+
+        $album = $this->getAlbumModel()->findByPK(['id' => $media->id_album]);
+        $this->denyAccessUnlessGranted('view', $album);
 
         // Ensure the destination directory
         $publicDirectory = $this->getParameter('jaccob_media.directory.public');

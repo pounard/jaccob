@@ -175,6 +175,8 @@ class AlbumController extends AbstractUserAwareController
     {
         $album = $this->findAlbumOr404($albumId);
 
+        $this->denyAccessUnlessGranted('share', $album);
+
         $alreadyEnabled = (bool)$album->share_enabled;
 
         if ($alreadyEnabled) {
@@ -230,7 +232,7 @@ class AlbumController extends AbstractUserAwareController
                 // Do never tell the user if the mail exist or not
                 if ($alreadyEnabled === (bool)$album->share_enabled) {
                     if ($alreadyEnabled) {
-                        $this->addFlash('success', "Share settings have been updated, copy-paste then share this link: " . $url);
+                        $this->addFlash('success', "Share settings have been updated, copy-paste then share this link: <a href=\"" . $url . "\">" . $url . "</a>");
                     } else {
                         $this->addFlash('info', "Share is disabled");
                     }

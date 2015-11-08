@@ -8,7 +8,6 @@ use Jaccob\AccountBundle\Controller\AbstractUserAwareController;
 use Jaccob\MediaBundle\MediaModelAware;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 
 class MediaController extends AbstractUserAwareController
 {
@@ -17,13 +16,13 @@ class MediaController extends AbstractUserAwareController
 
     public function viewAction($mediaId)
     {
-        // @todo View media in its own page
-        // @todo Check rights with albumId
-
         $media    = $this->findMediaOr404($mediaId);
+        $album    = $this->getAlbumModel()->findByPK(['id' => $media->id_album]);
+
+        $this->denyAccessUnlessGranted('view', $album);
+
         $device   = $this->getDeviceModel()->findByPK(['id' => $media->id_device]);
         $owner    = $this->getAccountModel()->findByPK(['id' => $media->id_account]);
-        $album    = $this->getAlbumModel()->findByPK(['id' => $media->id_album]);
         $previous = null;
         $next     = null;
         $metadata = [];
@@ -42,13 +41,13 @@ class MediaController extends AbstractUserAwareController
 
     public function viewFullscreenAction($mediaId)
     {
-        // @todo View media in its own page
-        // @todo Check rights with albumId
-
         $media    = $this->findMediaOr404($mediaId);
+        $album    = $this->getAlbumModel()->findByPK(['id' => $media->id_album]);
+
+        $this->denyAccessUnlessGranted('view', $album);
+
         $device   = $this->getDeviceModel()->findByPK(['id' => $media->id_device]);
         $owner    = $this->getAccountModel()->findByPK(['id' => $media->id_account]);
-        $album    = $this->getAlbumModel()->findByPK(['id' => $media->id_album]);
         $previous = null;
         $next     = null;
         $metadata = [];

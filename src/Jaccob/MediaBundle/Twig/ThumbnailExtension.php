@@ -111,8 +111,8 @@ class ThumbnailExtension extends \Twig_Extension implements ContainerAwareInterf
             }
         }
 
-        $imgTag = '<img class="lazy-load" data-src="' . $src . '" alt="' . $media->getDisplayName() . '" width="' . $width . '" height="' . $height . '"/>';
-        // $imgTag = '<img src="' . $src . '" alt="' . $media->user_name . '" width="' . $width . '" height="' . $height . '"/>';
+        // $imgTag = '<img class="lazy-load" data-src="' . $src . '" alt="' . $media->getDisplayName() . '" width="' . $width . '" height="' . $height . '"/>';
+        $imgTag = '<img src="' . $src . '" alt="' . $media->user_name . '"/>';
 
         if ($href) {
             return '<a href="' . $href . '" title="View larger">' . $imgTag . '</a>';

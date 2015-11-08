@@ -39,7 +39,7 @@
         <div class="row">
           {% for type, messages in app.session.flashbag.all %}
             <div class="alert alert-{{ type }}" role="alert">
-              {{ messages|join(', ') }}
+              {{ messages|join(', ')|raw }}
             </div>
           {% endfor %}
         </div>
@@ -53,5 +53,6 @@
         <script type="text/javascript" src="{{ asset_url }}"></script>
       {% endjavascripts %}
     {% endblock %}
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/packery/1.4.3/packery.pkgd.min.js"></script>
   </body>
 </html>

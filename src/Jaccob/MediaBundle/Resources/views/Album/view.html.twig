@@ -16,6 +16,14 @@
   </a>
 {% endblock %}
 
-{% block main %}
-  {{ media_grid(mediaList, 4, size, true) }}
+{% block mainwapper %}
+  <div class="container-fluid">
+    <div class="row js-packery" data-packery-options='{"itemSelector":".media-thumbnail","gutter":0}'>
+      {% for media in mediaList %}
+        <div class="media-thumbnail">
+          {{ media_thumbnail(media, size, true) }}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
 {% endblock %}
