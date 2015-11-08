@@ -17,8 +17,8 @@
 {% endblock %}
 
 {% block mainwapper %}
-  <div class="container-fluid">
-    <div class="row js-packery" data-packery-options='{"itemSelector":".media-thumbnail","gutter":0}'>
+  <div class="container-fluid pack">
+    <div class="row js-packery">
       {% for media in mediaList %}
         <div class="media-thumbnail">
           {{ media_thumbnail(media, size, true) }}
