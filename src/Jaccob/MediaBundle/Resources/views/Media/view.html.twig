@@ -19,11 +19,15 @@
   <li class="active">{{ media.displayName }}</li>
 {% endblock %}
 
-{% block main %}
-  <div class="col-md-9">
-    {{ media_thumbnail(media, size, false) }}
-  </div>
-  <div class="col-md-3">
-    Sidebar
+{% block mainwapper %}
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-9 media-view">
+        {{ responsive_image(media, size) }}
+      </div>
+      <div class="col-md-3">
+        Sidebar
+      </div>
+    </div>
   </div>
 {% endblock %}

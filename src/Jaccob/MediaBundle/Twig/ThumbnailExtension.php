@@ -70,22 +70,41 @@ class ThumbnailExtension extends \Twig_Extension implements ContainerAwareInterf
         $allowedSizes = $this->container->getParameter('jaccob_media.size.list');
         $publicDirectory = $this->container->getParameter('jaccob_media.directory.relative');
 
-        $map = [];
+        $sources = [];
 
         if (!$defaultSize) {
             $defaultSize = reset($allowedSizes);
         }
 
+        /*
+         * We are going to use a polyfill, hence the srcset instead of the src
+         * attribute within the img tag fallback.
+         *
+         * This page explains it quite well:
+         *   http://www.smashingmagazine.com/2014/05/picturefill-2-0-responsive-images-and-the-perfect-polyfill/
+         *
+         * Great thanks and all credit to its author.
+         *
+             <picture>
+               <source srcset="extralarge.jpg, extralarge.jpg 2x" media="(min-width: 1000px)">
+               <source srcset="large.jpg, large.jpg 2x" media="(min-width: 800px)">
+               <source srcset="medium.jpg">
+               <img srcset="medium.jpg" alt="Cambodia Map">
+             </picture>
+         */
+
         foreach ($allowedSizes as $size) {
             if (is_numeric($size)) {
                 $src = '/' . FileSystem::pathJoin($publicDirectory, 'w' . $size, $media->physical_path);
-                $map[] = $src . ' ' . $size . 'w';
+                $medias = 'min-width: ' . $size . 'px';
+                $sources[] = '<source srcset="' . $src . '" media="' . $medias . '"/>';
             }
         }
 
         $defaultSrc = '/' . FileSystem::pathJoin($publicDirectory, $defaultSize, $media->physical_path);
+        $sources[] = '<img srcset="' . $defaultSrc . '"/>';
 
-        return '<img src="' . $defaultSrc . '" srcset="' . implode(', ', $map) . '" sizes="100vw"/>';
+        return "\n<picture>\n" . implode("\n", $sources) . "\n</picture>\n";
     }
 
     /**

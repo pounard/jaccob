@@ -1,11 +1,7 @@
 {% extends '::base.html.twig' %}
 
 {% block body %}
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-md-12 centered">
-        {{ responsive_image(media, size) }}
-      </div>
-    </div>
+  <div id="fullscreen">
+    {{ responsive_image(media, size) }}
   </div>
 {% endblock %}
