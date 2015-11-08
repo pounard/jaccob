@@ -26,7 +26,10 @@
     // We don't want empty or erroneous images to reserve space, just use the
     // 1px trick so that the browser may still load it anyway. Please note that
     // when loading images from cache, the browser might be faster than us.
-    if (!nodes[i].complete) {
+    if (nodes[i].complete) {
+      nodes[i].removeAttribute("height");
+      nodes[i].removeAttribute("width");
+    } else {
       nodes[i].setAttribute("height", 1);
       imgList.push(nodes[i]);
     }
