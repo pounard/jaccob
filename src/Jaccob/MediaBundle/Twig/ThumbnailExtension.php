@@ -32,6 +32,10 @@ class ThumbnailExtension extends \Twig_Extension implements ContainerAwareInterf
     public function getFunctions()
     {
         return [
+            new \Twig_SimpleFunction('responsive_image', [$this, 'responsiveImage'], [
+                'is_safe' => ['html'],
+                'needs_environment' => true,
+            ]),
             new \Twig_SimpleFunction('media_grid', [$this, 'createGrid'], [
                 'is_safe' => ['html'],
                 'needs_environment' => true,
@@ -49,6 +53,39 @@ class ThumbnailExtension extends \Twig_Extension implements ContainerAwareInterf
     public function getName()
     {
         return 'jaccob_media_thumbnail';
+    }
+
+    /**
+     * Generate a responsive version of the image, including all configured
+     * sizes
+     *
+     * @param \Twig_Environment $twig
+     * @param Media $media
+     * @param int $defaultSize
+     *
+     * @return string
+     */
+    public function responsiveImage(\Twig_Environment $twig, Media $media, $defaultSize = null)
+    {
+        $allowedSizes = $this->container->getParameter('jaccob_media.size.list');
+        $publicDirectory = $this->container->getParameter('jaccob_media.directory.relative');
+
+        $map = [];
+
+        if (!$defaultSize) {
+            $defaultSize = reset($allowedSizes);
+        }
+
+        foreach ($allowedSizes as $size) {
+            if (is_numeric($size)) {
+                $src = '/' . FileSystem::pathJoin($publicDirectory, 'w' . $size, $media->physical_path);
+                $map[] = $src . ' ' . $size . 'w';
+            }
+        }
+
+        $defaultSrc = '/' . FileSystem::pathJoin($publicDirectory, $defaultSize, $media->physical_path);
+
+        return '<img src="' . $defaultSrc . '" srcset="' . implode(', ', $map) . '" sizes="100vw"/>';
     }
 
     /**

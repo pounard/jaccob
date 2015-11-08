@@ -28,6 +28,7 @@ class MediaController extends AbstractUserAwareController
         $metadata = [];
 
         return $this->render('JaccobMediaBundle:Media:view.html.twig', [
+            'canEdit'   => $this->isGranted('edit', $album),
             'metadata'  => $metadata,
             'device'    => $device,
             'owner'     => $owner,
@@ -53,6 +54,7 @@ class MediaController extends AbstractUserAwareController
         $metadata = [];
 
         return $this->render('JaccobMediaBundle:Media:viewFullscreen.html.twig', [
+            'canEdit'   => $this->isGranted('edit', $album),
             'metadata'  => $metadata,
             'device'    => $device,
             'owner'     => $owner,

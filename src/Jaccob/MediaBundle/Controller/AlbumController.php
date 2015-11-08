@@ -25,10 +25,10 @@ class AlbumController extends AbstractUserAwareController
     protected function getImporter()
     {
         return $this
-          ->get('jaccob_media.importer')
-          ->setOwner(
-              $this->getCurrentUserAccount()
-          )
+            ->get('jaccob_media.importer')
+            ->setOwner(
+                $this->getCurrentUserAccount()
+            )
         ;
     }
 
@@ -49,6 +49,7 @@ class AlbumController extends AbstractUserAwareController
         $mediaList  = $mediaPager->getIterator();
 
         return $this->render('JaccobMediaBundle:Album:view.html.twig', [
+            'canEdit'   => $this->isGranted('edit', $album),
             'owner'     => $owner,
             'album'     => $album,
             'mediaList' => $mediaList,
