@@ -1,3 +1,6 @@
+/*global Packery, console */
+/*jslint browser: true, for: true, white: true */
+
 // God, I hate JavaScript, and most of all, I hate Chrome. Fuck you Google.
 (function (document, Packery, console) {
   "use strict";
@@ -11,7 +14,7 @@
     return;
   }
 
-  var nodes, i, img = [], container, pack = [];
+  var nodes, i, imgList = [], container, pack = [];
 
   nodes = document.querySelectorAll(".pack img");
   if (!nodes.length) {
@@ -19,28 +22,29 @@
   }
 
   // Convert img to an array.
-  for (i = 0; i < nodes.length; i++) {
-    img.push(nodes[i]);
-
-    // We don't want empty or erroneous images to reserve space, just use
-    // the 1px trick so that the browser may still load it anyway.
-    img[i].setAttribute("height", 1);
-    img[i].setAttribute("width", 1);
+  for (i = 0; i < nodes.length; i += 1) {
+    // We don't want empty or erroneous images to reserve space, just use the
+    // 1px trick so that the browser may still load it anyway. Please note that
+    // when loading images from cache, the browser might be faster than us.
+    if (!nodes[i].complete) {
+      nodes[i].setAttribute("height", 1);
+      imgList.push(nodes[i]);
+    }
   }
 
   function doCheck() {
-    var key, removed = false;
+    var changed = false;
 
-    for (key in img) {
+    imgList.forEach(function (img, index) {
       // This means the image has been loaded, if the browser had set a natural
       // width, this also means the image was loaded from cache, and so will
       // support bugguy Chrome browser, etc...
-      if (img[key].complete) {
+      if (img.complete) {
 
-        if (!img[key].naturalWidth) {
+        if (!img.naturalWidth) {
           // This image failed, I guess.
-          img.splice(key, 1);
-          continue;
+          imgList.splice(index, 1);
+          return;
         }
 
         // Removing height and width attributes will allow CSS to correctly
@@ -48,25 +52,25 @@
         // correctly in the Bootstrap grid, but we cannot really do that cause
         // Packery needs to be able to fill the gaps whenever an image is not
         // fully loaded.
-        img[key].removeAttribute("height");
-        img[key].removeAttribute("width");
+        img.removeAttribute("height");
+        img.removeAttribute("width");
 
         // Thanks https://stackoverflow.com/a/3199627
-        img.splice(key, 1);
-        removed = true;
+        imgList.splice(index, 1);
+        changed = true;
       }
-    }
+    });
 
-    if (removed) {
-      for (key in pack) {
-        pack[key].layout();
-      }
+    if (changed) {
+      pack.forEach(function (item) {
+        item.layout();
+      });
     }
 
     // This is some sort of active wait, don't like it, but at least it does
     // work on every browser. Why 100 ? Why not. We don't do anything too
     // heavy in there, it's good enough.
-    if (img.length) {
+    if (imgList.length) {
       setTimeout(doCheck, 100);
     } else {
       if (console) {
@@ -80,7 +84,7 @@
   pack.push(new Packery(container, {
     itemSelector: ".media-thumbnail",
     transitionDuration: 0,
-    isInitLayout: false,
+    // isInitLayout: false,
     gutter: 0
   }));
 
