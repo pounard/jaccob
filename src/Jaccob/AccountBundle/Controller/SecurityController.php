@@ -60,8 +60,8 @@ class SecurityController extends Controller
                     $password = Crypt::createPassword();
                     $model->updatePassword($account, $password);
 
-                    if (true /* FIXME In devel mode */) {
-                        $this->addFlash('success', "Password is: " . $password);
+                    if ($this->getParameter('jaccob_account.password_request_as_message')) {
+                        $this->addFlash('danger', "Password is: " . $password);
                     }
                 }
 

@@ -24,3 +24,7 @@ parameters:
     jaccob_media.directory.public: /var/www/jaccob/web/media
     jaccob_media.directory.relative: media
     jaccob_media.directory.upload: /data/private/photos
+
+    # Set this to true and the request password will give you the password
+    # on screen instead of mailing it
+    jaccob_account.password_request_as_message: false

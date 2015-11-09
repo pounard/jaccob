@@ -70,6 +70,8 @@ class ThumbnailExtension extends \Twig_Extension implements ContainerAwareInterf
         $allowedSizes = $this->container->getParameter('jaccob_media.size.list');
         $publicDirectory = $this->container->getParameter('jaccob_media.directory.relative');
 
+        $maxWidth = $media->width;
+
         $sources = [];
 
         if (!$defaultSize) {
@@ -94,9 +96,13 @@ class ThumbnailExtension extends \Twig_Extension implements ContainerAwareInterf
          */
 
         foreach ($allowedSizes as $size) {
-            if (is_numeric($size)) {
+            if (is_numeric($size) && $size < $maxWidth) {
                 $src = '/' . FileSystem::pathJoin($publicDirectory, 'w' . $size, $media->physical_path);
                 $medias = 'min-width: ' . $size . 'px';
+                $sources[] = '<source srcset="' . $src . '" media="' . $medias . '"/>';
+            } else if ('full' === $size) {
+                $src = '/' . FileSystem::pathJoin($publicDirectory, 'full', $media->physical_path);
+                $medias = 'min-width: ' . $maxWidth . 'px';
                 $sources[] = '<source srcset="' . $src . '" media="' . $medias . '"/>';
             }
         }

@@ -4,4 +4,8 @@
   <div id="fullscreen">
     {{ responsive_image(media, size) }}
   </div>
+
+  {% javascripts '@JaccobMediaBundle/Resources/public/js/*' %}
+    <script src="{{ asset_url }}" async></script>
+  {% endjavascripts %}
 {% endblock %}
