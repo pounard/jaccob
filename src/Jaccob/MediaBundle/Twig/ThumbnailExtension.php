@@ -32,15 +32,11 @@ class ThumbnailExtension extends \Twig_Extension implements ContainerAwareInterf
     public function getFunctions()
     {
         return [
-            new \Twig_SimpleFunction('responsive_image', [$this, 'responsiveImage'], [
+            new \Twig_SimpleFunction('media_responsive', [$this, 'createResponsivePicture'], [
                 'is_safe' => ['html'],
                 'needs_environment' => true,
             ]),
-            new \Twig_SimpleFunction('media_grid', [$this, 'createGrid'], [
-                'is_safe' => ['html'],
-                'needs_environment' => true,
-            ]),
-            new \Twig_SimpleFunction('media_thumbnail', [$this, 'createThumbnail'], [
+            new \Twig_SimpleFunction('media_thumbnail', [$this, 'createThumbnailImage'], [
                 'is_safe' => ['html'],
                 'needs_environment' => true,
             ]),
@@ -55,6 +51,34 @@ class ThumbnailExtension extends \Twig_Extension implements ContainerAwareInterf
         return 'jaccob_media_thumbnail';
     }
 
+    protected function getMediaUrl(Media $media, $size, $modifier = null)
+    {
+        $allowedSizes     = $this->container->getParameter('jaccob_media.size.list');
+        $publicDirectory  = $this->container->getParameter('jaccob_media.directory.relative');
+
+        // Better be safe than sorry
+        if (!$media->physical_path) {
+            return null;
+        }
+
+        if (!in_array($size, $allowedSizes)) {
+            // Take the nearest
+            $closest = null;
+            foreach ($allowedSizes as $item) {
+                if ($closest === null || abs($size - $closest) > abs($item - $closest)) {
+                    $closest = $item;
+                }
+            }
+        }
+
+        // Ensure given parameter consistency
+        if ('full' !== $size && $modifier) {
+            $size = $modifier . abs((int)$size);
+        }
+
+        return '/' . FileSystem::pathJoin($publicDirectory, $size, $media->physical_path);
+    }
+
     /**
      * Generate a responsive version of the image, including all configured
      * sizes
@@ -65,17 +89,25 @@ class ThumbnailExtension extends \Twig_Extension implements ContainerAwareInterf
      *
      * @return string
      */
-    public function responsiveImage(\Twig_Environment $twig, Media $media, $defaultSize = null)
+    public function createResponsivePicture(\Twig_Environment $twig, Media $media, $defaultSize = null, $maxSize = null, $modifier = null)
     {
         $allowedSizes = $this->container->getParameter('jaccob_media.size.list');
-        $publicDirectory = $this->container->getParameter('jaccob_media.directory.relative');
 
-        $maxWidth = $media->width;
-
-        $sources = [];
+        // Do not ever try to include sizes over the image size
+        if (!$maxSize || $media->width < $maxSize) {
+            $maxSize = $media->width;
+        }
 
         if (!$defaultSize) {
-            $defaultSize = reset($allowedSizes);
+            if ($maxSize) {
+                // Maximum size if set probably is the target size for normal
+                // display
+                $defaultSize = $maxSize;
+            } else {
+                // Arbitrary take the smallest one and potentially save some
+                // bandwidth for older or outdated devices
+                $defaultSize = max($allowedSizes);
+            }
         }
 
         /*
@@ -95,20 +127,33 @@ class ThumbnailExtension extends \Twig_Extension implements ContainerAwareInterf
              </picture>
          */
 
+        $sources = [];
+
+        // Default modifier is width, seems logic at this point
+        switch ($modifier) {
+            case 's':
+                break;
+            case 'h':
+                break;
+            default:
+            case 'w':
+                $modifier = 'w';
+                break;
+        }
+
         foreach ($allowedSizes as $size) {
-            if (is_numeric($size) && $size < $maxWidth) {
-                $src = '/' . FileSystem::pathJoin($publicDirectory, 'w' . $size, $media->physical_path);
-                $medias = 'min-width: ' . $size . 'px';
-                $sources[] = '<source srcset="' . $src . '" media="' . $medias . '"/>';
+            if (is_numeric($size) && $size < $maxSize) {
+                $medias = 'min-width: ' . ((int)$size) . 'px';
+                $href = $this->getMediaUrl($media, $size, $modifier);
+                $sources[] = '<source srcset="' . $href . ' 1x" media="(' . $medias . ')"/>';
             } else if ('full' === $size) {
-                $src = '/' . FileSystem::pathJoin($publicDirectory, 'full', $media->physical_path);
-                $medias = 'min-width: ' . $maxWidth . 'px';
-                $sources[] = '<source srcset="' . $src . '" media="' . $medias . '"/>';
+                $medias = 'min-width: ' . ((int)$maxSize) . 'px';
+                $href = $this->getMediaUrl($media, 'full');
+                $sources[] = '<source srcset="' . $href . ' 1x" media="(' . $medias . ')"/>';
             }
         }
 
-        $defaultSrc = '/' . FileSystem::pathJoin($publicDirectory, $defaultSize, $media->physical_path);
-        $sources[] = '<img srcset="' . $defaultSrc . '"/>';
+        $sources[] = '<img srcset="' . $this->getMediaUrl($media, $defaultSize, $modifier) . ' 1x"/>';
 
         return "\n<picture>\n" . implode("\n", $sources) . "\n</picture>\n";
     }
@@ -120,123 +165,47 @@ class ThumbnailExtension extends \Twig_Extension implements ContainerAwareInterf
      *   The media
      * @param int $size
      *   Size in pixels
-     * @param boolean|string $withLink
-     *   True and link will be generated automatically, a string and it will
-     *   be used as the link
-     * @param boolean $lazy
-     *   Lazy load images.
+     * @param string $modifier
+     *   Modifier:
+     *     'w' (default) : size is width (scale)
+     *     'h' : size is height (scale)
+     *     's' : size is square (scale and crop)
      *
      * @return string
      */
-    public function createThumbnail(\Twig_Environment $twig, Media $media, $size = 100, $withLink = false, $lazy = true)
+    public function createThumbnailImage(\Twig_Environment $twig, Media $media, $size = 100, $modifier = 'w')
     {
-        // Better be safe than sorry.
+        // Better be safe than sorry
         if (!$media->physical_path) {
-            return '';
+            return null;
         }
         if (!$media->width || !$media->height) {
-            return '';
+            return null;
         }
 
-        if (is_string($size) && !is_numeric($size[0])) {
-            if ('h' === $size[0]) {
-                $height = (int)substr($size, 1);
-                $width = floor(($height / $media->height) * $media->width);
-            } else if ('w' === $size[0]) {
-                $width = (int)substr($size, 1);
-                $height = floor(($width / $media->width) * $media->height);
-            } else if ('s' === $size[0]) {
-                $width = $height = (int)substr($size, 1);
-                $size = $width;
-            } else {
-                // Dafuck?
-                return '';
-            }
-        } else {
-            $width = (int)$size;
-            $height = floor(($width / $media->width) * $media->height);
-            $size = 'w' . $size;
+        $size = abs((int)$size);
+
+        // Re-compute image width/height
+        switch ($modifier) {
+
+            case 's':
+                $height   = $size;
+                $width    = $size;
+                break;
+
+            case 'h':
+                $height   = $size;
+                $width    = ceil(($height / $media->height) * $media->width);
+                break;
+
+            default:
+            case 'w':
+                $modifier = 'w';
+                $width    = $size;
+                $height   = ceil(($width / $media->width) * $media->height);
+                break;
         }
 
-        $publicDirectory = $this->container->getParameter('jaccob_media.directory.relative');
-        // @todo URL with base path
-        $src = '/' . FileSystem::pathJoin($publicDirectory, $size, $media->physical_path);
-
-        $href   = null;
-        if ($withLink) {
-            if (is_string($withLink)) {
-                // @todo URL with base path
-                $href = '/' . $withLink;
-            } else {
-                // @todo URL with base path
-                $href = '/' . FileSystem::pathJoin('media/view', $media->id);
-            }
-        }
-
-        ///$imgTag = '<img class="lazy-load" data-src="' . $src . '" alt="' . $media->getDisplayName() . '" width="' . $width . '" height="' . $height . '"/>';
-        $imgTag = '<img src="' . $src . '" alt="' . $media->user_name . '" width="' . $width . '" height="' . $height . '"/>';
-
-        if ($href) {
-            return '<a href="' . $href . '" title="View larger">' . $imgTag . '</a>';
-        } else {
-            return $imgTag;
-        }
-    }
-
-    /**
-     * Generate thumbnail grid
-     *
-     * @param \Jaccob\MediaBundle\Model\Media[] $mediaList
-     * @param int $columns
-     * @param int $width
-     * @param string $withLink
-     * @param int|string $toSize
-     *
-     * @return string
-     */
-    public function createGrid(\Twig_Environment $twig, $mediaList, $columns = 3, $width = 240, $withLink = false)
-    {
-        $columnsData = array_fill(0, $columns, []);
-        $columnsSize = array_fill(0, $columns, 0);
-
-        $size = $width;
-        if (!is_int($width[0])) {
-            $width = (int)substr($width, 1);
-        }
-
-        foreach ($mediaList as $media) {
-
-            // Better be safe than sorry.
-            if (!$media instanceof Media) {
-                continue; 
-            }
-            if (!$media->physical_path) {
-                continue;
-            }
-            if (!$media->width || !$media->height) {
-                continue;
-            }
-
-            $currentColumn = 0;
-            $currentSize = null;
-
-            for ($i = 0; $i < $columns; ++$i) {
-                if (null === $currentSize || $columnsSize[$i] < $currentSize) {
-                    $currentColumn = $i;
-                    $currentSize = $columnsSize[$i];
-                }
-            }
-
-            $height = floor(($width / $media->getWidth()) * $media->getHeight());
-
-            $columnsSize[$currentColumn] += $height;
-            $columnsData[$currentColumn][] = $media;
-        }
-
-        return $twig->render('JaccobMediaBundle:Helper:thumbnailGrid.html.twig', [
-            'columns'   => $columnsData,
-            'width'     => $size,
-            'withLink'  => $withLink,
-        ]);
+        return '<img src="' . $this->getMediaUrl($media, $size, $modifier) . '" alt="' . $media->user_name . '" width="' . $width . '" height="' . $height . '"/>';
     }
 }

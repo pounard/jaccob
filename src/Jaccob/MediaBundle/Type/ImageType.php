@@ -42,6 +42,10 @@ class ImageType extends ContainerAware implements TypeInterface
                 if (false !== strpos(self::EXIF_SECTIONS, $section)) {
                     foreach ($values as $key => $value) {
                         // Exclude some garbage we got on some photos
+                        if (!is_string($value)) {
+                            //trigger_error(sprintf("%s' is not a string", $key), E_USER_WARNING);
+                            continue;
+                        }
                         if ("MakerNote" !== $key && 0 !== strpos($key, "Undefined") && 0 !== strpos($key, "Thumbnail")) {
                             // It seems that we often inherit from stupid
                             // empty values from the EXIF data, it also

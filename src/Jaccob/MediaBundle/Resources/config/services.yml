@@ -14,9 +14,9 @@ parameters:
     # Default media view width (media view with sidebar)
     jaccob_media.size.default: 855
     # Default thumbnail size used for album list (home)
-    jaccob_media.size.thumbnail: s250
+    jaccob_media.size.thumbnail: 250
     # Default thumbnail size used for media grid view
-    jaccob_media.size.thumbnail.grid: w570
+    jaccob_media.size.thumbnail.grid: 570
 
 services:
 

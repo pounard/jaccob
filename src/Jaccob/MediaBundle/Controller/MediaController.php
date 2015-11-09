@@ -36,7 +36,7 @@ class MediaController extends AbstractUserAwareController
             'media'     => $media,
             'previous'  => $previous,
             'next'      => $next,
-            'size'      => 'w' . $this->getParameter('jaccob_media.size.default'),
+            'size'      => $this->getParameter('jaccob_media.size.default'),
         ]);
     }
 
@@ -62,7 +62,7 @@ class MediaController extends AbstractUserAwareController
             'media'     => $media,
             'previous'  => $previous,
             'next'      => $next,
-            'size'      => 'w' . $this->getParameter('jaccob_media.size.fullscreen'),
+            'size'      => $this->getParameter('jaccob_media.size.fullscreen'),
         ]);
     }
 }
