@@ -23,8 +23,8 @@ class MediaController extends AbstractUserAwareController
 
         $device   = $this->getDeviceModel()->findByPK(['id' => $media->id_device]);
         $owner    = $this->getAccountModel()->findByPK(['id' => $media->id_account]);
-        $previous = null;
-        $next     = null;
+        $previous = $this->getMediaModel()->findPreviousInAlbum($media->id_album, $media->id);
+        $next     = $this->getMediaModel()->findNextInAlbum($media->id_album, $media->id);
         $metadata = [];
 
         return $this->render('JaccobMediaBundle:Media:view.html.twig', [
@@ -49,8 +49,8 @@ class MediaController extends AbstractUserAwareController
 
         $device   = $this->getDeviceModel()->findByPK(['id' => $media->id_device]);
         $owner    = $this->getAccountModel()->findByPK(['id' => $media->id_account]);
-        $previous = null;
-        $next     = null;
+        $previous = $this->getMediaModel()->findPreviousInAlbum($media->id_album, $media->id);
+        $next     = $this->getMediaModel()->findNextInAlbum($media->id_album, $media->id);
         $metadata = [];
 
         return $this->render('JaccobMediaBundle:Media:viewFullscreen.html.twig', [

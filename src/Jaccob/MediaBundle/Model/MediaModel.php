@@ -47,4 +47,46 @@ class MediaModel extends Model
 
         return $this->paginateFindWhere($where, 100);
     }
+
+    public function findPreviousInAlbum($albumId, $currentMediaId)
+    {
+        $where = (new Where())
+            ->andWhere('id_album = $*', [$albumId])
+            ->andWhere('id < $*', [$currentMediaId])
+        ;
+
+        $sql = strtr(
+            "select :fields from :table where :condition order by id desc limit 1",
+            [
+              ':fields'     => $this->createProjection()->formatFieldsWithFieldAlias(),
+              ':table'      => $this->getStructure()->getRelation(),
+              ':condition'  => $where,
+            ]
+        );
+
+        $iterator = $this->query($sql, [$albumId, $currentMediaId]);
+
+        return $iterator->isEmpty() ? null : $iterator->current();
+    }
+
+    public function findNextInAlbum($albumId, $currentMediaId)
+    {
+        $where = (new Where())
+            ->andWhere('id_album = $*', [$albumId])
+            ->andWhere('id > $*', [$currentMediaId])
+        ;
+
+        $sql = strtr(
+            "select :fields from :table where :condition order by id asc limit 1",
+            [
+              ':fields'     => $this->createProjection()->formatFieldsWithFieldAlias(),
+              ':table'      => $this->getStructure()->getRelation(),
+              ':condition'  => $where,
+            ]
+        );
+
+        $iterator = $this->query($sql, [$albumId, $currentMediaId]);
+
+        return $iterator->isEmpty() ? null : $iterator->current();
+    }
 }

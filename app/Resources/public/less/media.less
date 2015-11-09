@@ -1,50 +1,98 @@
 
 @album-padding: 5px;
 
+.body-inverse {
+    background-color: black;
+}
+
 .media-thumbnail {
-  overflow-x: hidden;
-  width: 20%;
-  img {
-    width: 100%;
-  }
+    overflow-x: hidden;
+    width: 20%;
+    img {
+        width: 100%;
+    }
 }
 
 @media (max-width: @screen-md-min) {
-  .media-thumbnail {
-    width: 25%;
-  }
+    .media-thumbnail {
+        width: 25%;
+    }
 }
 
 @media (max-width: @screen-sm-min) {
-  .media-thumbnail {
-    width: 50%;
-  }
+    .media-thumbnail {
+        width: 50%;
+    }
 }
 
 @media (max-width: @screen-xs-min) {
-  .media-thumbnail {
-    width: 100%;
-  }
+    .media-thumbnail {
+        width: 100%;
+    }
 }
 
 .media-view {
-  img {
-    width: 100%;
-  }
+    img {
+        width: 100%;
+    }
 }
 
 #fullscreen {
-  position: absolute;
-  top: 0;
-  right: 0;
-  left: 0;
-  bottom: 0;
-  background-color: black;
-  text-align: center;
-  img {
-    height: 100%;
-    margin: 0 auto;
-  }
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    background-color: black;
+    text-align: center;
+
+    .close-button {
+        opacity: 0;
+        background-color: @gray-darker;
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        height: 3em;
+        line-height: 3em;
+        font-size: 2em;
+
+        &:hover {
+            opacity: 0.8;
+            color: @gray;
+        }
+    }
+
+    .image, img {
+        height: 100%;
+        margin: 0 auto;
+    }
+
+    .browse {
+        opacity: 0.8;
+        width: 3em;
+        font-size: 5em;
+        color: @gray-dark;
+        line-height: 100vh;
+        text-align: center;
+        &:hover {
+            color: @gray;
+            background-color: @gray-darker;
+        }
+    }
+
+    .browse-left {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+    }
+    .browse-right {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+    }
 }
 
 .album {

@@ -2,7 +2,32 @@
 
 {% block body %}
   <div id="fullscreen">
-    {{ media_responsive(media, size) }}
+
+    <div class="image">
+      {{ media_responsive(media, size) }}
+
+      <a class="close-button" href="{{ path('jaccob_media.album.view', {albumId: media.id_album}) }}">
+        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+        Close
+      </a>
+    </div>
+
+    {# @todo Display info #}
+
+    {% if previous %}
+      <a class="browse browse-left"  href="{{ path('jaccob_media.media.view.full', {mediaId: previous.id}) }}" title="{{ previous.user_name }}">
+        <span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>
+        <span class="sr-only">{{ previous.user_name }}</span>
+      </a>
+    {% endif  %}
+
+    {% if next %}
+      <a class="browse browse-right" href="{{ path('jaccob_media.media.view.full', {mediaId: next.id}) }}" title="{{ next.user_name }}">
+        <span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span>
+        <span class="sr-only">{{ next.user_name }}</span>
+      </a>
+    {% endif  %}
+
   </div>
 
   {% javascripts '@JaccobMediaBundle/Resources/public/js/*' %}

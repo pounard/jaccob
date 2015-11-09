@@ -1,0 +1,14 @@
+
+.breadcrumb-inverse {
+  background-color: @navbar-inverse-bg;
+
+  > li {
+    + li:before, a {
+      color: @navbar-inverse-link-color;
+    }
+  }
+
+  > .active {
+    color: @navbar-inverse-link-active-color;
+  }
+}

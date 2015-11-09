@@ -19,7 +19,7 @@
       {% endif %}
         <a href="{{ path('jaccob_media.album.view', {albumId: album.id}) }}">
           {% if (previews[album.id] is defined) %}
-            {{ media_thumbnail(previews[album.id], size, 'w') }}
+            {{ media_thumbnail(previews[album.id], size, size * 2, 's') }}
           {% endif %}
           <p class="title">{{ album.displayName }}</p>
         </a>

@@ -93,6 +93,9 @@ class ThumbnailExtension extends \Twig_Extension implements ContainerAwareInterf
     {
         $allowedSizes = $this->container->getParameter('jaccob_media.size.list');
 
+        $allowedSizes = array_filter($allowedSizes, 'is_numeric');
+        sort($allowedSizes);
+
         // Do not ever try to include sizes over the image size
         if (!$maxSize || $media->width < $maxSize) {
             $maxSize = $media->width;
@@ -142,15 +145,18 @@ class ThumbnailExtension extends \Twig_Extension implements ContainerAwareInterf
         }
 
         foreach ($allowedSizes as $size) {
-            if (is_numeric($size) && $size < $maxSize) {
-                $medias = 'min-width: ' . ((int)$size) . 'px';
+            if ($size < $maxSize) {
+                $medias = 'max-width: ' . ((int)$size) . 'px';
                 $href = $this->getMediaUrl($media, $size, $modifier);
                 $sources[] = '<source srcset="' . $href . ' 1x" media="(' . $medias . ')"/>';
-            } else if ('full' === $size) {
-                $medias = 'min-width: ' . ((int)$maxSize) . 'px';
-                $href = $this->getMediaUrl($media, 'full');
-                $sources[] = '<source srcset="' . $href . ' 1x" media="(' . $medias . ')"/>';
             }
+        }
+
+        // Full first, for very big sreens.
+        if ($media->width < $maxSize) {
+            $medias = 'max-width: ' . ((int)$maxSize) . 'px';
+            $href = $this->getMediaUrl($media, 'full');
+            $sources[] = '<source srcset="' . $href . ' 1x" media="(' . $medias . ')"/>';
         }
 
         $sources[] = '<img srcset="' . $this->getMediaUrl($media, $defaultSize, $modifier) . ' 1x"/>';
@@ -173,39 +179,77 @@ class ThumbnailExtension extends \Twig_Extension implements ContainerAwareInterf
      *
      * @return string
      */
-    public function createThumbnailImage(\Twig_Environment $twig, Media $media, $size = 100, $modifier = 'w')
+    public function createThumbnailImage(\Twig_Environment $twig, Media $media, $defaultSize = null, $maxSize = null, $modifier = null)
     {
-        // Better be safe than sorry
-        if (!$media->physical_path) {
-            return null;
-        }
-        if (!$media->width || !$media->height) {
-            return null;
+        $allowedSizes = $this->container->getParameter('jaccob_media.size.list');
+
+        $allowedSizes = array_filter($allowedSizes, 'is_numeric');
+        sort($allowedSizes);
+
+        // Do not ever try to include sizes over the image size
+        if (!$maxSize || $media->width < $maxSize) {
+            $maxSize = $media->width;
         }
 
-        $size = abs((int)$size);
+        if (!$defaultSize) {
+            if ($maxSize) {
+                // Maximum size if set probably is the target size for normal
+                // display
+                $defaultSize = $maxSize;
+            } else {
+                // Arbitrary take the smallest one and potentially save some
+                // bandwidth for older or outdated devices
+                $defaultSize = max($allowedSizes);
+            }
+        }
 
-        // Re-compute image width/height
+        /*
+         * We are going to use a polyfill, hence the srcset instead of the src
+         * attribute within the img tag fallback.
+         *
+         * This page explains it quite well:
+         *   http://www.smashingmagazine.com/2014/05/picturefill-2-0-responsive-images-and-the-perfect-polyfill/
+         *
+         * Great thanks and all credit to its author.
+         *
+            <img src="small.jpg"
+                 srcset="large.jpg 1024w,
+                         medium.jpg 640w,
+                         small.jpg 320w"
+                 sizes="(min-width: 36em) 33.3vw,
+                        100vw"
+                 alt="A rad wolf" />
+         */
+
+        $sets = [];
+
+        // Default modifier is width, seems logic at this point
         switch ($modifier) {
-
             case 's':
-                $height   = $size;
-                $width    = $size;
                 break;
-
             case 'h':
-                $height   = $size;
-                $width    = ceil(($height / $media->height) * $media->width);
                 break;
-
             default:
             case 'w':
                 $modifier = 'w';
-                $width    = $size;
-                $height   = ceil(($width / $media->width) * $media->height);
                 break;
         }
 
-        return '<img src="' . $this->getMediaUrl($media, $size, $modifier) . '" alt="' . $media->user_name . '" width="' . $width . '" height="' . $height . '"/>';
+
+        foreach ($allowedSizes as $size) {
+            if ($size < $maxSize) {
+                $href = $this->getMediaUrl($media, $size, $modifier);
+                $sets[] = $href . ' ' . $size . 'w';
+            }
+        }
+
+        if ($maxSize < $media->width) {
+            $href = $this->getMediaUrl($media, 'full');
+            $sets[] = $href . ' ' . $size . 'w';
+        }
+
+        $defaultHref = $this->getMediaUrl($media, $defaultSize, $modifier);
+
+        return '<img srcset="' . implode(",\n", $sets) . '" sizes="20vw" src="' . $defaultHref . '" />';
     }
 }
