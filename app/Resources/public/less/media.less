@@ -11,6 +11,12 @@
     img {
         width: 100%;
     }
+    &:hover {
+        img {
+            filter: brightness(1.3);
+            transition: opacity .25s ease-in-out;
+        }
+    }
 }
 
 @media (max-width: @screen-md-min) {
@@ -59,7 +65,8 @@
 
         &:hover {
             opacity: 0.8;
-            color: @gray;
+            color: @gray-light;
+            text-decoration: none;
         }
     }
 
@@ -96,9 +103,8 @@
 }
 
 .album {
-    margin: 10px;
+    margin: 5px;
     text-align: center;
-    padding: @album-padding;
 
     overflow: hidden;
     text-overflow: ellipsis;
@@ -107,23 +113,38 @@
 
     min-height: 3em; // Fit to title
 
+    &:hover {
+        img {
+            filter: brightness(1.3);
+            transition: opacity .25s ease-in-out;
+        }
+    }
+
     a {
         color: black;
         white-space: nowrap;
         display: block;
     }
 
+    .album-status {
+        position: absolute;
+        top: 0;
+        right: 0;
+        font-size: 1.3em;
+        padding: @album-padding (@album-padding * 2);
+        background: black;
+        opacity: 0.7;
+    }
+
     img {
-       box-shadow: 1px 1px 2px #ccc;
        display: block;
        width: 100%;
     }
 
     .title {
         position: absolute;
-        left: @album-padding;
-        right: @album-padding;
-        bottom: @album-padding;
+        width: 100%;
+        bottom: 0;
         margin: 0;
         padding: @album-padding;
         max-height: 3em;
@@ -131,6 +152,7 @@
         font-weight: bold;
         background: black;
         opacity: 0.7;
+        overflow: hidden;
         text-overflow: ellipsis;
     }
 }
