@@ -243,7 +243,7 @@ class ThumbnailExtension extends \Twig_Extension implements ContainerAwareInterf
             }
         }
 
-        if ($maxSize < $media->width) {
+        if (!$maxSize) {
             $href = $this->getMediaUrl($media, 'full');
             $sets[] = $href . ' ' . $size . 'w';
         }

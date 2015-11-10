@@ -10,19 +10,23 @@
 {% block main %}
   {% for album in albums %}
     <div class="col-md-3">
-      {% if album.share_enabled and album.share_password %}
-        <div class="album shared password">
-      {% elseif album.share_enabled %}
-        <div class="album shared">
-      {% else %}
-        <div class="album">
-      {% endif %}
+      <div class="album">
         <a href="{{ path('jaccob_media.album.view', {albumId: album.id}) }}">
           {% if (previews[album.id] is defined) %}
             {{ media_thumbnail(previews[album.id], size, size * 2, 's') }}
           {% endif %}
           <p class="title">{{ album.displayName }}</p>
         </a>
+        <div class="album-status">
+          {% if album.share_enabled and album.share_password %}
+            <span class="text-danger glyphicon glyphicon-lock" aria-hidden="true"></span>
+            <span class="sr-only">This album is password protected.</span>
+          {% endif %}
+          {% if album.share_enabled %}
+            <span class="text-primary glyphicon glyphicon-link" aria-hidden="true"></span>
+            <span class="sr-only">This album is shared.</span>
+          {% endif %}
+        </div>
       </div>
     </div>
   {% endfor %}

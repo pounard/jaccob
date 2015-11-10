@@ -5,7 +5,6 @@ namespace Jaccob\MediaBundle\Controller;
 use Jaccob\AccountBundle\Controller\AbstractUserAwareController;
 
 use Jaccob\MediaBundle\MediaModelAware;
-use Jaccob\MediaBundle\Toolkit\ExternalImagickImageToolkit;
 use Jaccob\MediaBundle\Util\FileSystem;
 
 use PommProject\Foundation\Where;
@@ -42,24 +41,23 @@ class ThumbnailController extends AbstractUserAwareController
 
         // Check size is valid
         if ('h' === $sizeId[0]) {
-            $mode = 'h';
+            $modifier = 'h';
             $size = substr($sizeId, 1);
         } else if ('w' === $sizeId[0]) {
-            $mode = 'w';
+            $modifier = 'w';
             $size = substr($sizeId, 1);
         } else if ('m' === $sizeId[0]) {
-            $mode = 'm';
+            $modifier = 'm';
             $size = substr($sizeId, 1);
         } else if ('s' === $sizeId[0]) {
-            $mode = 's'; // Square
+            $modifier = 's'; // Square
             $size = substr($sizeId, 1);
         } else {
-            $mode = 's';
+            $modifier = 's';
             $size = (int)$sizeId;
         }
 
         // Ensure size is valid
-        // @todo Configuration would be better here
         $allowedSizes = $this->getParameter('jaccob_media.size.list');
 
         if (!in_array($size, $allowedSizes)) {
@@ -91,31 +89,20 @@ class ThumbnailController extends AbstractUserAwareController
         $album = $this->getAlbumModel()->findByPK(['id' => $media->id_album]);
         $this->denyAccessUnlessGranted('view', $album);
 
+        /* @var $type \Jaccob\MediaBundle\Type\TypeInterface */
+        $type = $this->get('jaccob_media.type_finder')->getTypeFor($media->mimetype);
+        if (!$type->canDoThumbnail()) {
+            throw $this->createNotFoundException();
+        }
+
         // Ensure the destination directory
         $publicDirectory = $this->getParameter('jaccob_media.directory.public');
 
-        $inFile = FileSystem::pathJoin($publicDirectory, 'full', $hash);
-        $outFile = FileSystem::pathJoin($publicDirectory, $sizeId, $hash);
+        $inFile   = FileSystem::pathJoin($publicDirectory, 'full', $hash);
+        $outFile  = FileSystem::pathJoin($publicDirectory, $sizeId, $hash);
 
-        $toolkit = new ExternalImagickImageToolkit();
-
-        switch ($mode) {
-
-            case 'm':
-                $toolkit->scaleTo($inFile, $outFile, $size, $size, true);
-                break;
-
-            case 'h':
-                $toolkit->scaleTo($inFile, $outFile, null, $size, true);
-                break;
-
-            case 'w':
-                $toolkit->scaleTo($inFile, $outFile, $size, null, true);
-                break;
-
-            case 's':
-                $toolkit->scaleAndCrop($inFile, $outFile, $size, $size);
-                break;
+        if (!$type->createThumbnail($media, $inFile, $outFile, $size, $modifier)) {
+            $this->createNotFoundException();
         }
 
         return new BinaryFileResponse($outFile);

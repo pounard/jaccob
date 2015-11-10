@@ -32,4 +32,30 @@ interface TypeInterface
      * @return boolean
      */
     public function isValid();
+
+    /**
+     * Is this type able to generate thumbnails for files
+     *
+     * @return boolean
+     */
+    public function canDoThumbnail();
+
+    /**
+     * Generate thumbnail
+     *
+     * @param \Jaccob\MediaBundle\Model\Media $media
+     *   Media to generate the thumbnail for
+     * @param string $inFile
+     *   Input file real path
+     * @param string $outFile
+     *   Output file real path
+     * @param int $size
+     *   Size in pixels (width, height, or both, see the $modifier parameter)
+     * @param string $modifier
+     *   's', 'w' or 'h'
+     *
+     * @return boolean
+     *   True in case of success, false otherwise
+     */
+    public function createThumbnail(Media $media, $inFile, $outFile, $size, $modifier);
 }

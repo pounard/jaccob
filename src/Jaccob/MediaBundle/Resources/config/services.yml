@@ -6,6 +6,7 @@ parameters:
     jaccob_media.directory.public: /var/www/jaccob/web/media/th
     jaccob_media.directory.relative: media/th
     jaccob_media.directory.upload: /data/private/photos
+    # jaccob_media.image.default: 
 
     # Allowed media sizes
     jaccob_media.size.list: [250, 285, 570, 855, 1140, 1440, full]
@@ -59,7 +60,7 @@ services:
         class: Jaccob\MediaBundle\Type\TypeFinderService
 
     jaccob_media.type.image:
-        class: Jaccob\MediaBundle\Type\ImageType
+        class: Jaccob\MediaBundle\Type\Impl\ImageType
         arguments:
             - image/gif
             - image/jpeg

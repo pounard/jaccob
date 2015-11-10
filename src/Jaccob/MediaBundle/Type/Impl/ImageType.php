@@ -1,8 +1,10 @@
 <?php
 
-namespace Jaccob\MediaBundle\Type;
+namespace Jaccob\MediaBundle\Type\Impl;
 
 use Jaccob\MediaBundle\Model\Media;
+use Jaccob\MediaBundle\Toolkit\ExternalImagickImageToolkit;
+use Jaccob\MediaBundle\Type\TypeInterface;
 use Jaccob\MediaBundle\Util\Date;
 use Jaccob\MediaBundle\Util\Exif;
 use Jaccob\MediaBundle\Util\FileSystem;
@@ -115,6 +117,46 @@ class ImageType extends ContainerAware implements TypeInterface
      */
     public function isValid()
     {
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function canDoThumbnail()
+    {
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createThumbnail(Media $media, $inFile, $outFile, $size, $modifier)
+    {
+        $toolkit = new ExternalImagickImageToolkit();
+
+        switch ($modifier) {
+
+            case 'm':
+                $toolkit->scaleTo($inFile, $outFile, $size, $size, true);
+                break;
+
+            case 'h':
+                $toolkit->scaleTo($inFile, $outFile, null, $size, true);
+                break;
+
+            case 'w':
+                $toolkit->scaleTo($inFile, $outFile, $size, null, true);
+                break;
+
+            case 's':
+                $toolkit->scaleAndCrop($inFile, $outFile, $size, $size);
+                break;
+
+            default:
+                return false;
+        }
+
         return true;
     }
 }

@@ -2,6 +2,8 @@
 
 namespace Jaccob\MediaBundle\Type;
 
+use Jaccob\MediaBundle\Type\Impl\NullType;
+
 /**
  * This is actually a factory service that will register all known media types
  */
