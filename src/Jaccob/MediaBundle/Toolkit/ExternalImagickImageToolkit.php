@@ -2,6 +2,8 @@
 
 namespace Jaccob\MediaBundle\Toolkit;
 
+use Symfony\Component\Process\ProcessBuilder;
+
 /**
  * Uses the convert system command
  */
@@ -11,25 +13,22 @@ class ExternalImagickImageToolkit extends AbstractImageToolkit
     {
         $size = ((int)$width) . "x" . ((int)$height);
 
-        $command = array(
-            escapeshellcmd("convert"),
-            escapeshellarg($inFile),
-            "-auto-orient",
-            "-resize",
-            "'" . $size . "^'",
-            "-gravity",
-            "center",
-            "-crop",
-            "'" . $size . "+0+0'",
-            escapeshellarg($outFile),
-        );
-
-        $ret = 0;
-        system(implode(" ", $command), $ret);
-
-        if (0 !== ((int)$ret)) {
-            throw new \LogicException("Could not exec command", $ret);
-        }
+        (new ProcessBuilder())
+            ->setPrefix("convert")
+            ->setArguments([
+                $inFile,
+                "-auto-orient",
+                "-resize",
+                $size . "^",
+                "-gravity",
+                "center",
+                "-crop",
+                $size . "+0+0",
+                $outFile,
+            ])
+            ->getProcess()
+            ->mustRun()
+        ;
     }
 
     public function scaleAndCrop($inFile, $outFile, $width, $height)
@@ -67,20 +66,17 @@ class ExternalImagickImageToolkit extends AbstractImageToolkit
             }
         }
 
-        $command = array(
-            escapeshellcmd("convert"),
-            escapeshellarg($inFile),
-            "-auto-orient",
-            "-resize",
-            "'" . $size . "'",
-            escapeshellarg($outFile),
-        );
-
-        $ret = 0;
-        system(implode(" ", $command), $ret);
-
-        if (0 !== ((int)$ret)) {
-            throw new \LogicException("Could not exec command", $ret);
-        }
+        (new ProcessBuilder())
+            ->setPrefix("convert")
+            ->setArguments([
+                $inFile,
+                "-auto-orient",
+                "-resize",
+                $size,
+                $outFile,
+            ])
+            ->getProcess()
+            ->mustRun()
+        ;
     }
 }
