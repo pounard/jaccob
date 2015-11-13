@@ -41,12 +41,12 @@ class FilesystemImporter extends DefaultImporter
 
         foreach ($files as $filename) {
 
-            $new = $this->createEntityFromFile($filename, $this->getWorkingDirectory());
-
             // Pure optimization: avoid loading the album at each iteration
             if (null === $album) {
-                $album = $this->findAlbum($new);
+                $album = $this->findAlbum($filename);
             }
+
+            $new = $this->createEntityFromFile($album, $filename);
 
             $this->import($new, $album);
         }

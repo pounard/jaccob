@@ -51,10 +51,21 @@ services:
         tags:
           - { name: kernel.event_listener, event: jaccob.menu_configure, method: onMenuConfigure }
 
+    # Register all and make it configurable via parameters.yml file
+    jaccob_media.path_builder:
+        class: Jaccob\MediaBundle\Util\SimplePathBuilder
+
     jaccob_media.importer:
         class: Jaccob\MediaBundle\Import\FilesystemImporter
         calls:
             - [setContainer, ["@service_container"]]
+            - [setPathBuilder, ["@jaccob_media.path_builder"]]
+
+    jaccob_media.media_helper:
+        class: Jaccob\MediaBundle\Util\MediaHelper
+        calls:
+            - [setContainer, ["@service_container"]]
+            - [setTypeFinder, ["@jaccob_media.type_finder"]]
 
     jaccob_media.type_finder:
         class: Jaccob\MediaBundle\Type\TypeFinderService

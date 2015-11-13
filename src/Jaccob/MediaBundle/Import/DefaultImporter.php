@@ -9,6 +9,7 @@ use Jaccob\MediaBundle\MediaModelAware;
 use Jaccob\MediaBundle\Model\Album;
 use Jaccob\MediaBundle\Model\Media;
 use Jaccob\MediaBundle\Util\FileSystem;
+use Jaccob\MediaBundle\Util\PathBuilderAwareTrait;
 
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -20,6 +21,7 @@ use PommProject\Foundation\Where;
 class DefaultImporter extends ContainerAware
 {
     use MediaModelAware;
+    use PathBuilderAwareTrait;
 
     /**
      * Root working directory
@@ -135,6 +137,8 @@ class DefaultImporter extends ContainerAware
     /**
      * Create instance from file
      *
+     * @param \Jaccob\MediaBundle\Model\Album $album
+     *   Target album
      * @param string $filename
      *   Full file physical path
      * @param string $workingDirectory
@@ -143,7 +147,7 @@ class DefaultImporter extends ContainerAware
      * @return \Jaccob\MediaBundle\Model\Media
      *   Entity will not be persisted
      */
-    public function createEntityFromFile($filename, $workingDirectory = null)
+    public function createEntityFromFile(Album $album, $filename)
     {
         if (!is_file($filename)) {
             throw new \RuntimeException("File does not exists or is not a regular file");
@@ -152,6 +156,7 @@ class DefaultImporter extends ContainerAware
             throw new \RuntimeException("File is not readable");
         }
 
+        $workingDirectory = $this->getWorkingDirectory();
         if ($workingDirectory && 0 === strpos($filename, $workingDirectory)) {
             $relativePath = substr($filename, strlen($workingDirectory) + 1);
         } else {
@@ -159,16 +164,19 @@ class DefaultImporter extends ContainerAware
         }
 
         // @todo Handle other attributes here or where?
-        return $this->getMediaModel()->createEntity([
+        $media = $this->getMediaModel()->createEntity([
             'name'          => basename($relativePath),
             'user_name'     => basename($relativePath),
             'path'          => dirname($relativePath),
-            'physical_path' => $this->createRealPath($relativePath),
             'size'          => filesize($filename),
             'mimetype'      => $this->findMimeType($filename),
             'ts_added'      => new \DateTime(),
             'md5_hash'      => md5_file($filename),
         ]);
+
+        $media->physical_path = $this->pathBuilder->buildPath($album, $media);
+
+        return $media;
     }
 
     /**
@@ -195,19 +203,27 @@ class DefaultImporter extends ContainerAware
     /**
      * Find or create album for the given media
      *
-     * @param \Jaccob\MediaBundle\Model\Media $media
+     * @param string $filename
      *
      * @return \Jaccob\MediaBundle\Model\Album
      */
-    protected function findAlbum(Media $media)
+    protected function findAlbum($filename)
     {
         $albumModel = $this->getAlbumModel();
+
+        $workingDirectory = $this->getWorkingDirectory();
+        if ($workingDirectory && 0 === strpos($filename, $workingDirectory)) {
+            $path = substr($filename, strlen($workingDirectory) + 1);
+        } else {
+            $path = $filename;
+        }
+        $path = ltrim(dirname($path), '/');
 
         // We should definitely create the album if possible
         $album = $albumModel
             ->findWhere(
                 (new Where())
-                    ->andWhere('path = $*', [$media->path])
+                    ->andWhere('path = $*', [$path])
             )
         ;
 
@@ -220,7 +236,7 @@ class DefaultImporter extends ContainerAware
         } else {
             $album = $albumModel->createAndSave([
                 'id_account'  => $this->getOwner()->getId(),
-                'path'        => $media->getPath(),
+                'path'        => $path,
             ]);
         }
 
@@ -277,7 +293,7 @@ class DefaultImporter extends ContainerAware
         $typeFinder = $this->container->get('jaccob_media.type_finder');
 
         if (!$album) {
-            $album = $this->findAlbum($media);
+            $album = $this->findAlbum($media->path);
         }
 
         $device     = $this->findDevice($media);
