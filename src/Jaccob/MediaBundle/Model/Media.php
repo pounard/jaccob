@@ -22,7 +22,7 @@ class Media extends FlexibleEntity
     {
         if ($path = $this->physical_path) {
             if (false !== ($position = strrpos($path, '.'))) {
-                return substr($path + 1, $position);
+                return substr($path, $position + 1);
             }
         }
     }
