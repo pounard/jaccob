@@ -70,6 +70,34 @@ class MediaHelper extends ContainerAware
     }
 
     /**
+     * Get specific thumbnail URI, suitable for URLs
+     *
+     * @param Media $media
+     * @param int $size
+     * @param string $modifier
+     *
+     * @return string
+     */
+    public function getThumbnailURI(Media $media, $size, $modifier = null)
+    {
+        $type = $this->typeFinder->getTypeFor($media->mimetype);
+
+        if (!$type->canDoThumbnail()) {
+            return;
+        }
+
+        $relativeDirectory = $this->container->getParameter('jaccob_media.directory.relative');
+
+        if ($modifier) {
+            $size = $modifier . $size;
+        }
+
+        $ext = $type->getThumbnailExtension($media, $size, $modifier);
+
+        return FileSystem::pathJoin($relativeDirectory, $size, $media->getPhysicalPathWithoutExtension() . '.' . $ext);
+    }
+
+    /**
      * Create thumbnail and return the real URL
      *
      * @param Media $media
@@ -81,8 +109,8 @@ class MediaHelper extends ContainerAware
      */
     public function createThumbnail(Media $media, $size, $modifier = null)
     {
-        $inFile = $this->getOriginalPath($media);
-        $outFile = $this->getThumbnailPath($media, $size, $modifier);
+        $inFile   = $this->getOriginalPath($media);
+        $outFile  = $this->getThumbnailPath($media, $size, $modifier);
 
         if (!$outFile) {
             return false;

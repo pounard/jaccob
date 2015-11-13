@@ -23,7 +23,7 @@ abstract class AbstractImageToolkit implements ImageToolkitInterface
         }
         if (file_exists($outFile)) {
             if (is_writable($outFile)) {
-                trigger_error(sprintf("Will overwrite file '%s'", $outFile), E_USER_NOTICE);
+                // trigger_error(sprintf("Will overwrite file '%s'", $outFile), E_USER_NOTICE);
             } else {
                 throw new \LogicException(sprintf("File is not writable '%s'", $outFile));
             }

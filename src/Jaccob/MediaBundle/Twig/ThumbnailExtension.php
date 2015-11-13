@@ -5,7 +5,7 @@ namespace Wps\View\Helper\Template;
 namespace Jaccob\MediaBundle\Twig;
 
 use Jaccob\MediaBundle\Model\Media;
-use Jaccob\MediaBundle\Util\FileSystem;
+use Jaccob\MediaBundle\Util\MediaHelper;
 
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -19,7 +19,7 @@ class ThumbnailExtension extends \Twig_Extension implements ContainerAwareInterf
     protected $container;
 
     /**
-     * @var \Jaccob\MediaBundle\
+     * @var \Jaccob\MediaBundle\Util\MediaHelper
      */
     protected $mediaHelper;
 
@@ -31,6 +31,15 @@ class ThumbnailExtension extends \Twig_Extension implements ContainerAwareInterf
         $this->container = $container;
     }
 
+    /**
+     * Set media helper
+     *
+     * @param \Jaccob\MediaBundle\Util\MediaHelper $mediaHelper
+     */
+    public function setMediaHelper(MediaHelper $mediaHelper)
+    {
+        $this->mediaHelper = $mediaHelper;
+    }
 
     /**
      * {@inheritdoc}
@@ -59,13 +68,7 @@ class ThumbnailExtension extends \Twig_Extension implements ContainerAwareInterf
 
     protected function getMediaUrl(Media $media, $size, $modifier = null)
     {
-        $allowedSizes     = $this->container->getParameter('jaccob_media.size.list');
-        $publicDirectory  = $this->container->getParameter('jaccob_media.directory.relative');
-
-        // Better be safe than sorry
-        if (!$media->physical_path) {
-            return null;
-        }
+        $allowedSizes = $this->container->getParameter('jaccob_media.size.list');
 
         if (!in_array($size, $allowedSizes)) {
             // Take the nearest
@@ -77,12 +80,8 @@ class ThumbnailExtension extends \Twig_Extension implements ContainerAwareInterf
             }
         }
 
-        // Ensure given parameter consistency
-        if ('full' !== $size && $modifier) {
-            $size = $modifier . abs((int)$size);
-        }
-
-        return '/' . FileSystem::pathJoin($publicDirectory, $size, $media->physical_path);
+        // @todo Use symfony path generator
+        return '/' . $this->mediaHelper->getThumbnailURI($media, $size, $modifier);
     }
 
     /**

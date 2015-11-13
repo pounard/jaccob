@@ -7,8 +7,6 @@ use Jaccob\AccountBundle\Controller\AbstractUserAwareController;
 
 use Jaccob\MediaBundle\MediaModelAware;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
 class MediaController extends AbstractUserAwareController
 {
     use MediaModelAware;
