@@ -89,22 +89,15 @@ class ThumbnailController extends AbstractUserAwareController
         $album = $this->getAlbumModel()->findByPK(['id' => $media->id_album]);
         $this->denyAccessUnlessGranted('view', $album);
 
-        /* @var $type \Jaccob\MediaBundle\Type\TypeInterface */
-        $type = $this->get('jaccob_media.type_finder')->getTypeFor($media->mimetype);
-        if (!$type->canDoThumbnail()) {
+        /* @var $mediaHelper \Jaccob\MediaBundle\Util\MediaHelper */
+        $mediaHelper = $this->get('jaccob_media.media_helper');
+
+        $thumbnailPath = $mediaHelper->createThumbnail($media, $size, $modifier);
+        if (!$thumbnailPath) {
+            // @todo Handle default image...
             throw $this->createNotFoundException();
         }
 
-        // Ensure the destination directory
-        $publicDirectory = $this->getParameter('jaccob_media.directory.public');
-
-        $inFile   = FileSystem::pathJoin($publicDirectory, 'full', $hash);
-        $outFile  = FileSystem::pathJoin($publicDirectory, $sizeId, $hash);
-
-        if (!$type->createThumbnail($media, $inFile, $outFile, $size, $modifier)) {
-            $this->createNotFoundException();
-        }
-
-        return new BinaryFileResponse($outFile);
+        return new BinaryFileResponse($thumbnailPath);
     }
 }

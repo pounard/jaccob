@@ -37,6 +37,14 @@ class NullType implements TypeInterface
     /**
      * {@inheritdoc}
      */
+    public function getThumbnailExtension(Media $media, $size, $modifier)
+    {
+        return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function createThumbnail(Media $media, $inFile, $outFile, $size, $modifier)
     {
         return false;

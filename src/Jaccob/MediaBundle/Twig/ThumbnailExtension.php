@@ -19,12 +19,18 @@ class ThumbnailExtension extends \Twig_Extension implements ContainerAwareInterf
     protected $container;
 
     /**
+     * @var \Jaccob\MediaBundle\
+     */
+    protected $mediaHelper;
+
+    /**
      * {@inheritdoc}
      */
     public function setContainer(ContainerInterface $container = null)
     {
         $this->container = $container;
     }
+
 
     /**
      * {@inheritdoc}

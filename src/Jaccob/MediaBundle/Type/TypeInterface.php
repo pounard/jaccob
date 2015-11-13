@@ -41,6 +41,21 @@ interface TypeInterface
     public function canDoThumbnail();
 
     /**
+     * This sounds dumb, but the generated thumbnail extension might change
+     * depending on the data type
+     *
+     * @param \Jaccob\MediaBundle\Model\Media $media
+     *   Media to generate the thumbnail for
+     * @param int $size
+     *   Size in pixels (width, height, or both, see the $modifier parameter)
+     * @param string $modifier
+     *   's', 'w' or 'h'
+     *
+     * @return string
+     */
+    public function getThumbnailExtension(Media $media, $size, $modifier);
+
+    /**
      * Generate thumbnail
      *
      * @param \Jaccob\MediaBundle\Model\Media $media
@@ -55,7 +70,6 @@ interface TypeInterface
      *   's', 'w' or 'h'
      *
      * @return boolean
-     *   True in case of success, false otherwise
      */
     public function createThumbnail(Media $media, $inFile, $outFile, $size, $modifier);
 }

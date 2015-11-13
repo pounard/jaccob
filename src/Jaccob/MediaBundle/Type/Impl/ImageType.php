@@ -131,6 +131,14 @@ class ImageType extends ContainerAware implements TypeInterface
     /**
      * {@inheritdoc}
      */
+    public function getThumbnailExtension(Media $media, $size, $modifier)
+    {
+        return $media->getFileExtension();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function createThumbnail(Media $media, $inFile, $outFile, $size, $modifier)
     {
         $toolkit = new ExternalImagickImageToolkit();
