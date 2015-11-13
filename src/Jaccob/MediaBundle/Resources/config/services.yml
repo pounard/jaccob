@@ -82,3 +82,19 @@ services:
         tags: [{ name: jaccob_media.type }]
         calls:
             - [setContainer, ["@service_container"]]
+
+    jaccob_media.type.video:
+        class: Jaccob\MediaBundle\Type\Impl\VideoType
+        arguments:
+            - video/3gpp
+            - video/mp2t
+            - video/mp4
+            - video/mpeg
+            - video/quicktime
+            - video/webm
+            - video/x-flv
+            - video/x-msvideo
+            - video/x-ms-wmv
+        tags: [{ name: jaccob_media.type }]
+        calls:
+            - [setContainer, ["@service_container"]]
