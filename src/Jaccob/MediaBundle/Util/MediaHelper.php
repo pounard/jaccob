@@ -131,7 +131,7 @@ class MediaHelper extends ContainerAware
         if ($escape) {
             $path = explode('/', $path);
             array_walk($path, function (&$value) {
-                $value = urlencode($value);
+                $value = rawurlencode($value);
             });
             $path = implode('/', $path);
         }
