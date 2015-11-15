@@ -19,8 +19,6 @@ class TypeFinderService
      *
      * @param string|string[] $mimetypes
      * @param \Jaccob\MediaBundle\Type\TypeInterface $type
-     *
-     * @return \Jaccob\MediaBundle\Type\TypeFinderService
      */
     public function addType($mimetypes, TypeInterface $type)
     {
@@ -31,8 +29,6 @@ class TypeFinderService
         foreach ($mimetypes as $mimetype) {
             $this->registeredTypes[$mimetype] = $type;
         }
-
-        return $this;
     }
 
     /**

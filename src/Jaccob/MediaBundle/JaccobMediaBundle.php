@@ -15,4 +15,17 @@ class JaccobMediaBundle extends Bundle
 
         $container->addCompilerPass(new TypeFinderCompilerPass());
     }
+
+    public function boot()
+    {
+        // @todo Find a better way via services.yml or parameters.yml
+        /* @var $jobFactory \Jaccob\MediaBundle\Type\Job\JobFactory */
+        $jobFactory = $this->container->get('jaccob_media.job_factory');
+        $jobFactory->addType('video_transcode', '\Jaccob\MediaBundle\Type\Impl\Video\TranscodeJob');
+
+        // @todo For this too
+        /* @var $pommSession \PommProject\Foundation\Session */
+        $pommSession = $this->container->get('pomm')->getSession('default');
+        $pommSession->registerClient(new \Jaccob\MediaBundle\Model\JobQueueManager());
+    }
 }

@@ -3,22 +3,19 @@
 namespace Jaccob\MediaBundle\Twig;
 
 use Jaccob\MediaBundle\Model\Media;
-use Jaccob\MediaBundle\Util\MediaHelper;
+use Jaccob\MediaBundle\Util\MediaHelperAwareTrait;
 
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class MediaTypeExtension extends \Twig_Extension implements ContainerAwareInterface
 {
+    use MediaHelperAwareTrait;
+
     /**
      * @var \Symfony\Component\DependencyInjection\ContainerInterface
      */
     protected $container;
-
-    /**
-     * @var \Jaccob\MediaBundle\Util\MediaHelper
-     */
-    protected $mediaHelper;
 
     /**
      * {@inheritdoc}
@@ -26,16 +23,6 @@ class MediaTypeExtension extends \Twig_Extension implements ContainerAwareInterf
     public function setContainer(ContainerInterface $container = null)
     {
         $this->container = $container;
-    }
-
-    /**
-     * Set media helper
-     *
-     * @param \Jaccob\MediaBundle\Util\MediaHelper $mediaHelper
-     */
-    public function setMediaHelper(MediaHelper $mediaHelper)
-    {
-        $this->mediaHelper = $mediaHelper;
     }
 
     /**
@@ -94,6 +81,8 @@ class MediaTypeExtension extends \Twig_Extension implements ContainerAwareInterf
 
         $width  = $media->width;
         $height = $media->height;
+
+        $ret = [];
 
         foreach ($allowedSizes as $size) {
 
@@ -158,6 +147,10 @@ class MediaTypeExtension extends \Twig_Extension implements ContainerAwareInterf
             ->getTwigTemplateName()
         ;
 
+        if (!$templateName) {
+            $templateName = 'JaccobMediaBundle:Type:default.html.twig';
+        }
+
         $variables = $this->getVariables($media, $defaultSize, $modifier, true);
         $variables += [
             'full'      => true,
@@ -185,6 +178,10 @@ class MediaTypeExtension extends \Twig_Extension implements ContainerAwareInterf
             ->getType($media)
             ->getTwigTemplateName()
         ;
+
+        if (!$templateName) {
+            $templateName = 'JaccobMediaBundle:Type:default.html.twig';
+        }
 
         $variables = $this->getVariables($media, $defaultSize, $modifier, false);
         $variables += [

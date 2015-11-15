@@ -95,6 +95,19 @@ services:
             - video/x-flv
             - video/x-msvideo
             - video/x-ms-wmv
-        tags: [{ name: jaccob_media.type }]
+        tags:
+          - { name: jaccob_media.type }
+          - { name: kernel.event_listener, event: jaccob_media.insert, method: onMediaSave }
+          - { name: kernel.event_listener, event: jaccob_media.update, method: onMediaSave }
         calls:
             - [setContainer, ["@service_container"]]
+            - [setMediaHelper, ["@jaccob_media.media_helper"]]
+
+    jaccob_media.job_factory:
+        class: Jaccob\MediaBundle\Type\Job\JobFactory
+
+    jaccob_media.commands.job_queue_list:
+        class: Jaccob\MediaBundle\Command\ListJobCommand
+        calls:
+            - [setContainer, ["@service_container"]]
+        tags: [{ name: console.command }]

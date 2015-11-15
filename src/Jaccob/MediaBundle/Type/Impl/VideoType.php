@@ -2,17 +2,23 @@
 
 namespace Jaccob\MediaBundle\Type\Impl;
 
+use Jaccob\MediaBundle\Event\MediaEvent;
+use Jaccob\MediaBundle\MediaModelAware;
 use Jaccob\MediaBundle\Model\Media;
 use Jaccob\MediaBundle\Toolkit\ExternalFFMpegVideoToolkit;
+use Jaccob\MediaBundle\Toolkit\ExternalImagickImageToolkit;
 use Jaccob\MediaBundle\Type\TypeInterface;
 use Jaccob\MediaBundle\Util\Date;
 use Jaccob\MediaBundle\Util\FileSystem;
+use Jaccob\MediaBundle\Util\MediaHelperAwareTrait;
 
 use Symfony\Component\DependencyInjection\ContainerAware;
-use Jaccob\MediaBundle\Toolkit\ExternalImagickImageToolkit;
 
 class VideoType extends ContainerAware implements TypeInterface
 {
+    use MediaHelperAwareTrait;
+    use MediaModelAware;
+
     /**
      * {@inheritdoc}
      */
@@ -148,5 +154,22 @@ class VideoType extends ContainerAware implements TypeInterface
         }
 
         return true;
+    }
+
+    /**
+     * Media insert event listener
+     *
+     * @param \Jaccob\MediaBundle\Event\MediaEvent $event
+     */
+    public function onMediaSave(MediaEvent $event)
+    {
+        /* @var $helper \Jaccob\MediaBundle\Util\MediaHelper */
+        $media  = $event->getMedia();
+        $type   = $this->mediaHelper->getType($media);
+
+        if ($type instanceof VideoType) {
+            // Run video transcode job
+            $this->getJobQueueManager()->push($media->id, 'video_transcode');
+        }
     }
 }

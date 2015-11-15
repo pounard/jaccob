@@ -5,6 +5,7 @@ namespace Jaccob\MediaBundle\Import;
 use Jaccob\AccountBundle\Model\Account;
 use Jaccob\AccountBundle\Security\Crypt;
 
+use Jaccob\MediaBundle\Event\MediaEvent;
 use Jaccob\MediaBundle\MediaModelAware;
 use Jaccob\MediaBundle\Model\Album;
 use Jaccob\MediaBundle\Model\Media;
@@ -168,7 +169,7 @@ class DefaultImporter extends ContainerAware
             'name'          => basename($relativePath),
             'user_name'     => basename($relativePath),
             'path'          => dirname($relativePath),
-            'size'          => filesize($filename),
+            //'size'          => filesize($filename),
             'mimetype'      => $this->findMimeType($filename),
             'ts_added'      => new \DateTime(),
             'md5_hash'      => md5_file($filename),
@@ -337,6 +338,11 @@ class DefaultImporter extends ContainerAware
 
             $mediaModel->insertOne($media);
 
+            $this->container->get('event_dispatcher')->dispatch(
+                MediaEvent::INSERT,
+                new MediaEvent($media, $album)
+            );
+
         } else {
 
             // FIXME Why does the fouque reset() not working on Iterator?
@@ -354,6 +360,11 @@ class DefaultImporter extends ContainerAware
             // @todo In case it wasn't really changed, do nothing.
 
             $media = $existing;
+
+            $this->container->get('event_dispatcher')->dispatch(
+                MediaEvent::UPDATE,
+                new MediaEvent($media, $album)
+            );
         }
 
         if (!$album->id_media_preview) {

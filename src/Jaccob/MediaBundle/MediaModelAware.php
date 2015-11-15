@@ -4,8 +4,6 @@ namespace Jaccob\MediaBundle;
 
 use PommProject\Foundation\Session;
 
-use Symfony\Component\DependencyInjection\ContainerAware;
-
 trait MediaModelAware
 {
     /**
@@ -35,12 +33,15 @@ trait MediaModelAware
         }
 
         // When we are working with an object plugged to the DIC.
-        if ($this instanceof ContainerAware) {
-            return $this->container->get('pomm')->getSession('default');
+        if (property_exists($this, 'container')) {
+            return $this->accountPommSession = $this->container->get('pomm')->getSession('default');
+        }
+        if (method_exists($this, 'getContainer')) {
+            return $this->accountPommSession = $this->getContainer()->get('pomm')->getSession('default');
         }
 
         // When we are working with a controller.
-        return $this->get('pomm')->getSession('default');
+        return $this->accountPommSession = $this->get('pomm')->getSession('default');
     }
 
     /**
@@ -53,6 +54,19 @@ trait MediaModelAware
         return $this
             ->getMediaSession()
             ->getModel('\Jaccob\MediaBundle\Model\MediaModel')
+        ;
+    }
+
+    /**
+     * Get pomm media model
+     *
+     * @return \Jaccob\MediaBundle\Model\MediaDerivativeModel
+     */
+    protected function getMediaDerivativeModel()
+    {
+        return $this
+            ->getMediaSession()
+            ->getModel('\Jaccob\MediaBundle\Model\MediaDerivativeModel')
         ;
     }
 
@@ -79,6 +93,19 @@ trait MediaModelAware
         return $this
             ->getMediaSession()
             ->getModel('\Jaccob\MediaBundle\Model\DeviceModel')
+        ;
+    }
+
+    /**
+     * Get pomm job manager
+     *
+     * @return \Jaccob\MediaBundle\Model\JobQueueManager
+     */
+    protected function getJobQueueManager()
+    {
+        return $this
+            ->getMediaSession()
+            ->getClient('query_helper', 'Jaccob\MediaBundle\Model\JobQueueManager');
         ;
     }
 
