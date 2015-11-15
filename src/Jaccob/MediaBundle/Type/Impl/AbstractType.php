@@ -26,6 +26,13 @@ abstract class AbstractType implements TypeInterface
     /**
      * {@inheritdoc}
      */
+    public function getTwigTemplateName()
+    {
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function canDoThumbnail()
     {
         return false;
@@ -36,7 +43,6 @@ abstract class AbstractType implements TypeInterface
      */
     public function getThumbnailExtension(Media $media, $size, $modifier)
     {
-        return false;
     }
 
     /**

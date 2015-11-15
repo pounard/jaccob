@@ -1,0 +1,20 @@
+{% extends 'JaccobMediaBundle:Type:default.html.twig' %}
+
+{#
+  We are going to use a polyfill, hence the srcset instead of the src
+  attribute within the img tag fallback.
+
+  This page explains it quite well:
+    http://www.smashingmagazine.com/2014/05/picturefill-2-0-responsive-images-and-the-perfect-polyfill/
+
+  Great thanks and all credit to its author.
+ #}
+
+{% block full %}
+  <picture>
+    {% for derivative in derivatives %}
+      <source srcset="{{ derivative.href }} 1x" media="(max-width: {{ derivative.width }}px)"/>
+    {% endfor %}
+    <img srcset="{{ default.href }} 1x" alt="{{ media.displayName }}"/>
+  </picture>
+{% endblock %}

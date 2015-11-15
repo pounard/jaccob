@@ -94,6 +94,14 @@ class VideoType extends ContainerAware implements TypeInterface
     /**
      * {@inheritdoc}
      */
+    public function getTwigTemplateName()
+    {
+        return 'JaccobMediaBundle:Type:video.html.twig';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function canDoThumbnail()
     {
         return true;

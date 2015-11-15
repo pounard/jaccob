@@ -31,8 +31,8 @@ services:
         tags:
             - { name: security.voter }
 
-    jaccob_media.twig.thumbnail:
-        class: Jaccob\MediaBundle\Twig\ThumbnailExtension
+    jaccob_media.twig.media_type:
+        class: Jaccob\MediaBundle\Twig\MediaTypeExtension
         tags: [{ name: twig.extension }]
         calls:
             - [setContainer, ["@service_container"]]

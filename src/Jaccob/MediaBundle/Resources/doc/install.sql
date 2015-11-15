@@ -43,6 +43,7 @@ CREATE TABLE device (
     FOREIGN KEY (id_account) REFERENCES account (id)
 );
 
+-- Store main media information
 CREATE TABLE media (
     id SERIAL PRIMARY KEY,
     id_album INTEGER NOT NULL,
@@ -52,7 +53,6 @@ CREATE TABLE media (
     name VARCHAR(1024) NOT NULL,
     path VARCHAR(1024) NOT NULL,
     physical_path VARCHAR(1024) NOT NULL,
-    size INTEGER NOT NULL DEFAULT 0,
     width INTEGER,
     height INTEGER,
     orientation INTEGER NOT NULL DEFAULT 1,
@@ -65,6 +65,31 @@ CREATE TABLE media (
     FOREIGN KEY (id_album) REFERENCES album(id),
     FOREIGN KEY (id_account) REFERENCES account(id),
     FOREIGN KEY (id_device) REFERENCES device(id)
+);
+
+-- Store transcoded versions of media when it makes sense, for example videos
+-- will need to be transcoded to be played into the browser, so we need this
+-- to reference all generated derivatives
+CREATE TABLE media_derivative (
+    id_media INTEGER NOT NULL,
+    physical_path VARCHAR(1024) NOT NULL,
+    width INTEGER,
+    height INTEGER,
+    md5_hash VARCHAR(255),
+    mimetype VARCHAR(255) NOT NULL DEFAULT 'application/octet-stream',
+    FOREIGN KEY (id_media) REFERENCES media (id) ON DELETE CASCADE
+);
+
+-- Jobs to be done by cron tasks, such as archive creation or video
+-- transcoding
+CREATE TABLE media_job_queue (
+    id_media INTEGER NOT NULL,
+    type VARCHAR(64) NOT NULL,
+    data BYTEA,
+    ts_added TIMESTAMP NOT NULL DEFAULT NOW(),
+    ts_started TIMESTAMP NOT NULL DEFAULT NOW(),
+    is_running BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (id_media) REFERENCES media (id) ON DELETE CASCADE
 );
 
 CREATE TABLE media_metadata (

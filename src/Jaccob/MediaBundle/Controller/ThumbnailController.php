@@ -66,6 +66,7 @@ class ThumbnailController extends AbstractUserAwareController
 
         // Rebuild the media real path from URL
         $hash = FileSystem::pathJoin($path);
+        $hash = urldecode($hash);
 
         // Load media
         $mediaList = $this

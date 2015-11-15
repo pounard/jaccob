@@ -34,6 +34,21 @@ interface TypeInterface
     public function isValid();
 
     /**
+     * Get associated twig template name
+     *
+     * If none given, the 'JaccobMediaBundle:Type:default.html.twig' template
+     * will be used instead. The given template should extend the default
+     * template and only override the necessary blocs. In most case, the
+     * 'thumbnail' bloc should not be overriden.
+     *
+     * This template will be prepared and used the by the
+     * Jaccob\MediaBundle\Twig\MediaTypeExtension functions.
+     *
+     * @return string
+     */
+    public function getTwigTemplateName();
+
+    /**
      * Is this type able to generate thumbnails for files
      *
      * @return boolean

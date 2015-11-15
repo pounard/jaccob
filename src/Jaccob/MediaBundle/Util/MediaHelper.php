@@ -28,6 +28,18 @@ class MediaHelper extends ContainerAware
     }
 
     /**
+     * get type for media
+     *
+     * @param Media $media
+     *
+     * @return \Jaccob\MediaBundle\Type\TypeInterface
+     */
+    public function getType(Media $media)
+    {
+        return $this->typeFinder->getTypeFor($media->mimetype);
+    }
+
+    /**
      * Get original file path, suitable for URLs
      *
      * @param Media $media
@@ -70,15 +82,13 @@ class MediaHelper extends ContainerAware
     }
 
     /**
-     * Get specific thumbnail URI, suitable for URLs
+     * Get full media URI, suitable for URLs
      *
      * @param Media $media
-     * @param int $size
-     * @param string $modifier
      *
      * @return string
      */
-    public function getThumbnailURI(Media $media, $size, $modifier = null)
+    public function getFullURI(Media $media)
     {
         $type = $this->typeFinder->getTypeFor($media->mimetype);
 
@@ -88,13 +98,45 @@ class MediaHelper extends ContainerAware
 
         $relativeDirectory = $this->container->getParameter('jaccob_media.directory.relative');
 
-        if ($modifier) {
+        return FileSystem::pathJoin($relativeDirectory, 'full', $media->physical_path);
+    }
+
+    /**
+     * Get specific thumbnail URI, suitable for URLs
+     *
+     * @param Media $media
+     * @param int $size
+     * @param string $modifier
+     * @param boolean $escape
+     *
+     * @return string
+     */
+    public function getThumbnailURI(Media $media, $size, $modifier = null, $escape = true)
+    {
+        $type = $this->typeFinder->getTypeFor($media->mimetype);
+
+        if (!$type->canDoThumbnail()) {
+            return;
+        }
+
+        $relativeDirectory = $this->container->getParameter('jaccob_media.directory.relative');
+
+        if ($size != 'full' && $modifier) {
             $size = $modifier . $size;
         }
 
         $ext = $type->getThumbnailExtension($media, $size, $modifier);
+        $path = $media->getPhysicalPathWithoutExtension();
 
-        return FileSystem::pathJoin($relativeDirectory, $size, $media->getPhysicalPathWithoutExtension() . '.' . $ext);
+        if ($escape) {
+            $path = explode('/', $path);
+            array_walk($path, function (&$value) {
+                $value = urlencode($value);
+            });
+            $path = implode('/', $path);
+        }
+
+        return FileSystem::pathJoin($relativeDirectory, $size, $path . '.' . $ext);
     }
 
     /**

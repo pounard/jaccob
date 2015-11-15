@@ -29,6 +29,13 @@ class NullType implements TypeInterface
     /**
      * {@inheritdoc}
      */
+    public function getTwigTemplateName()
+    {
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function canDoThumbnail()
     {
         return false;
@@ -39,7 +46,6 @@ class NullType implements TypeInterface
      */
     public function getThumbnailExtension(Media $media, $size, $modifier)
     {
-        return false;
     }
 
     /**

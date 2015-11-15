@@ -4,7 +4,7 @@
   <div id="fullscreen">
 
     <div class="image">
-      {{ media_responsive(media, size) }}
+      {{ media_full(media) }}
 
       <a class="close-button" href="{{ path('jaccob_media.album.view', {albumId: media.id_album}) }}">
         <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>

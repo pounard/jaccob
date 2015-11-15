@@ -1,0 +1,37 @@
+{#
+  Media display modes
+
+  This block will have the following variables:
+    - 'media' : the media object
+    - 'full' : boolean value which tells if the display mode
+    - 'thumbnail' : boolean value which tells if the display mode
+    - 'viewport' : percent value of viewport size in which is the
+      targetted media width
+    - 'derivatives' : array of 'derivative' values, each one is an array
+      containing the following values:
+        - 'href' : the file URI ready to be displayed as href value
+        - 'width' : the file derivative width
+        - 'height' : the file derivative height
+        - 'size' : the thumbnail size
+        - 'modifier' the thumbnail modifier
+    - 'default' : array containing the same values as the derivatives
+ #}
+{% if (full) %}
+  {% block full %}
+     <p>This media cannot be displayed in full screen</p>
+  {% endblock %}
+{% elseif thumbnail %}
+  {% block thumbnail %}
+    {% spaceless %}
+      <img
+        srcset="
+          {% for derivative in derivatives %}
+            {{ derivative.href }} {{ derivative.width }}w,
+          {% endfor %}"
+        sizes="{{ viewport }}vw"
+        src="{{ default.href }}"
+        alt="{{ media.displayName }}"
+      />
+    {% endspaceless %}
+  {% endblock %}
+{% endif %}

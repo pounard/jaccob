@@ -123,6 +123,14 @@ class ImageType extends ContainerAware implements TypeInterface
     /**
      * {@inheritdoc}
      */
+    public function getTwigTemplateName()
+    {
+        return 'JaccobMediaBundle:Type:image.html.twig';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function canDoThumbnail()
     {
         return true;
