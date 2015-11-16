@@ -15,6 +15,8 @@
         - 'size' : the thumbnail size
         - 'modifier' the thumbnail modifier
     - 'default' : array containing the same values as the derivatives
+  Please note that default might be not defined and derivatives could
+  be empty.
  #}
 {% if (full) %}
   {% block full %}
@@ -29,8 +31,10 @@
             {{ derivative.href }} {{ derivative.width }}w,
           {% endfor %}"
         sizes="{{ viewport }}vw"
-        src="{{ default.href }}"
-        alt="{{ media.displayName }}"
+        {% if default is defined %}
+          src="{{ default.href }}"
+          alt="{{ media.displayName }}"
+        {% endif %}
       />
     {% endspaceless %}
   {% endblock %}

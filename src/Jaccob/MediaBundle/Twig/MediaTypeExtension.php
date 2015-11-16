@@ -82,9 +82,14 @@ class MediaTypeExtension extends \Twig_Extension implements ContainerAwareInterf
         $width  = $media->width;
         $height = $media->height;
 
-        $ret = [];
+        $ret = ['derivatives' => []];
 
         foreach ($allowedSizes as $size) {
+
+            $rel = $this->mediaHelper->getThumbnailURI($media, $size, $modifier);
+            if (!$rel) {
+                continue;
+            }
 
             // Default modifier is width, seems logic at this point
             switch ($modifier) {
@@ -109,9 +114,9 @@ class MediaTypeExtension extends \Twig_Extension implements ContainerAwareInterf
 
             $derivative = [
                 // @todo Use symfony path generator
-                'href'      => '/' . $this->mediaHelper->getThumbnailURI($media, $size, $modifier),
-                'width'     => $size,
-                'height'    => 'todo',
+                'href'      => '/' . $rel,
+                'width'     => $width,
+                'height'    => $height,
                 'size'      => $size,
                 'modifier'  => $modifier,
                 'mimetype'  => $media->mimetype,

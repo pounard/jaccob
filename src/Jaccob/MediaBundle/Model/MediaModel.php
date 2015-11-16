@@ -39,13 +39,13 @@ class MediaModel extends Model
         return $this->query($sql, $primary_keys);
     }
 
-    public function findByAlbum($albumId)
+    public function findByAlbum($albumId, $limit = 200, $page = 1)
     {
         $where = (new Where())
             ->andWhere('id_album = $*', [$albumId])
         ;
 
-        return $this->paginateFindWhere($where, 100);
+        return $this->paginateFindWhere($where, $limit, $page, 'order by ts_added asc, id asc');
     }
 
     public function findPreviousInAlbum($albumId, $currentMediaId)

@@ -23,7 +23,7 @@
     <div class="row js-packery">
       {% for media in mediaList %}
         <div class="media-thumbnail">
-          <a href="{{ path('jaccob_media.media.view.full', {mediaId: media.id}) }}">
+          <a href="{{ path('jaccob_media.media.view.full', {mediaId: media.id}) }}" title="{{ media.displayName }}">
             {{ media_thumbnail(media, size, size * 2, 'w') }}
           </a>
         </div>

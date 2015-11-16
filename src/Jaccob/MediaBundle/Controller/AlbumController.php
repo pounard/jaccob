@@ -39,12 +39,7 @@ class AlbumController extends AbstractUserAwareController
     {
         // @todo List (paginated) all medias with thumbnails
         // @todo Request for sorting and filtering
-/*
-        (new \Jaccob\MediaBundle\Toolkit\ExternalFFMpegVideoToolkit())
-            ->findMetadata("/var/www/jaccob/web/media/th/full/fZZH7DFHCfxzI4nyU5mbud5pTohqxtsKGmNQ6ZGi7PmfzAHd6pcxyCVIoCW/OaqrUpgL56qOfkgTF7kK3a8Mbw.MOV");
-        ;
-die();
- */
+
         $album      = $this->findAlbumOr404($albumId);
         $owner      = $this->findAccountOr404($album->id_account);
 

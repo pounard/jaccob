@@ -155,6 +155,9 @@ class MediaHelper extends ContainerAware
     /**
      * Get specific derivative thumbnail URI, suitable for URLs
      *
+     * Derivatives are not meant to be thumbnailed so this is the only helper
+     * you'll get for those
+     *
      * @param MediaDerivative $media
      * @param int $size
      * @param string $modifier

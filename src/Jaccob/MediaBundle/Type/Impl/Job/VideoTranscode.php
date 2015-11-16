@@ -29,7 +29,6 @@ class VideoTranscode extends ContainerAware implements JobInterface
         }
 
         $derivativeModel = $this->getMediaDerivativeModel();
-        $publicDirectory = $this->container->getParameter('jaccob_media.directory.public');
 
         foreach ($formats as $options) {
 
