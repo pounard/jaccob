@@ -10,17 +10,20 @@ use Jaccob\MediaBundle\MediaModelAware;
 use Jaccob\MediaBundle\Model\Album;
 use Jaccob\MediaBundle\Model\Media;
 use Jaccob\MediaBundle\Util\FileSystem;
+use Jaccob\MediaBundle\Util\MediaHelperAwareTrait;
 use Jaccob\MediaBundle\Util\PathBuilderAwareTrait;
+
+use PommProject\Foundation\Where;
 
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use PommProject\Foundation\Where;
 
 /**
  * Default importer implementat that must be used by any other
  */
 class DefaultImporter extends ContainerAware
 {
+    use MediaHelperAwareTrait;
     use MediaModelAware;
     use PathBuilderAwareTrait;
 
@@ -30,13 +33,6 @@ class DefaultImporter extends ContainerAware
      * @var string
      */
     private $workingDirectory;
-
-    /**
-     * Destination directory
-     *
-     * @var string
-     */
-    private $destination;
 
     /**
      * @var Jaccob\AccountBundle\Model\Account
@@ -59,26 +55,10 @@ class DefaultImporter extends ContainerAware
             return;
         }
 
-        // Ensure the destination directory
-        $path = $container->getParameter('jaccob_media.directory.public');
-        FileSystem::ensureDirectory($path, true, true);
-        $this->destination = $path;
-
         // Ensure the working directory
         $path = $container->getParameter('jaccob_media.directory.upload');
         FileSystem::ensureDirectory($path, true, true);
         $this->workingDirectory = $path;
-    }
-
-    /**
-     * Get destination directory
-     *
-     * @return string
-     *   Root working directory
-     */
-    final public function getDestinationDirectory()
-    {
-        return $this->destination;
     }
 
     /**
@@ -326,7 +306,7 @@ class DefaultImporter extends ContainerAware
         if (!count($existing)) {
 
             // Get physical target (needs the data dir)
-            $target = FileSystem::pathJoin($this->getDestinationDirectory(), 'full', $media->physical_path);
+            $target = $this->mediaHelper->getOriginalPath($media);
             // Everything is relative find the real file path and create it
             // if necessary
             FileSystem::ensureDirectory(dirname($target), true, true);

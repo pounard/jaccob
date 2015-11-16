@@ -50,7 +50,7 @@ class MediaHelper extends ContainerAware
     {
         $publicDirectory = $this->container->getParameter('jaccob_media.directory.public');
 
-        return FileSystem::pathJoin($publicDirectory, 'full', $media->physical_path);
+        return FileSystem::pathJoin($publicDirectory, 'full', $media->physical_path, $media->name);
     }
 
     /**
@@ -98,7 +98,7 @@ class MediaHelper extends ContainerAware
 
         $relativeDirectory = $this->container->getParameter('jaccob_media.directory.relative');
 
-        return FileSystem::pathJoin($relativeDirectory, 'full', $media->physical_path);
+        return FileSystem::pathJoin($relativeDirectory, 'full', $media->physical_path, $media->name);
     }
 
     /**

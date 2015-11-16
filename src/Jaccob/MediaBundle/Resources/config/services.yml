@@ -60,6 +60,7 @@ services:
         class: Jaccob\MediaBundle\Import\FilesystemImporter
         calls:
             - [setContainer, ["@service_container"]]
+            - [setMediaHelper, ["@jaccob_media.media_helper"]]
             - [setPathBuilder, ["@jaccob_media.path_builder"]]
 
     jaccob_media.media_helper:
@@ -81,7 +82,7 @@ services:
             - image/vnd.microsoft.icon
         tags: [{ name: jaccob_media.type }]
         calls:
-            - [setContainer, ["@service_container"]]
+            - [setMediaHelper, ["@jaccob_media.media_helper"]]
 
     jaccob_media.type.video:
         class: Jaccob\MediaBundle\Type\Impl\VideoType

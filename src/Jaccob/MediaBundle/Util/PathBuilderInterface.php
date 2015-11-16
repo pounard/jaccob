@@ -16,7 +16,7 @@ interface PathBuilderInterface
      *   Incomplete media being built
      *
      * @return string
-     *   Media physical path
+     *   Media physical path, without the file extension
      */
     public function buildPath(Album $album, Media $media);
 }

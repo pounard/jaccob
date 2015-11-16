@@ -68,7 +68,12 @@ class ThumbnailController extends AbstractUserAwareController
         $hash = FileSystem::pathJoin($path);
         $hash = urldecode($hash);
 
-        // Load media
+        // Load media, we need to remove the file extension, because it depends
+        // on how it has been converted, and find the media by the lowest common
+        // denominator, i.e. the physical_path
+        if ($pos = strrpos($hash, '.')) {
+            $hash = substr($hash, 0, $pos);
+        }
         $mediaList = $this
             ->getMediaModel()
             ->findWhere(

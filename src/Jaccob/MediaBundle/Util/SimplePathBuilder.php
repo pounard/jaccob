@@ -14,6 +14,10 @@ class SimplePathBuilder implements PathBuilderInterface
     {
         $filename = $media->name;
 
+        if ($pos = strrpos($filename, '.')) {
+            $filename = substr($filename, 0, $pos);
+        }
+
         return $album->ts_added->format('Y/m/') . $album->id . '/' . $filename;
     }
 }

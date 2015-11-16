@@ -27,8 +27,7 @@ class VideoType extends ContainerAware implements TypeInterface
         $ret = [];
 
         if (!$filename) {
-            $publicDirectory = $this->container->getParameter('jaccob_media.directory.public');
-            $filename = FileSystem::pathJoin($publicDirectory, 'full', $media->physical_path);
+            $filename = $this->mediaHelper->getOriginalPath($media);
         }
 
         $toolkit = new ExternalFFMpegVideoToolkit();

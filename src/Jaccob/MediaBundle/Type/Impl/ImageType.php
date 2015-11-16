@@ -4,15 +4,14 @@ namespace Jaccob\MediaBundle\Type\Impl;
 
 use Jaccob\MediaBundle\Model\Media;
 use Jaccob\MediaBundle\Toolkit\ExternalImagickImageToolkit;
-use Jaccob\MediaBundle\Type\TypeInterface;
 use Jaccob\MediaBundle\Util\Date;
 use Jaccob\MediaBundle\Util\Exif;
-use Jaccob\MediaBundle\Util\FileSystem;
+use Jaccob\MediaBundle\Util\MediaHelperAwareTrait;
 
-use Symfony\Component\DependencyInjection\ContainerAware;
-
-class ImageType extends ContainerAware implements TypeInterface
+class ImageType extends AbstractType
 {
+    use MediaHelperAwareTrait;
+
     /**
      * Extracted EXIF sections
      */
@@ -26,8 +25,7 @@ class ImageType extends ContainerAware implements TypeInterface
         $ret = [];
 
         if (!$filename) {
-            $publicDirectory = $this->container->getParameter('jaccob_media.directory.public');
-            $filename = FileSystem::pathJoin($publicDirectory, 'full', $media->physical_path);
+            $filename = $this->mediaHelper->getOriginalPath($media);
         }
 
         $updates = [];
@@ -110,14 +108,6 @@ class ImageType extends ContainerAware implements TypeInterface
 
             return $ret;
         }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isValid()
-    {
-        return true;
     }
 
     /**
