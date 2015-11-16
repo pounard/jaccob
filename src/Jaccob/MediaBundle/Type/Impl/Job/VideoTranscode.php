@@ -1,11 +1,13 @@
 <?php
 
-namespace Jaccob\MediaBundle\Type\Impl\Video;
+namespace Jaccob\MediaBundle\Type\Impl\Job;
 
 use Jaccob\MediaBundle\Model\Media;
 use Jaccob\MediaBundle\Type\Job\JobInterface;
 
-class TranscodeJob implements JobInterface
+use Symfony\Component\DependencyInjection\ContainerAware;
+
+class VideoTranscode extends ContainerAware implements JobInterface
 {
     /**
      * {@inheritdoc}

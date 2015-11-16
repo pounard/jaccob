@@ -5,19 +5,19 @@ namespace Jaccob\MediaBundle\Type\Job;
 class JobFactory
 {
     /**
-     * @var string[]
+     * @var \Jaccob\MediaBundle\Type\Job\JobInterface[]
      */
-    protected $registeredTypes = [];
+    protected $registeredJobs = [];
 
     /**
      * Register a type
      *
      * @param string $type
-     * @param string $class
+     * @param \Jaccob\MediaBundle\Type\Job\JobInterface $instance
      */
-    public function addType($type, $class)
+    public function addJob($type, $instance)
     {
-        $this->registeredTypes[$type] = $class;
+        $this->registeredJobs[$type] = $instance;
     }
 
     /**
@@ -30,28 +30,12 @@ class JobFactory
      */
     public function isTypeValid($type, $throwException = false)
     {
-        if (!isset($this->registeredTypes[$type])) {
+        if (!isset($this->registeredJobs[$type])) {
             if ($throwException) {
                 throw new \InvalidArgumentException(sprintf("'%s' job type does not exist", $type));
             }
             return false;
         }
-
-        $class = $this->registeredTypes[$type];
-        if (!class_exists($class)) {
-            if ($throwException) {
-                throw new \InvalidArgumentException(sprintf("'%s' class does not exist", $type));
-            }
-            return false;
-        }
-
-        if (!is_subclass_of($class, '\Jaccob\MediaBundle\Type\Job\JobInterface')) {
-            if ($throwException) {
-                throw new \InvalidArgumentException(sprintf("'%s' class does not implements \Jaccob\MediaBundle\Type\Job\JobInterface", $type));
-            }
-            return false;
-        }
-
         return true;
     }
 
@@ -66,6 +50,6 @@ class JobFactory
     {
         $this->isTypeValid($type, true);
 
-        return new $this->registeredTypes[$type]();
+        return $this->registeredJobs[$type];
     }
 }

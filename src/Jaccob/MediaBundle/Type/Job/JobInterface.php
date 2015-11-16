@@ -4,6 +4,10 @@ namespace Jaccob\MediaBundle\Type\Job;
 
 use Jaccob\MediaBundle\Model\Media;
 
+/**
+ * Please consider carefully that all jobs will be services instance, and by
+ * so must remain stateless
+ */
 interface JobInterface
 {
     /**

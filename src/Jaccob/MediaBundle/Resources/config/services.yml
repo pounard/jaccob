@@ -19,6 +19,16 @@ parameters:
     # Default thumbnail size used for media grid view
     jaccob_media.size.thumbnail.grid: 570
 
+    # For this setting, only format and video tags will be interpreted, all
+    # the other key/value pairs will be given as-is to ffmpeg as options for
+    # the encoding ; defaults should be safe and all-around usage
+    # Generated derivatives will have the right codec/mimetype saved into
+    # database and video HTML tag will be correctly and dynamically built
+    # using those values
+    jaccob_media.video.derivatives:
+      - {format: mp4, video: libx264, preset: ultrafast, qp: 0, threads: 4}
+      - {format: webm, video: libvpx-vp9, threads: 4}
+
 services:
 
     jaccob_media.security.access.share_voter:
@@ -110,6 +120,12 @@ services:
             - [setMediaSession, ["@pomm.default_session"]]
             - [setSession, ["@pomm.default_session"]]
             - [setJobFactory, ["@jaccob_media.job_factory"]]
+
+    jaccob_media.job.video_transcode:
+        class: Jaccob\MediaBundle\Type\Impl\Job\VideoTranscode
+        calls:
+            - [setContainer, ["@service_container"]]
+        tags: [{ name: jaccob_media.job, alias: video_transcode }]
 
     jaccob_media.job_factory:
         class: Jaccob\MediaBundle\Type\Job\JobFactory
