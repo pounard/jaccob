@@ -168,8 +168,7 @@ class VideoType extends ContainerAware implements TypeInterface
         $type   = $this->mediaHelper->getType($media);
 
         if ($type instanceof VideoType) {
-            // Run video transcode job
-            $this->getJobQueueManager()->push($media->id, 'video_transcode');
+            $this->container->get('jaccob_media.job_manager')->push($media->id, 'video_transcode');
         }
     }
 }

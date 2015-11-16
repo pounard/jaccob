@@ -103,6 +103,13 @@ services:
             - [setContainer, ["@service_container"]]
             - [setMediaHelper, ["@jaccob_media.media_helper"]]
 
+    jaccob_media.job_manager:
+        class: Jaccob\MediaBundle\Model\JobQueueManager
+        calls:
+            - [setMediaSession, ["@pomm.default_session"]]
+            - [setSession, ["@pomm.default_session"]]
+            - [setJobFactory, ["@jaccob_media.job_factory"]]
+
     jaccob_media.job_factory:
         class: Jaccob\MediaBundle\Type\Job\JobFactory
 

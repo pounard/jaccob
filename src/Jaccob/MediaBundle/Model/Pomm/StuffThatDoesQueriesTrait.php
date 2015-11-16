@@ -2,22 +2,34 @@
 
 namespace Jaccob\MediaBundle\Model\Pomm;
 
-use PommProject\Foundation\Client\ClientInterface;
-use PommProject\Foundation\Client\ClientTrait;
+use PommProject\Foundation\Session;
+use PommProject\Foundation\Where;
 
-/**
- * This actually implements the ClientInterface interface
- */
-abstract class StuffThatDoesQueries implements ClientInterface
+trait StuffThatDoesQueriesTrait
 {
-    use ClientTrait;
+    /**
+     * @var \PommProject\Foundation\Session
+     */
+    private $session;
 
     /**
-     * {@inheritdoc}
+     * Set session
+     *
+     * @param \PommProject\Foundation\Session $session
      */
-    public function getClientIdentifier()
+    public function setSession(Session $session)
     {
-        return trim(get_class($this), "\\");
+        $this->session = $session;
+    }
+
+    /**
+     * Get pomm account session
+     *
+     * @return \PommProject\Foundation\Session
+     */
+    public function getSession()
+    {
+        return $this->session;
     }
 
     /**
@@ -35,10 +47,14 @@ abstract class StuffThatDoesQueries implements ClientInterface
      */
     protected function query($sql, array $values = [])
     {
+        if ($values instanceof Where) {
+            $values = $values->getValues();
+        }
+
         return $this
             ->getSession()
-            ->getClientUsingPooler('prepared_query', $sql)
-            ->execute($values)
+            ->getClientUsingPooler('query_manager', '\PommProject\Foundation\PreparedQuery\PreparedQueryManager')
+            ->query($sql, $values)
         ;
     }
 

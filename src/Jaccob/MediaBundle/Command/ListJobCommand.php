@@ -32,8 +32,9 @@ class ListJobCommand extends ContainerAwareCommand
 
         /* @var $jobFactory \Jaccob\MediaBundle\Type\Job\JobFactory */
         $jobFactory = $container->get('jaccob_media.job_factory');
-        $jobManager = $this->getJobQueueManager();
+        /* @var $jobFactory \Jaccob\MediaBundle\Model\JobQueueManager */
+        $jobManager = $container->get('jaccob_media.job_manager');
 
-        
+        var_dump($jobManager->runNext());
     }
 }

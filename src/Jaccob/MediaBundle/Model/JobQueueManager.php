@@ -2,7 +2,9 @@
 
 namespace Jaccob\MediaBundle\Model;
 
-use Jaccob\MediaBundle\Model\Pomm\StuffThatDoesQueries;
+use Jaccob\MediaBundle\MediaModelAware;
+use Jaccob\MediaBundle\Model\Pomm\StuffThatDoesQueriesTrait;
+use Jaccob\MediaBundle\Type\Job\JobFactoryAwareTrait;
 
 use PommProject\Foundation\Where;
 
@@ -11,15 +13,92 @@ use PommProject\Foundation\Where;
  * do not need to have a model class nor a structure object, we only need to
  * do very specific queries over this table.
  */
-class JobQueueManager extends StuffThatDoesQueries
+class JobQueueManager
 {
+    use JobFactoryAwareTrait;
+    use MediaModelAware;
+    use StuffThatDoesQueriesTrait;
+
     /**
-     * {@inheritdoc}
+     * Fetch next job to execute
+     *
+     * @return mixed[]
+     *   Row containing job data
      */
-    public function getClientType()
+    public function fetchNext()
     {
-        // And why not ?
-        return 'query_helper';
+        $sql = "
+            UPDATE
+                media_job_queue
+            SET
+                is_running = true,
+                ts_started = NOW()
+            WHERE id IN (
+                SELECT id
+                FROM media_job_queue
+                WHERE
+                    is_running = false
+                    AND is_failed = false
+                ORDER BY
+                    ts_added ASC,
+                    id ASC
+                LIMIT 1 OFFSET 0
+            )
+            RETURNING
+                *
+        ";
+
+        $data = $this->query($sql)->current();
+
+        if (!empty($data['data'])) {
+            $data['data'] = unserialize($data['data']);
+        }
+
+        return $data;
+    }
+
+    /**
+     * Run job with data
+     *
+     * @param mixed[] $data
+     *   Row containing job data
+     */
+    public function run($data)
+    {
+        if (!isset($data['type'])) {
+            throw new \InvalidArgumentException("Missing 'type' for job");
+        }
+        if (!isset($data['id_media'])) {
+            throw new \InvalidArgumentException("Missing 'id_media' for job");
+        }
+
+        $media = $this->getMediaModel()->findByPK(['id' => $data['id_media']]);
+        if (!$media) {
+            throw new \InvalidArgumentException("Media '%d' does not exists", $data['id_media']);
+        }
+
+        if (!isset($data['data'])) {
+            $data['data'] = [];
+        }
+
+        $runner = $this->jobFactory->createJob($data['type']);
+        $runner->run($media, $data['data']);
+    }
+
+    /**
+     * Run next in queue
+     *
+     * @return boolean
+     */
+    public function runNext()
+    {
+        $data = $this->fetchNext();
+
+        if (!$data) {
+            return false;
+        }
+
+        return $this->run($data);
     }
 
     /**
@@ -39,25 +118,6 @@ class JobQueueManager extends StuffThatDoesQueries
             'type'      => $type,
             'data'      => serialize($options),
         ];
-
-        /*
-        $result = $this->getSession()
-            ->getQueryManager()
-            ->query('select * from media_job_queue where my_field = $*', ['some value'])
-        ;
-
-        if ($result->isEmpty()) {
-          printf("There are no results with the given parameter.\n");
-        } else {
-          foreach ($result as $row) { // ← note 4
-            printf(
-                "field1 = '%s', field2 = '%s'.\n",
-                $row['field1'],     // ← note 5
-                $row['field2'] === true ? 'OK' : 'NO'
-                );
-          }
-        }
-         */
 
         $sql = strtr(
             "insert into :relation (:fields) values (:values) returning 1",

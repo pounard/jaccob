@@ -45,9 +45,9 @@ class JobFactory
             return false;
         }
 
-        if (!is_subclass_of($class, '\Jaccob\MediaBundle\Type\Job')) {
+        if (!is_subclass_of($class, '\Jaccob\MediaBundle\Type\Job\JobInterface')) {
             if ($throwException) {
-                throw new \InvalidArgumentException(sprintf("'%s' class does not implements \Jaccob\MediaBundle\Type\JobQueue\JobInterface", $type));
+                throw new \InvalidArgumentException(sprintf("'%s' class does not implements \Jaccob\MediaBundle\Type\Job\JobInterface", $type));
             }
             return false;
         }
@@ -66,6 +66,6 @@ class JobFactory
     {
         $this->isTypeValid($type, true);
 
-        return $this->registeredTypes[$type]();
+        return new $this->registeredTypes[$type]();
     }
 }

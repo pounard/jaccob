@@ -83,12 +83,14 @@ CREATE TABLE media_derivative (
 -- Jobs to be done by cron tasks, such as archive creation or video
 -- transcoding
 CREATE TABLE media_job_queue (
+    id SERIAL PRIMARY KEY,
     id_media INTEGER NOT NULL,
     type VARCHAR(64) NOT NULL,
     data BYTEA,
     ts_added TIMESTAMP NOT NULL DEFAULT NOW(),
     ts_started TIMESTAMP NOT NULL DEFAULT NOW(),
     is_running BOOLEAN DEFAULT FALSE,
+    is_failed BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (id_media) REFERENCES media (id) ON DELETE CASCADE
 );
 

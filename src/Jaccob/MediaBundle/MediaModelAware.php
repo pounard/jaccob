@@ -97,19 +97,6 @@ trait MediaModelAware
     }
 
     /**
-     * Get pomm job manager
-     *
-     * @return \Jaccob\MediaBundle\Model\JobQueueManager
-     */
-    protected function getJobQueueManager()
-    {
-        return $this
-            ->getMediaSession()
-            ->getClient('query_helper', 'Jaccob\MediaBundle\Model\JobQueueManager');
-        ;
-    }
-
-    /**
      * Get task or throw a 404 or 403 error depending on data
      *
      * @param int $id
