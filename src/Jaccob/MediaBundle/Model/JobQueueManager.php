@@ -82,7 +82,7 @@ class JobQueueManager
         }
 
         $runner = $this->jobFactory->createJob($data['type']);
-        $runner->run($media, $data['data']);
+        return $runner->run($media, $data['data']);
     }
 
     /**
@@ -98,7 +98,31 @@ class JobQueueManager
             return false;
         }
 
-        return $this->run($data);
+        try {
+            return $this->run($data);
+        } catch (\Exception $e) {
+            // Any kind of exception
+            $this->markAsFailed($data['id']);
+
+            throw $e;
+        }
+    }
+
+    /**
+     * Mark job as failed
+     */
+    public function markAsFailed($id)
+    {
+        $sql = "
+            UPDATE
+                media_job_queue
+            SET
+                is_running = false,
+                is_failed = true
+            WHERE id = $*
+        ";
+
+        $this->query($sql, [$id]);
     }
 
     /**

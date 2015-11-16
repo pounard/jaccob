@@ -8,7 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ListJobCommand extends ContainerAwareCommand
+class RunNextJobCommand extends ContainerAwareCommand
 {
     use MediaModelAware;
 
@@ -18,8 +18,8 @@ class ListJobCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('media:job-list')
-            ->setDescription('List queued jobs')
+            ->setName('media:job-run-next')
+            ->setDescription('Run next job')
         ;
     }
 
@@ -35,26 +35,6 @@ class ListJobCommand extends ContainerAwareCommand
         /* @var $jobManager \Jaccob\MediaBundle\Model\JobQueueManager */
         $jobManager = $container->get('jaccob_media.job_manager');
 
-        // $jobManager->runNext();
-        // return;
-
-        $rows = [];
-        foreach ($jobManager->listAll() as $data) {
-            $rows[] = [
-                $data['id'],
-                $data['type'],
-                $data['id_media'],
-                $data['ts_added']->format('Y-m-d H:i:s'),
-                $data['is_running'] ? 'Yes' : 'No',
-                $data['is_failed'] ? 'Yes' : 'No',
-            ];
-        }
-
-        $this->getHelper('table')
-            ->setHeaders(['id', 'type', 'media', 'added', 'running', 'failed'])
-            ->setRows($rows)
-            ->render($output)
-        ;
+        $jobManager->runNext();
     }
 }
-

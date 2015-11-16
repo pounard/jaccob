@@ -119,3 +119,9 @@ services:
         calls:
             - [setContainer, ["@service_container"]]
         tags: [{ name: console.command }]
+
+    jaccob_media.commands.job_queue_run_next:
+        class: Jaccob\MediaBundle\Command\RunNextJobCommand
+        calls:
+            - [setContainer, ["@service_container"]]
+        tags: [{ name: console.command }]
