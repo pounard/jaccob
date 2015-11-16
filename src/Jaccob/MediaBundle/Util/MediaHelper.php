@@ -44,7 +44,7 @@ class MediaHelper extends ContainerAware
     }
 
     /**
-     * Get original file path, suitable for URLs
+     * Get original absolute file path
      *
      * @param Media $media
      *
@@ -58,7 +58,7 @@ class MediaHelper extends ContainerAware
     }
 
     /**
-     * Get specific thumbnail path, suitable for URLs
+     * Get specific thumbnail absolute path
      *
      * @param Media $media
      * @param int $size
@@ -89,26 +89,6 @@ class MediaHelper extends ContainerAware
     }
 
     /**
-     * Get full media URI, suitable for URLs
-     *
-     * @param Media $media
-     *
-     * @return string
-     */
-    public function getFullURI(Media $media)
-    {
-        $type = $this->typeFinder->getTypeFor($media->mimetype);
-
-        if (!$type->canDoThumbnail()) {
-            return;
-        }
-
-        $relativeDirectory = $this->container->getParameter('jaccob_media.directory.relative');
-
-        return FileSystem::pathJoin($relativeDirectory, 'full', $media->physical_path, $media->name);
-    }
-
-    /**
      * Get specific thumbnail URI, suitable for URLs
      *
      * @param Media $media
@@ -118,7 +98,7 @@ class MediaHelper extends ContainerAware
      *
      * @return string
      */
-    public function getThumbnailURI(Media $media, $size, $modifier = null, $escape = true)
+    public function getMediaURI(Media $media, $size = 'full', $modifier = null, $escape = true)
     {
         $type = $this->typeFinder->getTypeFor($media->mimetype);
 

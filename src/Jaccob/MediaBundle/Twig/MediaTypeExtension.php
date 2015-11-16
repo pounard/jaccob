@@ -86,7 +86,7 @@ class MediaTypeExtension extends \Twig_Extension implements ContainerAwareInterf
 
         foreach ($allowedSizes as $size) {
 
-            $rel = $this->mediaHelper->getThumbnailURI($media, $size, $modifier);
+            $rel = $this->mediaHelper->getMediaURI($media, $size, $modifier);
             if (!$rel) {
                 continue;
             }

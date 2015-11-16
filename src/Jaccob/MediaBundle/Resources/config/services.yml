@@ -63,7 +63,15 @@ services:
         tags:
           - { name: kernel.event_listener, event: jaccob.menu_configure, method: onMenuConfigure }
 
-    # Register all and make it configurable via parameters.yml file
+    jaccob_media.media_listener:
+        class: Jaccob\MediaBundle\EventListener\MediaListener
+        calls:
+          - [setContainer, ["@service_container"]]
+        tags:
+          - { name: kernel.event_listener, event: jaccob_media.insert, method: onMediaSave }
+          - { name: kernel.event_listener, event: jaccob_media.update, method: onMediaSave }
+
+    # @todo Register all and make it configurable via parameters.yml file
     jaccob_media.path_builder:
         class: Jaccob\MediaBundle\Util\SimplePathBuilder
 
@@ -122,6 +130,13 @@ services:
             - [setSession, ["@pomm.default_session"]]
             - [setJobFactory, ["@jaccob_media.job_factory"]]
 
+    jaccob_media.job_factory:
+        class: Jaccob\MediaBundle\Type\Job\JobFactory
+
+    #
+    # Jobs
+    #
+
     jaccob_media.job.video_transcode:
         class: Jaccob\MediaBundle\Type\Impl\Job\VideoTranscode
         calls:
@@ -129,8 +144,16 @@ services:
             - [setMediaHelper, ["@jaccob_media.media_helper"]]
         tags: [{ name: jaccob_media.job, alias: video_transcode }]
 
-    jaccob_media.job_factory:
-        class: Jaccob\MediaBundle\Type\Job\JobFactory
+    jaccob_media.job.media_thumbnail:
+        class: Jaccob\MediaBundle\Type\Impl\Job\MediaThumbnail
+        calls:
+            - [setContainer, ["@service_container"]]
+            - [setMediaHelper, ["@jaccob_media.media_helper"]]
+        tags: [{ name: jaccob_media.job, alias: media_thumbnail }]
+
+    #
+    # Commands
+    #
 
     jaccob_media.commands.job_queue_list:
         class: Jaccob\MediaBundle\Command\ListJobCommand

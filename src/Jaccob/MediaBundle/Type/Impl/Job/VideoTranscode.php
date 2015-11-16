@@ -2,6 +2,7 @@
 
 namespace Jaccob\MediaBundle\Type\Impl\Job;
 
+use Jaccob\MediaBundle\Import\DefaultImporter;
 use Jaccob\MediaBundle\MediaModelAware;
 use Jaccob\MediaBundle\Model\Media;
 use Jaccob\MediaBundle\Toolkit\ExternalFFMpegVideoToolkit;
@@ -9,7 +10,6 @@ use Jaccob\MediaBundle\Type\Job\JobInterface;
 use Jaccob\MediaBundle\Util\MediaHelperAwareTrait;
 
 use Symfony\Component\DependencyInjection\ContainerAware;
-use Jaccob\MediaBundle\Import\DefaultImporter;
 
 class VideoTranscode extends ContainerAware implements JobInterface
 {
