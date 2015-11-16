@@ -28,6 +28,28 @@ class DefaultImporter extends ContainerAware
     use PathBuilderAwareTrait;
 
     /**
+     * Find file mimetype
+     *
+     * @param string $filename
+     *
+     * @return string
+     */
+    static function findFileMimeType($filename)
+    {
+        if (function_exists('finfo_open')) {
+            $res = finfo_open(FILEINFO_MIME_TYPE);
+            $mimetype = finfo_file($res, $filename);
+            finfo_close($res);
+        } else if (function_exists('mime_content_type')) {
+            $mimetype = mime_content_type($filename);
+        } else {
+            $mimetype = 'application/octet-stream';
+        }
+
+        return $mimetype;
+    }
+
+    /**
      * Root working directory
      *
      * @var string
@@ -97,22 +119,15 @@ class DefaultImporter extends ContainerAware
     /**
      * Get file mime type
      *
+     * Can be overriden
+     *   @todo Find a way to export this somewhere else?
+     *
      * @param string $filename
      *   Full file physical path
      */
     public function findMimeType($filename)
     {
-        if (function_exists('finfo_open')) {
-            $res = finfo_open(FILEINFO_MIME_TYPE);
-            $mimetype = finfo_file($res, $filename);
-            finfo_close($res);
-        } else if (function_exists('mime_content_type')) {
-            $mimetype = mime_content_type($filename);
-        } else {
-            $mimetype = 'application/octet-stream';
-        }
-
-        return $mimetype;
+        return self::findFileMimeType($filename);
     }
 
     /**
@@ -149,7 +164,7 @@ class DefaultImporter extends ContainerAware
             'name'          => basename($relativePath),
             'user_name'     => basename($relativePath),
             'path'          => dirname($relativePath),
-            //'size'          => filesize($filename),
+            'filesize'      => filesize($filename),
             'mimetype'      => $this->findMimeType($filename),
             'ts_added'      => new \DateTime(),
             'md5_hash'      => md5_file($filename),

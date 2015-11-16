@@ -49,7 +49,7 @@ trait MediaModelAware
      *
      * @return \Jaccob\MediaBundle\Model\MediaModel
      */
-    protected function getMediaModel()
+    public function getMediaModel()
     {
         return $this
             ->getMediaSession()
@@ -62,7 +62,7 @@ trait MediaModelAware
      *
      * @return \Jaccob\MediaBundle\Model\MediaDerivativeModel
      */
-    protected function getMediaDerivativeModel()
+    public function getMediaDerivativeModel()
     {
         return $this
             ->getMediaSession()
@@ -75,7 +75,7 @@ trait MediaModelAware
      *
      * @return \Jaccob\MediaBundle\Model\AlbumModel
      */
-    protected function getAlbumModel()
+    public function getAlbumModel()
     {
         return $this
             ->getMediaSession()
@@ -88,7 +88,7 @@ trait MediaModelAware
      *
      * @return \Jaccob\MediaBundle\Model\DeviceModel
      */
-    protected function getDeviceModel()
+    public function getDeviceModel()
     {
         return $this
             ->getMediaSession()

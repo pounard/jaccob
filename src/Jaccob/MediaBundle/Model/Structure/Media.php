@@ -25,6 +25,7 @@ class Media extends RowStructure
             ->addField('name', 'varchar')
             ->addField('path', 'varchar')
             ->addField('physical_path', 'varchar')
+            ->addField('filesize', 'int4')
             ->addField('width', 'int4')
             ->addField('height', 'int4')
             ->addField('orientation', 'int4')

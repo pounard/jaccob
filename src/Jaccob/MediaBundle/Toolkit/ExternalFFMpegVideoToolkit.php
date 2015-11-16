@@ -209,4 +209,63 @@ class ExternalFFMpegVideoToolkit implements VideoToolkitInterface
 
       return $data;
     }
+
+    /**
+     * {inheritdoc}
+     */
+    public function transcode($inFile, $outFile, $video, $format, $audio = null, $options = [])
+    {
+        $arguments = [
+          '-i',     $inFile,
+          '-c:v',   $video,
+          '-f',     $format,
+        ];
+        if ($audio) {
+            $arguments[] = '-c:a';
+            $arguments[] = $audio;
+        }
+
+        // Strip some options that should normally come from the defined formats
+        // in the parameters.yml file, see the documentation in there
+        unset(
+            $options['video'],
+            $options['format'],
+            $options['audio']
+        );
+        foreach ($options as $key => $value) {
+            // Just in case, you never now
+            if (null === $value || '' === $value) {
+                $arguments[] = '-' . $key;
+            } else {
+                $arguments[] = '-' . $key;
+                $arguments[] = $value;
+            }
+        }
+
+        // Some codecs are flaged as experimental, do not let ffmpeg fail
+        if (!isset($options['strict'])) {
+            $arguments[] = '-strict';
+            $arguments[] = '-2';
+        }
+        // All processors today are smp enought to enable this per default
+        if (!isset($options['threads'])) {
+            $arguments[] = '-threads';
+            $arguments[] = 2;
+        }
+        // Always force ffpmeg to replace existing files
+        $arguments[] = '-y';
+
+        // Most important argument of all
+        $arguments[] = $outFile;
+
+        // @todo Output should go somewhere
+        $output = (new ProcessBuilder())
+            ->setTimeout(null)
+            ->setPrefix("ffmpeg")
+            ->setArguments($arguments)
+            ->getProcess()
+            ->mustRun()
+            ->getOutput()
+        ;
+    }
 }

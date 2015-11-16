@@ -65,20 +65,23 @@ class ThumbnailController extends AbstractUserAwareController
         }
 
         // Rebuild the media real path from URL
-        $hash = FileSystem::pathJoin($path);
-        $hash = urldecode($hash);
+        $name = array_pop($path);
+        $name = urldecode($name);
+        $path = FileSystem::pathJoin($path);
+        $path = urldecode($path);
 
         // Load media, we need to remove the file extension, because it depends
         // on how it has been converted, and find the media by the lowest common
         // denominator, i.e. the physical_path
-        if ($pos = strrpos($hash, '.')) {
-            $hash = substr($hash, 0, $pos);
+        if ($pos = strrpos($name, '.')) {
+            $name = substr($name, 0, $pos);
         }
         $mediaList = $this
             ->getMediaModel()
             ->findWhere(
                 (new Where())
-                    ->andWhere('physical_path = $*', [$hash])
+                    ->andWhere('physical_path = $*', [$path])
+                    ->andWhere('name LIKE $*', [$name . '%'])
             )
         ;
 

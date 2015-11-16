@@ -114,6 +114,7 @@ class MediaTypeExtension extends \Twig_Extension implements ContainerAwareInterf
                 'height'    => 'todo',
                 'size'      => $size,
                 'modifier'  => $modifier,
+                'mimetype'  => $media->mimetype,
             ];
 
             $ret['derivatives'][] = $derivative;
@@ -158,6 +159,24 @@ class MediaTypeExtension extends \Twig_Extension implements ContainerAwareInterf
             'viewport'  => 100,
         ];
 
+        // @todo Needs something better than this
+        if (false !== strpos($media->mimetype, 'video')) {
+            $variables['derivatives'] = [];
+            $derivatives = $this->mediaHelper->getMediaDerivativeModel()->findByMedia($media->id);
+            if ($derivatives) {
+                foreach ($derivatives as $derivative) {
+                    $variables['derivatives'][] = [
+                        'href'      => '/' . $this->mediaHelper->getDerivativeURI($derivative),
+                        'width'     => $derivative->width,
+                        'height'    => $derivative->height,
+                        'size'      => 'full',
+                        'modifier'  => null,
+                        'mimetype'  => $derivative->mimetype,
+                    ];
+                }
+            }
+        }
+
         return $twig->render($templateName, $variables);
     }
 
@@ -191,47 +210,5 @@ class MediaTypeExtension extends \Twig_Extension implements ContainerAwareInterf
         ];
 
         return $twig->render($templateName, $variables);
-    }
-
-    /**
-     * Generate a video tag
-     *
-     * For video, modifier will be ignored in order to keep video ratio
-     *
-     * @param \Twig_Environment $twig
-     * @param Media $media
-     * @param int $defaultSize
-     * @param int $maxSize
-     * @param string $modifier
-     *
-     * @return string
-     */
-    public function createVideo(\Twig_Environment $twig, Media $media, $defaultSize = null, $maxSize = null, $modifier = null)
-    {
-        /*
-         * https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Using_HTML5_audio_and_video
-         *
-          <video controls width="320" height="240">
-            <source src="foo.ogg" type="video/ogg; codecs=dirac, speex">
-            <a href="dynamicsearch.mp4">
-              <img src="dynamicsearch.jpg" alt="Dynamic app search in Firefox OS">
-            </a>
-            <p>Click image to play a video demo of dynamic app search</p>
-          </video>
-         */
-
-        $width  = $media->width;
-        $height = $media->height;
-
-        if (!$width || !$height) {
-            // Better be safe than sorry
-            return;
-        }
-
-        $source = '<source src="' . $this->mediaHelper->getFullURI($media) . '" type="' . $media->mimetype . '">';
-
-        $fallback = $this->createThumbnailImage($twig, $media, $defaultSize, $maxSize, $modifier, false);
-
-        return '<video controls width="' . $width . '" height="' . $height . '">' . $source . $fallback . '</video>';
     }
 }

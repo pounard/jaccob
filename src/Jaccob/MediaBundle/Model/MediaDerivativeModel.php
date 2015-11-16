@@ -34,9 +34,27 @@ class MediaDerivativeModel extends Model
     public function findByMedia($mediaId)
     {
         $where = (new Where())
-            ->andWhere('id_album = $*', [$mediaId])
+            ->andWhere('id_media = $*', [$mediaId])
         ;
 
         return $this->findWhere($where);
+    }
+
+    /**
+     * Find by media
+     *
+     * @param int $mediaId
+     * @param string $mimetype
+     *
+     * @return \Jaccob\MediaBundle\Model\MediaDerivative
+     */
+    public function findOneByMediaAndMimetype($mediaId, $mimetype)
+    {
+        $where = (new Where())
+            ->andWhere('id_media = $*', [$mediaId])
+            ->andWhere('mimetype = $*', [$mimetype])
+        ;
+
+        return $this->findWhere($where)->current();
     }
 }

@@ -30,4 +30,16 @@ interface VideoToolkitInterface
      * @param string $inFile
      */
     public function findMetaData($inFile);
+
+    /**
+     * Transcode video
+     *
+     * @param string $inFile
+     * @param string $outFile
+     * @param string $video
+     * @param string $format
+     * @param string $audio
+     * @param array $options
+     */
+    public function transcode($inFile, $outFile, $video, $format, $audio = null, $options = []);
 }

@@ -20,20 +20,20 @@ class Media extends FlexibleEntity
 
     public function getFileExtension()
     {
-        if ($path = $this->physical_path) {
-            if (false !== ($position = strrpos($path, '.'))) {
-                return substr($path, $position + 1);
+        if ($name = $this->name) {
+            if (false !== ($position = strrpos($name, '.'))) {
+                return substr($name, $position + 1);
             }
         }
     }
 
-    public function getPhysicalPathWithoutExtension()
+    public function getNameWithoutExtension()
     {
-        if ($path = $this->physical_path) {
-            if (false !== ($position = strrpos($path, '.'))) {
-                return substr($path, 0, $position);
+        if ($name = $this->name) {
+            if (false !== ($position = strrpos($name, '.'))) {
+                return substr($name, 0, $position);
             }
-            return $path;
+            return $name;
         }
     }
 }

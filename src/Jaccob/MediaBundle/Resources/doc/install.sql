@@ -53,6 +53,7 @@ CREATE TABLE media (
     name VARCHAR(1024) NOT NULL,
     path VARCHAR(1024) NOT NULL,
     physical_path VARCHAR(1024) NOT NULL,
+    filesize INTEGER NOT NULL DEFAULT 0,
     width INTEGER,
     height INTEGER,
     orientation INTEGER NOT NULL DEFAULT 1,
@@ -71,8 +72,11 @@ CREATE TABLE media (
 -- will need to be transcoded to be played into the browser, so we need this
 -- to reference all generated derivatives
 CREATE TABLE media_derivative (
+    id SERIAL PRIMARY KEY,
     id_media INTEGER NOT NULL,
+    name VARCHAR(1024) NOT NULL,
     physical_path VARCHAR(1024) NOT NULL,
+    filesize INTEGER NOT NULL DEFAULT 0,
     width INTEGER,
     height INTEGER,
     md5_hash VARCHAR(255),

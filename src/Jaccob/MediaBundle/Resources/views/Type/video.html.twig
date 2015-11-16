@@ -1,1 +1,11 @@
 {% extends 'JaccobMediaBundle:Type:default.html.twig' %}
+
+{% block full %}
+  <video width="{{ media.width }}" height="{{ media.height }}" controls>
+    {% for derivative in derivatives %}
+      <source src="{{ derivative.href }}" type="{{ derivative.mimetype }}"/>
+    {% endfor %}
+    <!-- Flash or no flash ? -->
+    <img srcset="{{ default.href }} 1x" alt="{{ media.displayName }}"/>
+  </video>
+{% endblock %}

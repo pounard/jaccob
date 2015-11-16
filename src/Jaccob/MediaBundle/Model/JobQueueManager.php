@@ -99,13 +99,26 @@ class JobQueueManager
         }
 
         try {
-            return $this->run($data);
+            $ret = $this->run($data);
+
+            $this->delete($data['id']);
+
+            return $ret;
+
         } catch (\Exception $e) {
             // Any kind of exception
             $this->markAsFailed($data['id']);
 
             throw $e;
         }
+    }
+
+    /**
+     * Mark job as failed
+     */
+    public function delete($id)
+    {
+        $this->query("DELETE FROM media_job_queue WHERE id = $*", [$id]);
     }
 
     /**

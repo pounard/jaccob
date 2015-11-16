@@ -2,7 +2,9 @@
 
 namespace Jaccob\MediaBundle\Util;
 
+use Jaccob\MediaBundle\MediaModelAware;
 use Jaccob\MediaBundle\Model\Media;
+use Jaccob\MediaBundle\Model\MediaDerivative;
 use Jaccob\MediaBundle\Type\TypeFinderService;
 
 use Symfony\Component\DependencyInjection\ContainerAware;
@@ -12,6 +14,8 @@ use Symfony\Component\DependencyInjection\ContainerAware;
  */
 class MediaHelper extends ContainerAware
 {
+    use MediaModelAware;
+
     /**
      * @var \Jaccob\MediaBundle\Type\TypeFinderService
      */
@@ -66,19 +70,22 @@ class MediaHelper extends ContainerAware
     {
         $type = $this->typeFinder->getTypeFor($media->mimetype);
 
-        if (!$type->canDoThumbnail()) {
-            return;
+        if ('full' !== $size) {
+            if (!$type->canDoThumbnail()) {
+                return;
+            }
+            if ($modifier) {
+                $size = $modifier . $size;
+            }
+            $ext  = $type->getThumbnailExtension($media, $size, $modifier);
+            $name = $media->getNameWithoutExtension() . '.' . $ext;
+        } else {
+            $name = $media->name;
         }
 
         $publicDirectory = $this->container->getParameter('jaccob_media.directory.public');
 
-        if ($modifier) {
-            $size = $modifier . $size;
-        }
-
-        $ext = $type->getThumbnailExtension($media, $size, $modifier);
-
-        return FileSystem::pathJoin($publicDirectory, $size, $media->getPhysicalPathWithoutExtension() . '.' . $ext);
+        return FileSystem::pathJoin($publicDirectory, $size, $media->physical_path, $name);
     }
 
     /**
@@ -115,20 +122,26 @@ class MediaHelper extends ContainerAware
     {
         $type = $this->typeFinder->getTypeFor($media->mimetype);
 
-        if (!$type->canDoThumbnail()) {
-            return;
+        if ('full' !== $size) {
+            if (!$type->canDoThumbnail()) {
+                return;
+            }
+            if ($modifier) {
+                $size = $modifier . $size;
+            }
+            $ext  = $type->getThumbnailExtension($media, $size, $modifier);
+            $name = $media->getNameWithoutExtension() . '.' . $ext;
+        } else {
+            $name = $media->name;
         }
 
         $relativeDirectory = $this->container->getParameter('jaccob_media.directory.relative');
 
-        if ($size != 'full' && $modifier) {
-            $size = $modifier . $size;
-        }
-
-        $ext = $type->getThumbnailExtension($media, $size, $modifier);
-        $path = $media->getPhysicalPathWithoutExtension();
+        $ext  = $type->getThumbnailExtension($media, $size, $modifier);
+        $path = $media->physical_path;
 
         if ($escape) {
+            $name = rawurldecode($name);
             $path = explode('/', $path);
             array_walk($path, function (&$value) {
                 $value = rawurlencode($value);
@@ -136,7 +149,34 @@ class MediaHelper extends ContainerAware
             $path = implode('/', $path);
         }
 
-        return FileSystem::pathJoin($relativeDirectory, $size, $path . '.' . $ext);
+        return FileSystem::pathJoin($relativeDirectory, $size, $path, $name);
+    }
+
+    /**
+     * Get specific derivative thumbnail URI, suitable for URLs
+     *
+     * @param MediaDerivative $media
+     * @param int $size
+     * @param string $modifier
+     * @param boolean $escape
+     */
+    public function getDerivativeURI(MediaDerivative $derivative, $escape = true)
+    {
+          $relativeDirectory = $this->container->getParameter('jaccob_media.directory.relative');
+
+          $path = $derivative->physical_path;
+          $name = $derivative->name;
+
+          if ($escape) {
+              $name = rawurlencode($name);
+              $path = explode('/', $path);
+              array_walk($path, function (&$value) {
+                  $value = rawurlencode($value);
+              });
+              $path = implode('/', $path);
+          }
+
+          return FileSystem::pathJoin($relativeDirectory, 'full', $path, $name);
     }
 
     /**
