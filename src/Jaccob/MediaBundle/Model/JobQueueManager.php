@@ -102,6 +102,44 @@ class JobQueueManager
     }
 
     /**
+     * List all jobs
+     *
+     * @param mixed[] $conditions
+     * @param int $limit
+     * @param int $offset
+     *
+     * @return mixed[][]
+     */
+    public function listAll($conditions = [], $limit = 100, $offset = 0)
+    {
+        $where = new Where();
+        if (empty($conditions)) {
+            $where->andWhere('1 = 1');
+        } else {
+            foreach ($conditions as $key => $value) {
+                $where->andWhere($this->escapeIdentifier($key) . ' = $*', $value);
+            }
+        }
+
+        $sql = strtr("
+            SELECT *
+            FROM media_job_queue
+            WHERE
+                :conditions
+            ORDER BY
+                ts_added ASC,
+                id ASC
+            LIMIT :limit OFFSET :offset
+        ", [
+            ':conditions' => (string)$where,
+            ':limit'      => (int)$limit,
+            ':offset'     => (int)$offset,
+        ]);
+
+        return $this->query($sql, $where->getValues());
+    }
+
+    /**
      * Push a job in the queue
      *
      * @param int $mediaId
@@ -120,7 +158,7 @@ class JobQueueManager
         ];
 
         $sql = strtr(
-            "insert into :relation (:fields) values (:values) returning 1",
+            "INSERT INTO :relation (:fields) VALUES (:values) RETURNING 1",
             [
                 ':relation'   => 'public.media_job_queue',
                 ':fields'     => $this->getEscapedFieldList(array_keys($values)),
@@ -129,7 +167,5 @@ class JobQueueManager
         );
 
         $this->query($sql, array_values($values));
-
-        return $this;
     }
 }

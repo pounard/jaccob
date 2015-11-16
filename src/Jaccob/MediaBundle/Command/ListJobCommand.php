@@ -32,9 +32,28 @@ class ListJobCommand extends ContainerAwareCommand
 
         /* @var $jobFactory \Jaccob\MediaBundle\Type\Job\JobFactory */
         $jobFactory = $container->get('jaccob_media.job_factory');
-        /* @var $jobFactory \Jaccob\MediaBundle\Model\JobQueueManager */
+        /* @var $jobManager \Jaccob\MediaBundle\Model\JobQueueManager */
         $jobManager = $container->get('jaccob_media.job_manager');
 
-        var_dump($jobManager->runNext());
+        // $jobManager->runNext();
+        // return;
+
+        $rows = [];
+        foreach ($jobManager->listAll() as $data) {
+            $rows[] = [
+                $data['id'],
+                $data['type'],
+                $data['id_media'],
+                $data['ts_added']->format('Y-m-d H:i:s'),
+                $data['is_running'] ? 'Yes' : 'No',
+                $data['is_failed'] ? 'Yes' : 'No',
+            ];
+        }
+
+        $this->getHelper('table')
+            ->setHeaders(['id', 'type', 'media', 'added', 'running', 'failed'])
+            ->setRows($rows)
+            ->render($output)
+        ;
     }
 }
