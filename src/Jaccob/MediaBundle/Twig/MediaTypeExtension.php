@@ -210,7 +210,7 @@ class MediaTypeExtension extends \Twig_Extension implements ContainerAwareInterf
         $variables = $this->getVariables($media, $defaultSize, $modifier, false);
 
         if (!$variables) {
-          return;
+            return;
         }
         $variables += [
             'full'      => false,
