@@ -19,13 +19,14 @@ class RunNextJobCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('media:job-run-next')
+            ->setName('media:job-run')
             ->setDescription('Run next job')
             ->addOption(
                 'count',
                 'c',
                 InputOption::VALUE_OPTIONAL,
-                'How many jobs should be dequeued'
+                'How many jobs should be dequeued',
+                1
             )
         ;
     }
@@ -43,9 +44,6 @@ class RunNextJobCommand extends ContainerAwareCommand
         $jobManager = $container->get('jaccob_media.job_manager');
 
         $count = $input->getOption('count');
-        if (!$count) {
-            $count = 1;
-        }
 
         for ($i = 0; $i < $count; ++$i) {
             $jobManager->runNext();

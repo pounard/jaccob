@@ -4,6 +4,7 @@ namespace Jaccob\MediaBundle\Controller;
 
 use Jaccob\AccountBundle\AccountModelAware;
 use Jaccob\AccountBundle\Controller\AbstractUserAwareController;
+use Jaccob\AccountBundle\Security\Access;
 use Jaccob\AccountBundle\Security\Crypt;
 
 use Jaccob\MediaBundle\MediaModelAware;
@@ -170,6 +171,59 @@ class AlbumController extends AbstractUserAwareController
     }
 
     /**
+     * Edit form
+     */
+    public function editFormAction($albumId, Request $request)
+    {
+        $album = $this->findAlbumOr404($albumId);
+
+        $this->denyAccessUnlessGranted('edit', $album);
+
+        $form = $this
+            ->createFormBuilder($album)
+            ->add('user_name', 'text', [
+                'label'     => "Album title",
+                'required'  => false,
+                'attr'      => ['placeholder' => $album->getDisplayName()],
+            ])
+            ->add('access_level', 'choice', [
+                'label'     => "Visibility",
+                'choices'   => [
+                    Access::LEVEL_PRIVATE         => "Private",
+                    Access::LEVEL_PUBLIC_HIDDEN   => "Public (hidden)",
+                    Access::LEVEL_PUBLIC_VISIBLE  => "Public",
+                ],
+                'multiple'  => false,
+                'required'  => true,
+            ])
+            ->add("Update", 'submit', [
+                'attr' => ['class' => 'pull-right btn-primary'],
+            ])
+            ->getForm()
+        ;
+
+        if (Request::METHOD_POST === $request->getMethod()) {
+            if ($form->handleRequest($request)->isValid()) {
+
+                $this->getAlbumModel()->updateOne($album, ['user_name', 'access_level']);
+                $this->addFlash('success', "Changes have been successfully saved");
+
+                return $this->redirectToRoute('jaccob_media.album.view', [
+                    'albumId' => $album->id,
+                ]);
+
+            } else {
+                $this->addFlash('danger', "Please check the values you filled");
+            }
+        }
+
+        return $this->render('JaccobMediaBundle:Album:editForm.html.twig', [
+            'form'  => $form->createView(),
+            'album' => $album,
+        ]);
+    }
+
+    /**
      * Share form
      */
     public function shareFormAction($albumId, Request $request)
@@ -187,7 +241,7 @@ class AlbumController extends AbstractUserAwareController
         }
 
         $form = $this
-            ->createFormBuilder()
+            ->createFormBuilder($album)
             ->add('share_enabled', 'checkbox', [
                 'label'     => "Share this album",
                 'required'  => false,
@@ -195,23 +249,16 @@ class AlbumController extends AbstractUserAwareController
             ->add('share_password', 'text', [
                 'label'     => "Set a password",
                 'required'  => false,
+                'attr'      => ['placeholder' => "Password"],
             ])
-            ->add($saveLabel, 'submit')
+            ->add($saveLabel, 'submit', [
+                'attr' => ['class' => 'pull-right btn-primary'],
+            ])
             ->getForm()
         ;
 
         if (Request::METHOD_POST === $request->getMethod()) {
             if ($form->handleRequest($request)->isValid()) {
-
-                $data = $form->getData();
-
-                $album->share_enabled = (bool)$data['share_enabled'];
-
-                if ($data['share_password']) {
-                    $album->share_password = $data['share_password'];
-                } else {
-                    $album->share_password = null;
-                }
 
                 // Generate token if necessary
                 if (!$album->share_token && $album->share_enabled) {

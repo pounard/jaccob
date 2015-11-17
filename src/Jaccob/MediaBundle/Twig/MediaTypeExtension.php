@@ -61,6 +61,12 @@ class MediaTypeExtension extends \Twig_Extension implements ContainerAwareInterf
      */
     protected function getVariables(Media $media, $defaultSize = null, $modifier = null, $includeFull = false)
     {
+        // Better be safe than sorry, do not display anything when width
+        // and height cannot be computed
+        if (!$media->width || !$media->height) {
+            return false;
+        }
+
         $allowedSizes = $this->container->getParameter('jaccob_media.size.list');
         $allowedSizes = array_filter($allowedSizes, 'is_numeric');
         sort($allowedSizes);
@@ -79,9 +85,6 @@ class MediaTypeExtension extends \Twig_Extension implements ContainerAwareInterf
             $allowedSizes[] = 'full';
         }
 
-        $width  = $media->width;
-        $height = $media->height;
-
         $ret = ['derivatives' => []];
 
         foreach ($allowedSizes as $size) {
@@ -92,33 +95,35 @@ class MediaTypeExtension extends \Twig_Extension implements ContainerAwareInterf
             }
 
             // Default modifier is width, seems logic at this point
-            switch ($modifier) {
+            if ('full' !== $size) {
+                switch ($modifier) {
 
-                case 's':
-                    $width  = $size;
-                    $height = $size;
-                    break;
+                    case 's':
+                        $width  = $size;
+                        $height = $size;
+                        break;
 
-                case 'h':
-                    $height = $size;
-                    $width  = '';
-                    break;
+                    case 'h':
+                        $height = $size;
+                        $width  = ceil(($size / $height) * $media->width);
+                        break;
 
-                default:
-                case 'w':
-                    $width  = $size;
-                    $height = '';
-                    $modifier = 'w';
-                    break;
+                    default:
+                    case 'w':
+                        $width  = $size;
+                        $height = ceil(($size / $width) * $media->height);
+                        $modifier = 'w';
+                        break;
+                }
             }
 
             $derivative = [
                 // @todo Use symfony path generator
                 'href'      => '/' . $rel,
-                'width'     => $width,
-                'height'    => $height,
+                'width'     => 'full' === $size ? $media->width : $width,
+                'height'    => 'full' === $size ? $media->height : $height,
                 'size'      => $size,
-                'modifier'  => $modifier,
+                'modifier'  => 'full' === $size ? null : $modifier,
                 'mimetype'  => $media->mimetype,
             ];
 
@@ -147,6 +152,18 @@ class MediaTypeExtension extends \Twig_Extension implements ContainerAwareInterf
      */
     public function createMediaFull(\Twig_Environment $twig, Media $media, $defaultSize = null, $modifier = null)
     {
+        $variables = $this->getVariables($media, $defaultSize, $modifier, true);
+
+        if (!$variables) {
+            return;
+        }
+
+        $variables += [
+            'full'      => true,
+            'thumbnail' => false,
+            'viewport'  => 100,
+        ];
+
         $templateName = $this
             ->mediaHelper
             ->getType($media)
@@ -156,13 +173,6 @@ class MediaTypeExtension extends \Twig_Extension implements ContainerAwareInterf
         if (!$templateName) {
             $templateName = 'JaccobMediaBundle:Type:default.html.twig';
         }
-
-        $variables = $this->getVariables($media, $defaultSize, $modifier, true);
-        $variables += [
-            'full'      => true,
-            'thumbnail' => false,
-            'viewport'  => 100,
-        ];
 
         // @todo Needs something better than this
         if (false !== strpos($media->mimetype, 'video')) {
@@ -197,6 +207,21 @@ class MediaTypeExtension extends \Twig_Extension implements ContainerAwareInterf
      */
     public function createMediaThumbnail(\Twig_Environment $twig, Media $media, $defaultSize = null, $modifier = null, $includeFull = false)
     {
+        $variables = $this->getVariables($media, $defaultSize, $modifier, false);
+
+        if (!$variables) {
+          return;
+        }
+        $variables += [
+            'full'      => false,
+            'thumbnail' => true,
+            'viewport'  => 20,
+        ];
+
+        if (!$variables) {
+            return;
+        }
+
         $templateName = $this
             ->mediaHelper
             ->getType($media)
@@ -206,13 +231,6 @@ class MediaTypeExtension extends \Twig_Extension implements ContainerAwareInterf
         if (!$templateName) {
             $templateName = 'JaccobMediaBundle:Type:default.html.twig';
         }
-
-        $variables = $this->getVariables($media, $defaultSize, $modifier, false);
-        $variables += [
-            'full'      => false,
-            'thumbnail' => true,
-            'viewport'  => 20,
-        ];
 
         return $twig->render($templateName, $variables);
     }

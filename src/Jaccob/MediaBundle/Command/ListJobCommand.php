@@ -6,6 +6,7 @@ use Jaccob\MediaBundle\MediaModelAware;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ListJobCommand extends ContainerAwareCommand
@@ -20,10 +21,30 @@ class ListJobCommand extends ContainerAwareCommand
         $this
             ->setName('media:job-list')
             ->setDescription('List queued jobs')
+            ->addOption(
+                'page',
+                'p',
+                InputOption::VALUE_OPTIONAL,
+                'Which page to display',
+                1
+            )
+            ->addOption(
+                'limit',
+                'l',
+                InputOption::VALUE_OPTIONAL,
+                'Number of elements to display',
+                20
+            )
+            ->addOption(
+                'type',
+                't',
+                InputOption::VALUE_OPTIONAL,
+                'Filter by type'
+            )
         ;
     }
 
-    /**
+    /**app
      * {@inheritdoc}
      */
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -35,11 +56,20 @@ class ListJobCommand extends ContainerAwareCommand
         /* @var $jobManager \Jaccob\MediaBundle\Model\JobQueueManager */
         $jobManager = $container->get('jaccob_media.job_manager');
 
-        // $jobManager->runNext();
-        // return;
+        $conditions = [];
+
+        $limit  = $input->getOption('limit');
+        $page   = $input->getOption('page');
+        $type   = $input->getOption('type');
+
+        if ($type) {
+          $conditions['type'] = $type;
+        }
+
+        $total = $jobManager->countAll($conditions);
 
         $rows = [];
-        foreach ($jobManager->listAll() as $data) {
+        foreach ($jobManager->listAll($conditions, $limit, $page) as $data) {
             $rows[] = [
                 $data['id'],
                 $data['type'],
@@ -55,6 +85,13 @@ class ListJobCommand extends ContainerAwareCommand
             ->setRows($rows)
             ->render($output)
         ;
+
+        $output->writeln(sprintf("Displaying %d/%d jobs, page %d/%d",
+            count($rows),
+            $total,
+            $page,
+            ceil($total / $limit)
+        ));
     }
 }
 

@@ -28,7 +28,7 @@ jaccob_media.album.share:
 
 jaccob_media.album.edit:
     path:     /album/{albumId}/edit
-    defaults: { _controller: "JaccobMediaBundle:Album:edit" }
+    defaults: { _controller: "JaccobMediaBundle:Album:editForm" }
     requirements:
         albumId: \d+
 
@@ -54,7 +54,7 @@ jaccob_media.media.view:
 
 jaccob_media.media.edit:
     path:     /view/{mediaId}/edit
-    defaults: { _controller: "JaccobMediaBundle:Media:edit" }
+    defaults: { _controller: "JaccobMediaBundle:Media:editForm" }
     requirements:
         mediaId: \d+
 

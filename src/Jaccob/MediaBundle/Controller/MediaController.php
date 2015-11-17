@@ -7,6 +7,8 @@ use Jaccob\AccountBundle\Controller\AbstractUserAwareController;
 
 use Jaccob\MediaBundle\MediaModelAware;
 
+use Symfony\Component\HttpFoundation\Request;
+
 class MediaController extends AbstractUserAwareController
 {
     use MediaModelAware;
@@ -61,6 +63,67 @@ class MediaController extends AbstractUserAwareController
             'previous'  => $previous,
             'next'      => $next,
             'size'      => $this->getParameter('jaccob_media.size.fullscreen'),
+        ]);
+    }
+
+    /**
+     * Edit form
+     */
+    public function editFormAction($mediaId, Request $request)
+    {
+        $media    = $this->findMediaOr404($mediaId);
+        $album    = $this->getAlbumModel()->findByPK(['id' => $media->id_album]);
+
+        $this->denyAccessUnlessGranted('view', $album);
+
+        $form = $this
+            ->createFormBuilder($media)
+            ->add('user_name', 'text', [
+                'label'     => "Media title",
+                'required'  => false,
+                'attr'      => ['placeholder' => $media->getDisplayName()],
+            ])
+            ->add("update", 'submit', [
+                'attr' => [
+                    'class' => 'pull-right btn-primary',
+                    'value' => 'Update',
+                ],
+            ])
+            ->add("set_cover", 'submit', [
+                'attr' => [
+                    'class' => 'pull-right btn-success',
+                    'value' => "Set as cover",
+                ],
+            ])
+            ->getForm()
+        ;
+
+        if (Request::METHOD_POST === $request->getMethod()) {
+            if ($form->handleRequest($request)->isValid()) {
+
+                if ($form->get('update')->isClicked()) {
+                    $this->getMediaModel()->updateOne($media, ['user_name']);
+                    $this->addFlash('success', "Changes have been successfully saved");
+                }
+                if ($form->get('set_cover')->isClicked()) {
+                    $album->id_media_preview = $media->id;
+                    $this->getAlbumModel()->updateOne($album, ['id_media_preview']);
+                    $this->addFlash('success', "Album cover has been changed");
+                }
+
+                return $this->redirectToRoute('jaccob_media.media.view', [
+                    'mediaId' => $media->id,
+                ]);
+
+            } else {
+                $this->addFlash('danger', "Please check the values you filled");
+            }
+        }
+
+        return $this->render('JaccobMediaBundle:Media:editForm.html.twig', [
+            'form'  => $form->createView(),
+            'album' => $album,
+            'media' => $media,
         ]);
     }
 }

@@ -13,8 +13,8 @@
 {% block full %}
   <picture>
     {% for derivative in derivatives %}
-      <source srcset="{{ derivative.href }} 1x" media="(max-width: {{ derivative.width }}px)"/>
+      <source srcset="{{ derivative.href }}" media="(max-width: {{ derivative.width }}px)"/>
     {% endfor %}
-    <img srcset="{{ default.href }} 1x" alt="{{ media.displayName }}"/>
+    <img srcset="{{ default.href }}" alt="{{ media.displayName }}"/>
   </picture>
 {% endblock %}

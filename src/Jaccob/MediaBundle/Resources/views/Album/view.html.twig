@@ -24,7 +24,7 @@
       {% for media in mediaList %}
         <div class="media-thumbnail">
           <a href="{{ path('jaccob_media.media.view.full', {mediaId: media.id}) }}" title="{{ media.displayName }}">
-            {{ media_thumbnail(media, size, size * 2, 'w') }}
+            {{ media_thumbnail(media, null, 'w') }}
           </a>
         </div>
       {% endfor %}

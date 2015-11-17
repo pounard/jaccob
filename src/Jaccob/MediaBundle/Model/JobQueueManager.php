@@ -143,11 +143,11 @@ class JobQueueManager
      *
      * @param mixed[] $conditions
      * @param int $limit
-     * @param int $offset
+     * @param int $page
      *
      * @return mixed[][]
      */
-    public function listAll($conditions = [], $limit = 100, $offset = 0)
+    public function listAll($conditions = [], $limit = 100, $page = 1)
     {
         $where = new Where();
         if (empty($conditions)) {
@@ -170,10 +170,42 @@ class JobQueueManager
         ", [
             ':conditions' => (string)$where,
             ':limit'      => (int)$limit,
-            ':offset'     => (int)$offset,
+            ':offset'     => (int)(($page - 1) * $limit),
         ]);
 
         return $this->query($sql, $where->getValues());
+    }
+
+    /**
+     * Count amongst all jobs
+     *
+     * Alias of listAll() but returning only the count
+     *
+     * @param mixed[] $conditions
+     *
+     * @return int
+     */
+    public function countAll($conditions = [])
+    {
+        $where = new Where();
+        if (empty($conditions)) {
+            $where->andWhere('1 = 1');
+        } else {
+            foreach ($conditions as $key => $value) {
+                $where->andWhere($this->escapeIdentifier($key) . ' = $*', $value);
+            }
+        }
+
+        $sql = strtr("
+            SELECT COUNT(*)
+            FROM media_job_queue
+            WHERE
+                :conditions
+        ", [
+            ':conditions' => (string)$where,
+        ]);
+
+        return $this->query($sql, $where->getValues())->current()['count'];
     }
 
     /**
