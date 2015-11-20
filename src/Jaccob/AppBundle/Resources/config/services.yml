@@ -1,3 +1,12 @@
+parameters:
+
+    # Redis configuration
+    jaccob.redis.enabled: false
+    jaccob.redis.server: 127.0.0.1 # This can be a unix socket path
+    jaccob.redis.port: 6379
+    jaccob.redis.database: 7
+    jaccob.redis.passord: ~
+
 services:
 
     jaccob.menu_provider:
@@ -6,3 +15,10 @@ services:
         calls:
             - [setContainer, ["@service_container"]]
         tags: [{ name: knp_menu.provider }]
+
+    jaccob.redis.client:
+        class: Redis
+        calls:
+            - [connect, ["%jaccob.redis.server%", "%jaccob.redis.port%"]]
+            - [select, ["%jaccob.redis.database%"]]
+        # @todo Proxify or compile using a pass to call auth() or select()

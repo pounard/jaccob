@@ -105,3 +105,11 @@ CREATE TABLE media_metadata (
     FOREIGN KEY (id_media) REFERENCES media(id) ON DELETE CASCADE
 );
 
+CREATE TABLE external_session_acl (
+    id_album INTEGER NOT NULL,
+    id_session VARCHAR(255) NOT NULL,
+    ts_expire TIMESTAMP DEFAULT NULL,
+    FOREIGN KEY (id_album) REFERENCES album(id) ON DELETE CASCADE,
+    PRIMARY KEY (id_album, id_session)
+);
+

@@ -3,16 +3,19 @@
 namespace Jaccob\MediaBundle\Security\Authorization\Voter;
 
 use Jaccob\AccountBundle\Security\User\JaccobUser;
+
+use Jaccob\MediaBundle\Event\AlbumAuthEvent;
 use Jaccob\MediaBundle\Model\Album;
-use Jaccob\MediaBundle\Model\Media;
 use Jaccob\MediaBundle\MediaModelAware;
 
-use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\AbstractVoter;
 
 class AlbumVoter extends AbstractVoter
 {
     use MediaModelAware;
+    use ContainerAwareTrait;
 
     /**
      * View the album or its medias
@@ -30,16 +33,16 @@ class AlbumVoter extends AbstractVoter
     const SHARE = 'share';
 
     /**
-     * @var \Symfony\Component\HttpFoundation\Session\Session
+     * @var \Symfony\Component\HttpFoundation\Session\SessionInterface
      */
     protected $session;
 
     /**
      * Set session
      *
-     * @param \Symfony\Component\HttpFoundation\Session\Session $session
+     * @param \Symfony\Component\HttpFoundation\Session\SessionInterface $session
      */
-    public function setSession(Session $session)
+    public function setSession(SessionInterface $session)
     {
         $this->session = $session;
     }
@@ -72,32 +75,43 @@ class AlbumVoter extends AbstractVoter
         if (!$isAnonymous && !$user instanceof JaccobUser) {
             return false;
         }
-
         if (!$album instanceof Album) {
             return false;
         }
 
+        $isAuthorized = false;
+
         switch ($attribute) {
 
             case self::VIEW:
+
                 // Either the user is owner, or user
                 if (!$isAnonymous && $user->getAccount()->getId() === $album->id_account) {
-                    return true;
+                    $isAuthorized = true;
+                } else {
+                    // Check in session
+                    $isAuthorized = $this
+                        ->getAlbumModel()
+                        ->isAlbumInSession(
+                            $album->id,
+                            $this->session->getId()
+                        )
+                    ;
                 }
-                // Check in session
-                return $this
-                    ->getAlbumModel()
-                    ->isAlbumInSession(
-                        $album->id,
-                        $this->session->getId()
-                    );
+                break;
 
             case self::EDIT:
             case self::SHARE:
                 // Only owner can edit his own album for now
-                return !$isAnonymous && $user->getAccount()->getId() === $album->id_account;
+                $isAuthorized = !$isAnonymous && $user->getAccount()->getId() === $album->id_account;
+                break;
         }
 
-        return false;
+        $this->container->get('event_dispatcher')->dispatch(
+            AlbumAuthEvent::AUTH,
+            new AlbumAuthEvent([$album->id], $this->session->getId(), $isAuthorized)
+        );
+
+        return $isAuthorized;
     }
 }

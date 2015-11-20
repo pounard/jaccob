@@ -28,3 +28,10 @@ parameters:
     # Set this to true and the request password will give you the password
     # on screen instead of mailing it
     jaccob_account.password_request_as_message: false
+
+    # Redis configuration
+    jaccob.redis.enabled: false
+    jaccob.redis.server: 127.0.0.1 # This can be a unix socket path
+    jaccob.redis.port: 6379
+    jaccob.redis.database: 7
+    jaccob.redis.passord: ~

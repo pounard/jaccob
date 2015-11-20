@@ -36,6 +36,7 @@ services:
         class: Jaccob\MediaBundle\Security\Authorization\Voter\AlbumVoter
         public: false
         calls:
+            - [setContainer, ["@service_container"]]
             # FIXME This should be the "media" session
             - [setMediaSession, ["@pomm.default_session"]]
             - [setSession, ["@session"]]
@@ -132,6 +133,30 @@ services:
 
     jaccob_media.job_factory:
         class: Jaccob\MediaBundle\Type\Job\JobFactory
+
+    #
+    # External security (HTTPd authorization for media)
+    # @see \Jaccob\MediaBundle\Security\External\SessionAclManagerInterface
+    #
+
+    # You can swtich between the next implementations
+    # First one will use Redis and require you to have a working server
+    jaccob_media.security.external:
+        class: Jaccob\MediaBundle\Security\External\PhpRedisSessionAclManager
+        calls:
+            - [setRedisClient, ["@jaccob.redis.client"]]
+
+    # jaccob_media.security.external:
+    #     class: Jaccob\MediaBundle\Security\External\PommSessionAclManager
+    #     calls:
+    #         - [setSession, ["@pomm.default_session"]]
+
+    jaccob_media.security.external.listener:
+        class: Jaccob\MediaBundle\EventListener\ExternalSessionAclListener
+        calls:
+          - [setAclManager, ["@jaccob_media.security.external"]]
+        tags:
+          - { name: kernel.event_listener, event: jaccob_media.album.auth, method: onAuthorization }
 
     #
     # Jobs
