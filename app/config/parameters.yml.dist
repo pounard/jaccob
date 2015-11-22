@@ -22,6 +22,7 @@ parameters:
     secret:            ThisTokenIsNotSoSecretChangeIt
 
     # This is a path relative to the web/ public directory
+    # This probably should not be changed, a few code path would fail
     jaccob_media.directory.relative: media/th
     jaccob_media.directory.upload: /data/private/photos
 
