@@ -98,6 +98,11 @@ class AlbumVoter extends AbstractVoter
                         )
                     ;
                 }
+
+                $this->container->get('event_dispatcher')->dispatch(
+                    AlbumAuthEvent::AUTH,
+                    new AlbumAuthEvent([$album->id], $this->session->getId(), $isAuthorized)
+                );
                 break;
 
             case self::EDIT:
@@ -106,11 +111,6 @@ class AlbumVoter extends AbstractVoter
                 $isAuthorized = !$isAnonymous && $user->getAccount()->getId() === $album->id_account;
                 break;
         }
-
-        $this->container->get('event_dispatcher')->dispatch(
-            AlbumAuthEvent::AUTH,
-            new AlbumAuthEvent([$album->id], $this->session->getId(), $isAuthorized)
-        );
 
         return $isAuthorized;
     }
