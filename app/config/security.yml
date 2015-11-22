@@ -52,6 +52,7 @@ security:
 
     access_control:
         - { path: "^/media/th/", roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: "^/media(/|)$", roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: "^(/media/view|/media/share)", roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: "^/media/album/[^/]+$", roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/, roles: IS_AUTHENTICATED_FULLY }

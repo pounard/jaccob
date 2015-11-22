@@ -70,6 +70,29 @@ class AlbumModel extends Model
         }
     }
 
+    public function paginateAlbumsForSession($sessionId)
+    {
+        $sql = "
+            SELECT DISTINCT(a.id), a.*
+            FROM :table a
+            JOIN session_share ss
+                ON ss.id_album = a.id
+            WHERE (
+                ss.id_session = $*
+            )
+            ORDER BY a.ts_user_date_end DESC
+        ";
+
+        $sql = strtr($sql, [
+            ':table' => $this->getStructure()->getRelation(),
+        ]);
+
+        $values = [$sessionId];
+        // $total  = $this->fetchSingleValue("SELECT COUNT(*) FROM (" . $sql . ") AS c", '', $values);
+
+        return $this->paginateQuery($sql, $values, /* $total */ 100, 100);
+    }
+
     public function paginateAlbumsFor($accountId)
     {
         $sql = "
@@ -83,7 +106,7 @@ class AlbumModel extends Model
             )
             ORDER BY a.ts_user_date_end DESC
         ";
-  
+
         $sql = strtr($sql, [
             ':table' => $this->getStructure()->getRelation(),
         ]);

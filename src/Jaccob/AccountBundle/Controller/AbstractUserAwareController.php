@@ -21,6 +21,16 @@ class AbstractUserAwareController extends Controller
     }
 
     /**
+     * Is the current user anonymous
+     *
+     * @return boolean
+     */
+    public function isCurrentUserAnonymous()
+    {
+        return $this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_ANONYMOUSLY');
+    }
+
+    /**
      * Get current logged in user account
      *
      * @return \Jaccob\AccountBundle\Model\Account

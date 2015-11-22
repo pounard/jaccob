@@ -25,7 +25,7 @@ class ExternalSessionAclListener
         if ($event->isAuthorized()) {
             $this->aclManager->addAlbumAuthorization($event->getSessionId(), $event->getAlbumIdList());
         } else {
-            $this->aclManager->removeAlbumAuthorization($event->getSessionId(), $event->getAlbumList());
+            $this->aclManager->removeAlbumAuthorization($event->getSessionId(), $event->getAlbumIdList());
         }
     }
 }

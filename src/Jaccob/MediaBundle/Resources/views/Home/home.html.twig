@@ -1,10 +1,12 @@
 {% extends 'JaccobMediaBundle:Home:layout.html.twig' %}
 
 {% block actions %}
-  <a href="{{ path('jaccob_media.album.create_from') }}" class="btn btn-primary">
-    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-    New album
-  </a>
+  {% if canAdd %}
+    <a href="{{ path('jaccob_media.album.create_from') }}" class="btn btn-primary">
+      <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+      New album
+    </a>
+  {% endif %}
 {% endblock %}
 
 {% block main %}

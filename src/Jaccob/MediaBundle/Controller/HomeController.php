@@ -19,16 +19,30 @@ class HomeController extends AbstractUserAwareController
      */
     public function homeAction(Request $request)
     {
-        $currentAccount = $this->getCurrentUserAccount();
-
         // @todo List all seeable albums (paginated, sorted).
         // @todo Request for sorting and filtering
 
-        $albumList = $this
-            ->getAlbumModel()
-            ->paginateAlbumsFor($currentAccount->getId())
-            ->getIterator()
-        ;
+        if ($this->isCurrentUserAnonymous()) {
+            $albumList = $this
+                ->getAlbumModel()
+                ->paginateAlbumsForSession(
+                    $this
+                        ->get('session')
+                        ->getId()
+                )
+                ->getIterator()
+            ;
+        } else {
+            $albumList = $this
+                ->getAlbumModel()
+                ->paginateAlbumsFor(
+                    $this
+                        ->getCurrentUserAccount()
+                        ->getId()
+                )
+                ->getIterator()
+            ;
+        }
 
         $authMap = [];
 
@@ -47,7 +61,6 @@ class HomeController extends AbstractUserAwareController
             }
         }
 
-
         $this->get('event_dispatcher')->dispatch(
             AlbumAuthEvent::AUTH,
             new AlbumAuthEvent($authMap, $this->get('session')->getId(), true)
@@ -56,6 +69,7 @@ class HomeController extends AbstractUserAwareController
         return $this->render('JaccobMediaBundle:Home:home.html.twig', [
             'albums'    => $albumList,
             'previews'  => $previewMap,
+            'canAdd'    => !$this->isCurrentUserAnonymous(),
             "size"      => $this->getParameter('jaccob_media.size.thumbnail')
         ]);
     }
