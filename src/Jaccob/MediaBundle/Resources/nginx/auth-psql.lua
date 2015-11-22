@@ -6,8 +6,10 @@
 --     }
 --
 -- This requires that:
+--
 --   * the jaccob_media.security.external service is set to use the
 --     Jaccob\MediaBundle\Security\External\PommSessionAclManager class.
+--
 --   * the jaccob_media.path_builder service is set to use the
 --     Jaccob\MediaBundle\Util\SimplePathBuilder
 --
