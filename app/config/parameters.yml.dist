@@ -21,8 +21,8 @@ parameters:
     # A secret key that's used to generate certain security-related tokens
     secret:            ThisTokenIsNotSoSecretChangeIt
 
-    jaccob_media.directory.public: /var/www/jaccob/web/media
-    jaccob_media.directory.relative: media
+    # This is a path relative to the web/ public directory
+    jaccob_media.directory.relative: media/th
     jaccob_media.directory.upload: /data/private/photos
 
     # Set this to true and the request password will give you the password

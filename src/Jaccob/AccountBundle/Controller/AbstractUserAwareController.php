@@ -27,7 +27,10 @@ class AbstractUserAwareController extends Controller
      */
     public function isCurrentUserAnonymous()
     {
-        return $this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_ANONYMOUSLY');
+        return !$this
+            ->get('security.authorization_checker')
+            ->isGranted('IS_AUTHENTICATED_REMEMBERED')
+        ;
     }
 
     /**

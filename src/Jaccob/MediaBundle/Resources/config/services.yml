@@ -3,8 +3,8 @@ parameters:
     # @todo Those next two could be remove or determined
     # dynamically using the bundle routing prefix to avoid
     # problems
-    jaccob_media.directory.public: /var/www/jaccob/web/media/th
     jaccob_media.directory.relative: media/th
+    jaccob_media.directory.public: "%kernel.root_dir%/../web/%jaccob_media.directory.relative%"
     jaccob_media.directory.upload: /data/private/photos
     # jaccob_media.image.default: 
 
