@@ -23,6 +23,7 @@ class HomeController extends AbstractUserAwareController
         // @todo Request for sorting and filtering
 
         if ($this->isCurrentUserAnonymous()) {
+
             $albumList = $this
                 ->getAlbumModel()
                 ->paginateAlbumsForSession(
@@ -32,6 +33,11 @@ class HomeController extends AbstractUserAwareController
                 )
                 ->getIterator()
             ;
+
+            if (!count($albumList)) {
+                throw $this->createAccessDeniedException();
+            }
+
         } else {
             $albumList = $this
                 ->getAlbumModel()

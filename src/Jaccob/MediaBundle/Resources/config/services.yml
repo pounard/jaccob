@@ -43,13 +43,6 @@ services:
         tags:
             - { name: security.voter }
 
-    jaccob_media.twig.media_type:
-        class: Jaccob\MediaBundle\Twig\MediaTypeExtension
-        tags: [{ name: twig.extension }]
-        calls:
-            - [setContainer, ["@service_container"]]
-            - [setMediaHelper, ["@jaccob_media.media_helper"]]
-
     jaccob_media.menu_provider:
         class: Jaccob\MediaBundle\Menu\MediaMenuProvider
         arguments: ["@knp_menu.factory"]
@@ -157,6 +150,23 @@ services:
           - [setAclManager, ["@jaccob_media.security.external"]]
         tags:
           - { name: kernel.event_listener, event: jaccob_media.album.auth, method: onAuthorization }
+
+    #
+    # Twig extensions
+    #
+
+    jaccob_media.twig.media_type:
+        class: Jaccob\MediaBundle\Twig\MediaTypeExtension
+        tags: [{ name: twig.extension }]
+        calls:
+            - [setContainer, ["@service_container"]]
+            - [setMediaHelper, ["@jaccob_media.media_helper"]]
+
+    jaccob_media.twig.pomm_pager:
+        class: Jaccob\MediaBundle\Twig\PommPagerExtension
+        tags: [{ name: twig.extension }]
+        calls:
+            - [setContainer, ["@service_container"]]
 
     #
     # Jobs

@@ -39,7 +39,7 @@ class MediaModel extends Model
         return $this->query($sql, $primary_keys);
     }
 
-    public function findByAlbum($albumId, $limit = 200, $page = 1)
+    public function findByAlbum($albumId, $limit = 10, $page = 1)
     {
         $where = (new Where())
             ->andWhere('id_album = $*', [$albumId])

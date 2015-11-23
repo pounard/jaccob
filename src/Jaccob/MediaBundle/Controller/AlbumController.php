@@ -46,7 +46,9 @@ class AlbumController extends AbstractUserAwareController
 
         $this->denyAccessUnlessGranted('view', $album);
 
-        $mediaPager = $this->getMediaModel()->findByAlbum($albumId);
+        $page = $request->get('page', 1);
+
+        $mediaPager = $this->getMediaModel()->findByAlbum($albumId, 20, $page);
         $mediaList  = $mediaPager->getIterator();
 
         return $this->render('JaccobMediaBundle:Album:view.html.twig', [
@@ -54,6 +56,7 @@ class AlbumController extends AbstractUserAwareController
             'owner'     => $owner,
             'album'     => $album,
             'mediaList' => $mediaList,
+            'pager'     => $mediaPager,
             'size'      => $this->getParameter('jaccob_media.size.thumbnail.grid')
         ]);
     }

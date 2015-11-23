@@ -30,4 +30,7 @@
       {% endfor %}
     </div>
   </div>
+
+  {{ pager('jaccob_media.album.view', {albumId: album.id}, pager) }}
+
 {% endblock %}
