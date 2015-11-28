@@ -51,6 +51,16 @@ class Crypt
     }
 
     /**
+     * Create a non predictable plain text random hash
+     *
+     * @return string
+     */
+    static public function createRandomPlainToken()
+    {
+        return preg_replace('/[^a-zA-Z0-9]+/', '', self::createRandomToken());
+    }
+
+    /**
      * Create new salt
      *
      * @return string

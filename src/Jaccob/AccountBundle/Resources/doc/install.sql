@@ -21,6 +21,14 @@ INSERT INTO account (id, mail, user_name, is_active, is_admin) VALUES (0, 'Anony
 INSERT INTO account (mail, user_name, is_active, is_admin) VALUES ('pounard@processus.org', 'Pierre', TRUE, TRUE);
 -- INSERT INTO account (mail, user_name, is_active, is_admin) VALUES ('jean.test@processus.org', 'Jean Test', TRUE, FALSE);
 
+-- One time login temporary storage
+CREATE TABLE account_onetime (
+    id_account INTEGER NOT NULL,
+    login_token VARCHAR(255) DEFAULT NULL,
+    ts_expire TIMESTAMP NOT NULL DEFAULT NOW(),
+    FOREIGN KEY (id_account) REFERENCES account (id) ON DELETE CASCADE
+);
+
 CREATE TABLE session (
     id VARCHAR(255) NOT NULL,
     created TIMESTAMP NOT NULL DEFAULT NOW(),

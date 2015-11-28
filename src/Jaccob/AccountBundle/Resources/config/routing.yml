@@ -10,6 +10,14 @@ jaccob_account.request_password:
     path:     /login/request-password
     defaults: { _controller: 'JaccobAccountBundle:Security:requestPassword' }
 
+jaccob_account.change_password:
+    path:     /change-password
+    defaults: { _controller: 'JaccobAccountBundle:Security:changePassword' }
+
+jaccob_account.one_time_login:
+    path:     /login/one/{accountId}/{token}
+    defaults: { _controller: 'JaccobAccountBundle:Security:oneTimeLogin' }
+
 jaccob_account.login_check:
     path:     /login/go
 

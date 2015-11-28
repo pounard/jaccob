@@ -51,6 +51,7 @@ security:
             anonymous:                ~
 
     access_control:
+        - { path: "^/u/login/one", roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: "^/media/th/", roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: "^/media(/|)$", roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: "^(/media/view|/media/share)", roles: IS_AUTHENTICATED_ANONYMOUSLY }

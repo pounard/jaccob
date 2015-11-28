@@ -1,0 +1,10 @@
+{% extends '::centered-form.html.twig' %}
+{% form_theme form 'bootstrap_3_horizontal_layout.html.twig' %}
+
+{% block title %}Password request{% endblock %}
+
+{% block form %}
+  <p>Please type in your new password.</p>
+
+  {{ form(form) }}
+{% endblock %}
