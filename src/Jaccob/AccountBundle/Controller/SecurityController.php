@@ -105,11 +105,11 @@ class SecurityController extends Controller
                 'method' => Request::METHOD_POST,
                 'attr' => ['novalidate' => 'novalidate'],
             ])
-            ->add('email', 'email', [
+            ->add('email', 'Symfony\Component\Form\Extension\Core\Type\EmailType', [
                 'label' => "Email",
                 'required' => true,
             ])
-            ->add('submit', 'submit', [
+            ->add('submit', 'Symfony\Component\Form\Extension\Core\Type\SubmitType', [
                 'label' => "Request new password",
             ])
             ->getForm()

@@ -14,7 +14,7 @@ class MediaMenuProvider extends AbstractSecurityAwareMenuProvider
         switch ($name) {
 
             case 'main.media':
-                $account = $this->getCurrentAccount();
+                $account = $this->getCurrentUserAccount();
 
                 if ($account) {
                     $menu = $this->factory->createItem('Tasks', ['route' => 'jaccob_media.home']);

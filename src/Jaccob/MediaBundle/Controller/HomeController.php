@@ -2,7 +2,7 @@
 
 namespace Jaccob\MediaBundle\Controller;
 
-use Jaccob\AccountBundle\Controller\AbstractUserAwareController;
+use Jaccob\AccountBundle\SecurityAware;
 
 use Jaccob\MediaBundle\Event\AlbumAuthEvent;
 use Jaccob\MediaBundle\MediaModelAware;
@@ -10,9 +10,10 @@ use Jaccob\MediaBundle\MediaModelAware;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
-class HomeController extends AbstractUserAwareController
+class HomeController extends Controller
 {
     use MediaModelAware;
+    use SecurityAware;
 
     /**
      * List of user visible albums

@@ -7,13 +7,14 @@ use Jaccob\MediaBundle\Model\Media;
 use Jaccob\MediaBundle\Model\MediaDerivative;
 use Jaccob\MediaBundle\Type\TypeFinderService;
 
-use Symfony\Component\DependencyInjection\ContainerAware;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 /**
  * Sorry for the name
  */
-class MediaHelper extends ContainerAware
+class MediaHelper
 {
+    use ContainerAwareTrait;
     use MediaModelAware;
 
     /**

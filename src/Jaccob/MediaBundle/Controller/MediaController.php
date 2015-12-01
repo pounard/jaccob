@@ -3,16 +3,16 @@
 namespace Jaccob\MediaBundle\Controller;
 
 use Jaccob\AccountBundle\AccountModelAware;
-use Jaccob\AccountBundle\Controller\AbstractUserAwareController;
 
 use Jaccob\MediaBundle\MediaModelAware;
 
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
-class MediaController extends AbstractUserAwareController
+class MediaController extends Controller
 {
-    use MediaModelAware;
     use AccountModelAware;
+    use MediaModelAware;
 
     public function viewAction($mediaId)
     {

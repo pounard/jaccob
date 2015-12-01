@@ -13,7 +13,7 @@ class ConfigureMenuListener extends AbstractSecurityAwareMenuListener
     {
         $menu = $event->getMenu();
 
-        $account = $this->getCurrentAccount();
+        $account = $this->getCurrentUserAccount();
 
         if ($account) {
 

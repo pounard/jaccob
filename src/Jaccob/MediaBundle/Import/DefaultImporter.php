@@ -15,17 +15,19 @@ use Jaccob\MediaBundle\Util\PathBuilderAwareTrait;
 
 use PommProject\Foundation\Where;
 
-use Symfony\Component\DependencyInjection\ContainerAware;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Default importer implementat that must be used by any other
  */
-class DefaultImporter extends ContainerAware
+class DefaultImporter implements ContainerAwareInterface
 {
     use MediaHelperAwareTrait;
     use MediaModelAware;
     use PathBuilderAwareTrait;
+
+    protected $container;
 
     /**
      * Find file mimetype
@@ -71,7 +73,7 @@ class DefaultImporter extends ContainerAware
      */
     public function setContainer(ContainerInterface $container = null)
     {
-        parent::setContainer($container);
+        $this->container = $container;
 
         if (!$container) {
             return;

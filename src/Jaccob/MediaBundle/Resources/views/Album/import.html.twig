@@ -1,0 +1,65 @@
+{% extends 'JaccobMediaBundle:Home:layout.html.twig' %}
+
+{% block breadcrumb %}
+  <li><a href="{{ path('jaccob_media.home') }}">Media</a></li>
+  <li class="active">Import album</li>
+{% endblock %}
+
+{% block actions %}
+  <a href="{{ path('jaccob_media.home') }}" class="btn btn-danger">
+    Cancel
+  </a>
+{% endblock %}
+
+{% block main %}
+  <h2>Let's start with a bit of help</h2>
+
+  <div class="well">
+    <p>
+      In order to import an album, you must first put it somewhere I can read
+      it. I don't care about the specific place you'd store it, but <strong>I
+      need to you to give me a valid <em>URI</em> I will understand</strong>.
+    </p>
+
+    <p>
+      <strong>Anything that starts by</strong> <code>http://</code>, <code>sftp://</code>,
+      <code>ftp://</code> will be fine.
+      If I need a username and a password to get it, please specify it into the
+      URI this way&nbsp;:
+      <code>ftp://USERNAME:PASSWORD@example.com/some/path/photos.zip</code>
+    </p>
+
+    <p>
+      I won't ask nor recommend you to give me any password, but if you give any
+      <strong>I will never store it or use it behind your back</strong>&nbsp;!
+    </p>
+
+    <p>
+      It's not magic, but I can import either an archive, or a folder I can read,
+      but some limitations are in effect&nbsp;:
+      <ul>
+        <li>
+          <p>
+            I an read <strong>folders</strong> with <code>sftp://</code> and
+            <code>ftp://</code>&nbsp;;
+          </p>
+        </li>
+        <li>
+          <p>
+            For all the others, I need you to give me a <strong>single archive file</strong>
+            I will recognize any of the following formats: <code>rar</code>, <code>tar</code>
+            or <code>zip</code>.
+          </p>
+        </li>
+      </ul>
+    </p>
+
+    <p>
+      If you are ready to go, proceed with the following form.
+    </p>
+  </div>
+
+  <h2>Yes ! I understood it all !</h2>
+
+  {{ form(form) }}
+{% endblock %}

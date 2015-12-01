@@ -8,11 +8,12 @@ use Jaccob\AccountBundle\SecurityAware;
 use Knp\Menu\FactoryInterface;
 use Knp\Menu\Provider\MenuProviderInterface;
 
-use Symfony\Component\DependencyInjection\ContainerAware;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
-abstract class AbstractSecurityAwareMenuProvider extends ContainerAware implements MenuProviderInterface
+abstract class AbstractSecurityAwareMenuProvider implements MenuProviderInterface
 {
     use AccountModelAware;
+    use ContainerAwareTrait;
     use SecurityAware;
 
     /**

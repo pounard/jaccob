@@ -12,10 +12,11 @@ use Jaccob\MediaBundle\Util\Date;
 use Jaccob\MediaBundle\Util\FileSystem;
 use Jaccob\MediaBundle\Util\MediaHelperAwareTrait;
 
-use Symfony\Component\DependencyInjection\ContainerAware;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
-class VideoType extends ContainerAware implements TypeInterface
+class VideoType extends AbstractType implements TypeInterface
 {
+    use ContainerAwareTrait;
     use MediaHelperAwareTrait;
     use MediaModelAware;
 
@@ -86,14 +87,6 @@ class VideoType extends ContainerAware implements TypeInterface
         }
 
         return $ret;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isValid()
-    {
-        return true;
     }
 
     /**

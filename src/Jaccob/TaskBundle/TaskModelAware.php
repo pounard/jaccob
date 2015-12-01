@@ -3,7 +3,8 @@
 namespace Jaccob\TaskBundle;
 
 use PommProject\Foundation\Session;
-use Symfony\Component\DependencyInjection\ContainerAware;
+
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 trait TaskModelAware
 {
@@ -33,7 +34,7 @@ trait TaskModelAware
             return $this->pommSession;
         }
 
-        if ($this instanceof ContainerAware) {
+        if ($this instanceof ContainerAwareInterface) {
             return $this->container->get('pomm')->getSession('default');
         }
 

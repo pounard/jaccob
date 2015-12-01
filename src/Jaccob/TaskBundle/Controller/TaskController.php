@@ -2,7 +2,8 @@
 
 namespace Jaccob\TaskBundle\Controller;
 
-use Jaccob\AccountBundle\Controller\AbstractUserAwareController;
+use Jaccob\AccountBundle\SecurityAware;
+
 use Jaccob\TaskBundle\Model\Task;
 use Jaccob\TaskBundle\TaskModelAware;
 
@@ -11,8 +12,9 @@ use PommProject\Foundation\Where;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
-class TaskController extends AbstractUserAwareController
+class TaskController extends Controller
 {
+    use SecurityAware;
     use TaskModelAware;
 
     /**

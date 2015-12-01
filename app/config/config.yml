@@ -15,7 +15,7 @@ framework:
     validation:      { enable_annotations: true }
     templating:
         engines: ['twig']
-        assets_version: 1.0
+        # assets_version: 1.0
     default_locale:  "%locale%"
     trusted_hosts:   ~
     trusted_proxies: ~
@@ -24,6 +24,7 @@ framework:
         handler_id:  ~ # jaccob_session_storage
     fragments:       ~
     http_method_override: true
+    assets: ~
 
 # Twig Configuration
 twig:

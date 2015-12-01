@@ -15,7 +15,7 @@ class ConfigureMenuListener extends AbstractSecurityAwareMenuListener
     {
         $menu = $event->getMenu();
 
-        $account = $this->getCurrentAccount();
+        $account = $this->getCurrentUserAccount();
 
         if ($account) {
             $menu->addChild('Medias', ['route' => 'jaccob_media.home']);

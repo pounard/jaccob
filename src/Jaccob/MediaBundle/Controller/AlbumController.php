@@ -3,7 +3,7 @@
 namespace Jaccob\MediaBundle\Controller;
 
 use Jaccob\AccountBundle\AccountModelAware;
-use Jaccob\AccountBundle\Controller\AbstractUserAwareController;
+use Jaccob\AccountBundle\SecurityAware;
 use Jaccob\AccountBundle\Security\Access;
 use Jaccob\AccountBundle\Security\Crypt;
 
@@ -13,10 +13,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-class AlbumController extends AbstractUserAwareController
+class AlbumController extends Controller
 {
     use AccountModelAware;
     use MediaModelAware;
+    use SecurityAware;
 
     /**
      * Get media importer
@@ -169,6 +170,64 @@ class AlbumController extends AbstractUserAwareController
         }
 
         return $this->render('JaccobMediaBundle:Album:createFrom.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * Import form action
+     */
+    public function importAction(Request $request)
+    {
+        $form = $this
+            ->createFormBuilder()
+            ->add("source", 'text', [
+                'label'     => "Source",
+                'required'  => false,
+                'attr'      => ['placeholder' => "ftp://user:password@example.net/my/folder/photos.zip"],
+            ])
+            ->add('user_name', 'text', [
+                'label'     => "Album title",
+                'required'  => false,
+                'attr'      => ['placeholder' => "Emily's 7th anniversary"],
+            ])
+            ->add('access_level', 'choice', [
+                'label'     => "Visibility",
+                'choices'   => [
+                    Access::LEVEL_PRIVATE         => "Private",
+                    Access::LEVEL_PUBLIC_HIDDEN   => "Public (hidden)",
+                    Access::LEVEL_PUBLIC_VISIBLE  => "Public",
+                ],
+                'multiple'  => false,
+                'required'  => true,
+            ])
+            ->add("Import", 'submit', [
+                'attr' => ['class' => 'pull-right btn-primary'],
+            ])
+            ->getForm()
+        ;
+
+        if (Request::METHOD_POST === $request->getMethod()) {
+            if ($form->handleRequest($request)->isValid()) {
+
+                $data     = $form->getData();
+                $importer = $this->getImporter();
+
+                $album = $importer->importFromFolder($data['directory']);
+
+                // Do never tell the user if the mail exist or not
+                $this->addFlash('success', "Your album has been created");
+
+                return $this->redirectToRoute('jaccob_media.album.view', [
+                    'albumId' => $album->id,
+                ]);
+
+            } else {
+                $this->addFlash('danger', "Please check the values you filled");
+            }
+        }
+
+        return $this->render('JaccobMediaBundle:Album:import.html.twig', [
             'form' => $form->createView(),
         ]);
     }

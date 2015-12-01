@@ -4,14 +4,10 @@ namespace Jaccob\AccountBundle;
 
 use Jaccob\AccountBundle\Security\User\JaccobUser;
 
-use Symfony\Component\DependencyInjection\ContainerAware;
-use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
-
 /**
  * Provide a few helper functions regarding the user
  *
- * Classes implement this must implement the
- * \Symfony\Component\DependencyInjectionContainerAwareInterface interface
+ * This should be used on a container aware object
  */
 trait SecurityAware
 {
@@ -20,9 +16,14 @@ trait SecurityAware
      *
      * @return boolean
      */
-    protected function isLoggedIn()
+    protected function isCurrentUserLoggedIn()
     {
-        return null === $this->getCurrentUser();
+        return $this
+            ->container
+            ->get('security.token_storage')
+            ->getToken()
+            ->isAuthenticated()
+        ;
     }
 
     /**
@@ -30,9 +31,9 @@ trait SecurityAware
      *
      * @return boolean
      */
-    protected function isAnonymous()
+    protected function isCurrentUserAnonymous()
     {
-        return !$this->isLoggedIn();
+        return !$this->isCurrentUserLoggedIn();
     }
 
     /**
@@ -49,7 +50,7 @@ trait SecurityAware
     protected function getCurrentUser()
     {
         /* @var $currentUser \Jaccob\AccountBundle\Security\User\JaccobUser */
-        $token = $this->container->get('security.context')->getToken();
+        $token = $this->container->get('security.token_storage')->getToken();
         if ($token && !$token instanceof AnonymousToken) {
             return $token->getUser();
         }
@@ -62,7 +63,7 @@ trait SecurityAware
      *   If there is no logged in user, this returns null with no other kind
      *   of warning or error, please us isLoggedIn() or isAnonymous() before
      */
-    protected function getCurrentAccount()
+    protected function getCurrentUserAccount()
     {
         $user = $this->getCurrentUser();
 

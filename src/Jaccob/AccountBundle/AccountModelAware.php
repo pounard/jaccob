@@ -4,7 +4,7 @@ namespace Jaccob\AccountBundle;
 
 use PommProject\Foundation\Session;
 
-use Symfony\Component\DependencyInjection\ContainerAware;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 trait AccountModelAware
 {
@@ -35,7 +35,7 @@ trait AccountModelAware
         }
 
         // When we are working with an object plugged to the DIC.
-        if ($this instanceof ContainerAware) {
+        if ($this instanceof ContainerAwareInterface) {
             return $this->container->get('pomm')->getSession('default');
         }
 

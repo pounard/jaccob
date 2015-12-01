@@ -10,9 +10,10 @@ use Jaccob\MediaBundle\MediaModelAware;
 
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\Security\Core\Authorization\Voter\AbstractVoter;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
-class AlbumVoter extends AbstractVoter
+class AlbumVoter extends Voter
 {
     use MediaModelAware;
     use ContainerAwareTrait;
@@ -50,34 +51,26 @@ class AlbumVoter extends AbstractVoter
     /**
      * {@inheritdoc}
      */
-    protected function getSupportedAttributes()
+    protected function supports($attribute, $subject)
     {
-        return [self::VIEW, self::EDIT, self::SHARE];
+        return $subject instanceof Album && in_array($attribute, [self::VIEW, self::EDIT, self::SHARE]);
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function getSupportedClasses()
+    protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
     {
-        return [
-            'Jaccob\MediaBundle\Model\Album',
-        ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function isGranted($attribute, $album, $user = null)
-    {
+        $user = $token->getUser();
         $isAnonymous = is_string($user);
 
         if (!$isAnonymous && !$user instanceof JaccobUser) {
             return false;
         }
-        if (!$album instanceof Album) {
+        if (!$subject instanceof Album) {
             return false;
         }
+        $album = $subject; // Useless.
 
         $isAuthorized = false;
 

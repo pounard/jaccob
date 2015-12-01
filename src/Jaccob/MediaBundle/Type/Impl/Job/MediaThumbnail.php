@@ -6,10 +6,11 @@ use Jaccob\MediaBundle\Model\Media;
 use Jaccob\MediaBundle\Type\Job\JobInterface;
 use Jaccob\MediaBundle\Util\MediaHelperAwareTrait;
 
-use Symfony\Component\DependencyInjection\ContainerAware;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
-class MediaThumbnail extends ContainerAware implements JobInterface
+class MediaThumbnail implements JobInterface
 {
+    use ContainerAwareTrait;
     use MediaHelperAwareTrait;
 
     /**

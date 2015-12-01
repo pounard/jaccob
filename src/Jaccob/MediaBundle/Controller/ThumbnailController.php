@@ -2,8 +2,6 @@
 
 namespace Jaccob\MediaBundle\Controller;
 
-use Jaccob\AccountBundle\Controller\AbstractUserAwareController;
-
 use Jaccob\MediaBundle\MediaModelAware;
 use Jaccob\MediaBundle\Util\FileSystem;
 
@@ -21,7 +19,7 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
  * of security by offuscation (believe me, I know that this is very wrong) is
  * done by computing media's hash and use it for file system paths.
  */
-class ThumbnailController extends AbstractUserAwareController
+class ThumbnailController extends Controller
 {
     use MediaModelAware;
 

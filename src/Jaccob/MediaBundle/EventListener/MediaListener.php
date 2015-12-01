@@ -4,10 +4,12 @@ namespace Jaccob\MediaBundle\EventListener;
 
 use Jaccob\MediaBundle\Event\MediaEvent;
 
-use Symfony\Component\DependencyInjection\ContainerAware;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
-class MediaListener extends ContainerAware
+class MediaListener
 {
+    use ContainerAwareTrait;
+
     public function onMediaSave(MediaEvent $event)
     {
         $this

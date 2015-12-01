@@ -3,14 +3,10 @@
 namespace Jaccob\AccountBundle\Controller;
 
 use Jaccob\AccountBundle\AccountModelAware;
-use Jaccob\AccountBundle\Controller\AbstractUserAwareController;
-
-use PommProject\Foundation\Where;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 
-class AccountController extends AbstractUserAwareController
+class AccountController extends Controller
 {
     use AccountModelAware;
 

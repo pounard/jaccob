@@ -71,7 +71,7 @@ class PommPagerExtension extends \Twig_Extension implements ContainerAwareInterf
 
         /* @var $router \Symfony\Component\Routing\RouterInterface */
         $router = $this->container->get('router');
-        $query = $this->container->get('request')->request->all() + $routeArgs;
+        $query = $this->container->get('request_stack')->getCurrentRequest()->request->all() + $routeArgs;
 
         $variables = ['pages' => []];
 
