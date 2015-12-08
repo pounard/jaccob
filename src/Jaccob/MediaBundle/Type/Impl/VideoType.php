@@ -14,7 +14,7 @@ use Jaccob\MediaBundle\Util\MediaHelperAwareTrait;
 
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
-class VideoType extends AbstractType implements TypeInterface
+class VideoType extends AbstractType
 {
     use ContainerAwareTrait;
     use MediaHelperAwareTrait;
