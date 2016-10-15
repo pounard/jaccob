@@ -3,6 +3,7 @@
 namespace Jaccob\AccountBundle\Controller;
 
 use Jaccob\AccountBundle\AccountModelAware;
+use Jaccob\AccountBundle\Model\Account;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -38,9 +39,24 @@ class AccountController extends Controller
     /**
      * View account
      */
+    public function selfAction()
+    {
+        /** @var $account \Jaccob\AccountBundle\Model\Account */
+        $account = $this->getUser()->getAccount();
+
+        $this->denyAccessUnlessGranted('view', $account);
+
+        return $this->forward('JaccobAccountBundle:Account:view', ['id' => $account->getId()]);
+    }
+
+    /**
+     * View account
+     */
     public function viewAction($id)
     {
         $account = $this->findAccountOr404($id);
+
+        $this->denyAccessUnlessGranted('view', $account);
 
         return $this->render('JaccobAccountBundle:Account:view.html.twig', ['account' => $account]);
     }

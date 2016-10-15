@@ -59,7 +59,7 @@ class DefaultImporter implements ContainerAwareInterface
     private $workingDirectory;
 
     /**
-     * @var Jaccob\AccountBundle\Model\Account
+     * @var \Jaccob\AccountBundle\Model\Account
      */
     private $owner;
 

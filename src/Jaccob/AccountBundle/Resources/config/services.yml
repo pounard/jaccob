@@ -16,3 +16,9 @@ services:
             - [setContainer, ["@service_container"]]
         tags:
           - { name: kernel.event_listener, event: jaccob.menu_configure, method: onMenuConfigure }
+
+    jaccob.security.access.account_voter:
+        class: Jaccob\AccountBundle\Security\Authorization\Voter\AccountVoter
+        public: false
+        tags:
+            - { name: security.voter }

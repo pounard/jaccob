@@ -93,4 +93,14 @@ class Account extends FlexibleEntity
     {
         $this->set('salt', $value);
     }
+
+    /**
+     * Is user admin
+     *
+     * @return boolean
+     */
+    public function isAdmin()
+    {
+        return $this->get('is_admin');
+    }
 }

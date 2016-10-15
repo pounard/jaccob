@@ -1,6 +1,6 @@
 jaccob_account.home:
     path:     /
-    defaults: {_controller: 'JaccobAccountBundle:Default:index'}
+    defaults: { _controller: 'JaccobAccountBundle:Account:self' }
 
 jaccob_account.login:
     path:     /login

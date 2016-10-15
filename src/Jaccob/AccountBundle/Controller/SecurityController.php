@@ -6,6 +6,8 @@ use Jaccob\AccountBundle\AccountModelAware;
 use Jaccob\AccountBundle\Security\Crypt;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 
 class SecurityController extends Controller
@@ -30,70 +32,66 @@ class SecurityController extends Controller
     }
 
     /**
-     * Change password form
-     *
+     * Change password action.
+     */
     public function changePasswordAction(Request $request)
     {
+        /** @var $account \Jaccob\AccountBundle\Model\Account */
+        $account = $this->getUser()->getAccount();
+
+        $this->denyAccessUnlessGranted('edit', $account);
+
+        // Create the change password form.
         $form = $this
             ->createFormBuilder(null, [
                 'method' => Request::METHOD_POST,
                 'attr' => ['novalidate' => 'novalidate'],
             ])
-            ->add('email', 'email', [
-                'label'     => "Email",
-                'attr'      => ['placeholder' => "Please confirm your email address"],
+            ->add('password_old', PasswordType::class, [
+                'label'     => "Your current password",
                 'required'  => true,
             ])
-            ->add('pass_old', 'password', [
-                'label'     => "Current password",
-                'attr'      => ['placeholder' => "Please confirm your old password"],
+            ->add('password1', PasswordType::class, [
+                'label'     => "Password",
                 'required'  => true,
             ])
-            ->add('pass_new1', 'password', [
-                'label'     => "New password",
-                'attr'      => ['placeholder' => "Please type in your new password"],
-                'required'  => true,
-            ])
-            ->add('pass_new2', 'password', [
+            ->add('password2', PasswordType::class, [
                 'label'     => "Confirmation",
-                'attr'      => ['placeholder' => "Confirm here the new password"],
                 'required'  => true,
             ])
-            ->add('submit', 'submit', [
+            ->add('submit', SubmitType::class, [
                 'label' => "Change password",
             ])
             ->getForm()
         ;
 
         if (Request::METHOD_POST === $request->getMethod()) {
-            if ($form->handleRequest($request)->isValid()) {
-/*
-                $model    = $this->getAccountModel();
-                $account  = $model->findUserByMail($form['email']->getData());
 
-                if ($account) {
-                    $password = Crypt::createPassword();
-                    $model->updatePassword($account, $password);
+            $form->handleRequest($request);
 
-                    if ($this->getParameter('jaccob_account.password_request_as_message')) {
-                        $this->addFlash('danger', "Password is: " . $password);
-                    }
-                }
+            $data = $form->getData();
+            $matches = !empty($data['password1']) && $data['password1'] === $data['password2'];
+
+            if ($form->isValid() && $matches) {
+
+                $this->getAccountModel()->updatePassword($account, $data['password1']);
 
                 // Do never tell the user if the mail exist or not
-                $this->addFlash('success', "A newly generated password has been sent to your e-mail address");
+                $this->addFlash('success', "Your password has been changed");
 
-                return $this->redirectToRoute('jaccob_account.login');
+                return $this->redirectToRoute('jaccob_account.profile_view', [
+                    'id' => $account->getId(),
+                ]);
 
             } else {
-                $this->addFlash('danger', "Please verify information");
+                $this->addFlash('danger', "Please check that both passwords matches");
             }
         }
 
-        return $this->render('JaccobAccountBundle:Security:requestPassword.html.twig', [
+        return $this->render('JaccobAccountBundle:Security:changePassword.html.twig', [
             'form' => $form->createView(),
         ]);
-    } */
+    }
 
     /**
      * Request new password form.
@@ -226,15 +224,15 @@ class SecurityController extends Controller
                 'method' => Request::METHOD_POST,
                 'attr' => ['novalidate' => 'novalidate'],
             ])
-            ->add('password1', 'password', [
+            ->add('password1', PasswordType::class, [
                 'label'     => "Password",
                 'required'  => true,
             ])
-            ->add('password2', 'password', [
+            ->add('password2', PasswordType::class, [
                 'label'     => "Confirmation",
                 'required'  => true,
             ])
-            ->add('submit', 'submit', [
+            ->add('submit', PasswordType::submit, [
                 'label' => "Change password",
             ])
             ->getForm()
