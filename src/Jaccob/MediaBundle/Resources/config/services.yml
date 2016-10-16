@@ -6,10 +6,10 @@ parameters:
     jaccob_media.directory.relative: media/th
     jaccob_media.directory.public: "%kernel.root_dir%/../web/%jaccob_media.directory.relative%"
     jaccob_media.directory.upload: /data/private/photos
-    # jaccob_media.image.default: 
+    # jaccob_media.image.default:
 
     # Allowed media sizes
-    jaccob_media.size.list: [250, 285, 570, 855, 1140, 1440, full]
+    jaccob_media.size.list: [285, 855, 1440, full]
     # Default full screen width (media view with no sidebar)
     jaccob_media.size.fullscreen: 1440
     # Default media view width (media view with sidebar)

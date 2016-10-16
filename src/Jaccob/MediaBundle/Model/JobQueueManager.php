@@ -8,6 +8,8 @@ use Jaccob\MediaBundle\Type\Job\JobFactoryAwareTrait;
 
 use PommProject\Foundation\Where;
 
+use Symfony\Component\Console\Output\OutputInterface;
+
 /**
  * Job handling goes throught this, this is not a model because we definitly
  * do not need to have a model class nor a structure object, we only need to
@@ -62,8 +64,9 @@ class JobQueueManager
      *
      * @param mixed[] $data
      *   Row containing job data
+     * @param OutputInterface $output
      */
-    public function run($data)
+    public function run($data, OutputInterface $output)
     {
         if (!isset($data['type'])) {
             throw new \InvalidArgumentException("Missing 'type' for job");
@@ -82,15 +85,17 @@ class JobQueueManager
         }
 
         $runner = $this->jobFactory->createJob($data['type']);
-        return $runner->run($media, $data['data']);
+        return $runner->run($media, $data['data'], $output);
     }
 
     /**
      * Run next in queue
      *
+     * @param OutputInterface $output
+     *
      * @return boolean
      */
-    public function runNext()
+    public function runNext(OutputInterface $output)
     {
         $data = $this->fetchNext();
 
@@ -99,7 +104,7 @@ class JobQueueManager
         }
 
         try {
-            $ret = $this->run($data);
+            $ret = $this->run($data, $output);
 
             $this->delete($data['id']);
 

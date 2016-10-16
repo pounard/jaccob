@@ -80,7 +80,7 @@ class AlbumModel extends Model
             WHERE (
                 ss.id_session = $*
             )
-            ORDER BY a.ts_user_date_end DESC
+            ORDER BY a.ts_user_date_begin DESC
         ";
 
         $sql = strtr($sql, [
@@ -104,7 +104,7 @@ class AlbumModel extends Model
                 a.id_account = $*
                 OR aa.id_account = $*
             )
-            ORDER BY a.ts_user_date_end DESC
+            ORDER BY a.ts_user_date_begin DESC
         ";
 
         $sql = strtr($sql, [

@@ -10,6 +10,10 @@ use Jaccob\AccountBundle\Security\Crypt;
 use Jaccob\MediaBundle\MediaModelAware;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -49,7 +53,7 @@ class AlbumController extends Controller
 
         $page = $request->get('page', 1);
 
-        $mediaPager = $this->getMediaModel()->findByAlbum($albumId, 20, $page);
+        $mediaPager = $this->getMediaModel()->findByAlbum($albumId, 100, $page);
         $mediaList  = $mediaPager->getIterator();
 
         return $this->render('JaccobMediaBundle:Album:view.html.twig', [
@@ -140,12 +144,12 @@ class AlbumController extends Controller
 
         $form = $this
             ->createFormBuilder()
-            ->add('directory', 'choice', [
+            ->add('directory', ChoiceType::class, [
                 'label'     => "Select a folder",
                 'required'  => true,
-                'choices'   => $options,
+                'choices'   => array_flip($options),
             ])
-            ->add('Run the import', 'submit')
+            ->add('Run the import', SubmitType::class)
             ->getForm()
         ;
 
@@ -181,27 +185,27 @@ class AlbumController extends Controller
     {
         $form = $this
             ->createFormBuilder()
-            ->add("source", 'text', [
+            ->add("source", TextType::class, [
                 'label'     => "Source",
                 'required'  => false,
                 'attr'      => ['placeholder' => "ftp://user:password@example.net/my/folder/photos.zip"],
             ])
-            ->add('user_name', 'text', [
+            ->add('user_name', TextType::class, [
                 'label'     => "Album title",
                 'required'  => false,
                 'attr'      => ['placeholder' => "Emily's 7th anniversary"],
             ])
-            ->add('access_level', 'choice', [
+            ->add('access_level', ChoiceType::class, [
                 'label'     => "Visibility",
                 'choices'   => [
-                    Access::LEVEL_PRIVATE         => "Private",
-                    Access::LEVEL_PUBLIC_HIDDEN   => "Public (hidden)",
-                    Access::LEVEL_PUBLIC_VISIBLE  => "Public",
+                    "Private" => Access::LEVEL_PRIVATE,
+                    "Public (hidden in lists)" => Access::LEVEL_PUBLIC_HIDDEN,
+                    "Public" => Access::LEVEL_PUBLIC_VISIBLE,
                 ],
                 'multiple'  => false,
                 'required'  => true,
             ])
-            ->add("Import", 'submit', [
+            ->add("Import", SubmitType::class, [
                 'attr' => ['class' => 'pull-right btn-primary'],
             ])
             ->getForm()
@@ -243,22 +247,26 @@ class AlbumController extends Controller
 
         $form = $this
             ->createFormBuilder($album)
-            ->add('user_name', 'text', [
+            ->add('user_name', TextType::class, [
                 'label'     => "Album title",
                 'required'  => false,
                 'attr'      => ['placeholder' => $album->getDisplayName()],
             ])
-            ->add('access_level', 'choice', [
+//             ->add('fix_dates', CheckboxType::class, [
+//                 'label'     => "Fix dates from media list",
+//                 'required'  => false,
+//             ])
+            ->add('access_level', ChoiceType::class, [
                 'label'     => "Visibility",
                 'choices'   => [
-                    Access::LEVEL_PRIVATE         => "Private",
-                    Access::LEVEL_PUBLIC_HIDDEN   => "Public (hidden)",
-                    Access::LEVEL_PUBLIC_VISIBLE  => "Public",
+                    "Private" => Access::LEVEL_PRIVATE,
+                    "Public (hidden in lists)" => Access::LEVEL_PUBLIC_HIDDEN,
+                    "Public" => Access::LEVEL_PUBLIC_VISIBLE,
                 ],
                 'multiple'  => false,
                 'required'  => true,
             ])
-            ->add("Update", 'submit', [
+            ->add("Update", SubmitType::class, [
                 'attr' => ['class' => 'pull-right btn-primary'],
             ])
             ->getForm()
@@ -267,7 +275,25 @@ class AlbumController extends Controller
         if (Request::METHOD_POST === $request->getMethod()) {
             if ($form->handleRequest($request)->isValid()) {
 
-                $this->getAlbumModel()->updateOne($album, ['user_name', 'access_level']);
+                $data = $form->getData();
+//                if ($data['fix_dates']) {
+                    $ret = $this
+                        ->getMediaSession()
+                        ->getQueryManager()
+                        ->query(
+                            "select min(ts_user_date), max(ts_user_date) from media where id_album = $* group by id_album",
+                            [$albumId]
+                        )
+                    ;
+
+                    $values = $ret->current();
+                    if ($values) {
+                        $album->ts_user_date_begin = $values['min'];
+                        $album->ts_user_date_end = $values['max'];
+                    }
+//                }
+
+                $this->getAlbumModel()->updateOne($album, ['user_name', 'access_level', 'ts_user_date_begin', 'ts_user_date_end']);
                 $this->addFlash('success', "Changes have been successfully saved");
 
                 return $this->redirectToRoute('jaccob_media.album.view', [
@@ -304,16 +330,16 @@ class AlbumController extends Controller
 
         $form = $this
             ->createFormBuilder($album)
-            ->add('share_enabled', 'checkbox', [
+            ->add('share_enabled', CheckboxType::class, [
                 'label'     => "Share this album",
                 'required'  => false,
             ])
-            ->add('share_password', 'text', [
+            ->add('share_password', TextType::class, [
                 'label'     => "Set a password",
                 'required'  => false,
                 'attr'      => ['placeholder' => "Password"],
             ])
-            ->add($saveLabel, 'submit', [
+            ->add($saveLabel, SubmitType::class, [
                 'attr' => ['class' => 'pull-right btn-primary'],
             ])
             ->getForm()

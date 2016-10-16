@@ -36,7 +36,7 @@ class ImageType extends AbstractType
         }
 
         if (function_exists('exif_read_data')) {
-            foreach (exif_read_data($filename, self::EXIF_SECTIONS, true) as $section => $values) {
+            foreach (@exif_read_data($filename, self::EXIF_SECTIONS, true) as $section => $values) {
                 // Sad but true story the function batlantly ignores our
                 // sections parameters and returns everything...
                 if (false !== strpos(self::EXIF_SECTIONS, $section)) {

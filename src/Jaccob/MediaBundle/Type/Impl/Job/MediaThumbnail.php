@@ -7,6 +7,7 @@ use Jaccob\MediaBundle\Type\Job\JobInterface;
 use Jaccob\MediaBundle\Util\MediaHelperAwareTrait;
 
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class MediaThumbnail implements JobInterface
 {
@@ -16,7 +17,7 @@ class MediaThumbnail implements JobInterface
     /**
      * {@inheritdoc}
      */
-    public function run(Media $media, array $options = [])
+    public function run(Media $media, array $options = [], OutputInterface $output)
     {
         $container = $this->container;
         $allowedSizes = $container->getParameter('jaccob_media.size.list');
@@ -27,10 +28,11 @@ class MediaThumbnail implements JobInterface
 
                     $filename = $this->mediaHelper->getThumbnailPath($media, $size, $modifier);
                     if (file_exists($filename)) {
-                        print "Skipped '" . $filename . "'\n";
+                        // print "Skipped '" . $filename . "'\n";
+                        // $output->writeln('<comment>' . sprintf("%s: media skipped", $filename) . '</comment>');
                         continue;
                     }
-                    print "Generating '" . $filename . "'\n";
+                    // print "Generating '" . $filename . "'\n";
 
                     $this->mediaHelper->createThumbnail($media, $size, $modifier);
                 }

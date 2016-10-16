@@ -6,6 +6,8 @@ use Jaccob\MediaBundle\MediaModelAware;
 use Jaccob\MediaBundle\Model\Album;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 
 class ShareController extends Controller
@@ -101,11 +103,11 @@ class ShareController extends Controller
 
         $form = $this
             ->createFormBuilder()
-            ->add('password', 'text', [
+            ->add('password', TextType::class, [
                 'label'     => "Password",
                 'required'  => true,
             ])
-            ->add("Okay", 'submit')
+            ->add("Okay", SubmitType::class)
             ->getForm()
         ;
 

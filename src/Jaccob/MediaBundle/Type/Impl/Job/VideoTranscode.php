@@ -10,6 +10,7 @@ use Jaccob\MediaBundle\Type\Job\JobInterface;
 use Jaccob\MediaBundle\Util\MediaHelperAwareTrait;
 
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class VideoTranscode implements JobInterface
 {
@@ -20,7 +21,7 @@ class VideoTranscode implements JobInterface
     /**
      * {@inheritdoc}
      */
-    public function run(Media $media, array $options = [])
+    public function run(Media $media, array $options = [], OutputInterface $output)
     {
         $container = $this->container;
         $formats = $container->getParameter('jaccob_media.video.derivatives');

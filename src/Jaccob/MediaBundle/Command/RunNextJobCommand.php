@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Helper\ProgressBar;
 
 class RunNextJobCommand extends ContainerAwareCommand
 {
@@ -21,13 +22,7 @@ class RunNextJobCommand extends ContainerAwareCommand
         $this
             ->setName('media:job-run')
             ->setDescription('Run next job')
-            ->addOption(
-                'count',
-                'c',
-                InputOption::VALUE_OPTIONAL,
-                'How many jobs should be dequeued',
-                1
-            )
+            ->addOption('count', 'c', InputOption::VALUE_OPTIONAL, 'How many jobs should be dequeued', 1)
         ;
     }
 
@@ -45,8 +40,13 @@ class RunNextJobCommand extends ContainerAwareCommand
 
         $count = $input->getOption('count');
 
+        $progress = new ProgressBar($output, $count);
+
         for ($i = 0; $i < $count; ++$i) {
-            $jobManager->runNext();
+            $jobManager->runNext($output);
+            $progress->advance();
         }
+
+        $progress->finish();
     }
 }

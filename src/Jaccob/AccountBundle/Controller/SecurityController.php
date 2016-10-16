@@ -6,6 +6,7 @@ use Jaccob\AccountBundle\AccountModelAware;
 use Jaccob\AccountBundle\Security\Crypt;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
@@ -103,11 +104,11 @@ class SecurityController extends Controller
                 'method' => Request::METHOD_POST,
                 'attr' => ['novalidate' => 'novalidate'],
             ])
-            ->add('email', 'Symfony\Component\Form\Extension\Core\Type\EmailType', [
+            ->add(EmailType::class, 'Symfony\Component\Form\Extension\Core\Type\EmailType', [
                 'label' => "Email",
                 'required' => true,
             ])
-            ->add('submit', 'Symfony\Component\Form\Extension\Core\Type\SubmitType', [
+            ->add(SubmitType::class, 'Symfony\Component\Form\Extension\Core\Type\SubmitType', [
                 'label' => "Request new password",
             ])
             ->getForm()
@@ -232,7 +233,7 @@ class SecurityController extends Controller
                 'label'     => "Confirmation",
                 'required'  => true,
             ])
-            ->add('submit', PasswordType::submit, [
+            ->add('submit', SubmitType::class, [
                 'label' => "Change password",
             ])
             ->getForm()

@@ -7,6 +7,8 @@ use Jaccob\AccountBundle\AccountModelAware;
 use Jaccob\MediaBundle\MediaModelAware;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 
 class MediaController extends Controller
@@ -78,18 +80,18 @@ class MediaController extends Controller
 
         $form = $this
             ->createFormBuilder($media)
-            ->add('user_name', 'text', [
+            ->add('user_name', TextType::class, [
                 'label'     => "Media title",
                 'required'  => false,
                 'attr'      => ['placeholder' => $media->getDisplayName()],
             ])
-            ->add("update", 'submit', [
+            ->add("update", SubmitType::class, [
                 'attr' => [
                     'class' => 'pull-right btn-primary',
                     'value' => 'Update',
                 ],
             ])
-            ->add("set_cover", 'submit', [
+            ->add("set_cover", SubmitType::class, [
                 'attr' => [
                     'class' => 'pull-right btn-success',
                     'value' => "Set as cover",

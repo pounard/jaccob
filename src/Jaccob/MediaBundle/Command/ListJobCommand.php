@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Helper\Table;
 
 class ListJobCommand extends ContainerAwareCommand
 {
@@ -21,26 +22,9 @@ class ListJobCommand extends ContainerAwareCommand
         $this
             ->setName('media:job-list')
             ->setDescription('List queued jobs')
-            ->addOption(
-                'page',
-                'p',
-                InputOption::VALUE_OPTIONAL,
-                'Which page to display',
-                1
-            )
-            ->addOption(
-                'limit',
-                'l',
-                InputOption::VALUE_OPTIONAL,
-                'Number of elements to display',
-                20
-            )
-            ->addOption(
-                'type',
-                't',
-                InputOption::VALUE_OPTIONAL,
-                'Filter by type'
-            )
+            ->addOption('page', 'p', InputOption::VALUE_OPTIONAL, 'Which page to display', 1)
+            ->addOption( 'limit', 'l', InputOption::VALUE_OPTIONAL, 'Number of elements to display', 20)
+            ->addOption('type', 't', InputOption::VALUE_OPTIONAL, 'Filter by type')
         ;
     }
 
@@ -80,7 +64,8 @@ class ListJobCommand extends ContainerAwareCommand
             ];
         }
 
-        $this->getHelper('table')
+        $table = new Table($output);
+        $table
             ->setHeaders(['id', 'type', 'media', 'added', 'running', 'failed'])
             ->setRows($rows)
             ->render($output)

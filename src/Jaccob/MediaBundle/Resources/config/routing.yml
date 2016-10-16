@@ -42,9 +42,13 @@ jaccob_media.album.add:
     path:     /new-album
     defaults: { _controller: "JaccobMediaBundle:Album:create" }
 
-jaccob_media.album.create_from:
+jaccob_media.album.external_import:
     path:     /import
     defaults: { _controller: "JaccobMediaBundle:Album:import" }
+
+jaccob_media.album.create_from:
+    path:     /import/local
+    defaults: { _controller: "JaccobMediaBundle:Album:createFrom" }
 
 jaccob_media.media.view:
     path:     /view/{mediaId}

@@ -11,6 +11,7 @@
 
 {% block breadcrumb %}
   <li><a href="{{ path('jaccob_media.home') }}">Media</a></li>
+  <li>{{ album.ts_user_date_begin|date('Y') }}</li>
   <li><a href="{{ path('jaccob_media.album.view', {albumId: album.id}) }}">{{ album.displayName }}</a></li>
   <li class="active">{{ media.displayName }}</li>
 {% endblock %}

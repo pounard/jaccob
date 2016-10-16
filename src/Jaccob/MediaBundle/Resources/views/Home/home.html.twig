@@ -10,7 +10,20 @@
 {% endblock %}
 
 {% block main %}
+  {% set currentYear = 0 %}
+
   {% for album in albums %}
+
+    {% set year = album.ts_user_date_begin|date('Y') %}
+    {% if year != currentYear %}
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <h2>{{ year }}</h2>
+        </div>
+        {% set currentYear = year %}
+    {% endif %}
+
     <div class="col-md-3">
       <div class="album">
         <a href="{{ path('jaccob_media.album.view', {albumId: album.id}) }}">
