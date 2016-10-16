@@ -4,9 +4,16 @@
   {% if canAdd %}
     <a href="{{ path('jaccob_media.album.create_from') }}" class="btn btn-primary">
       <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-      New album
+      {{ "Create"|trans }}
+    </a>
+    <a href="{{ path('jaccob_media.album.external_import') }}" class="btn btn-primary">
+      <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+      {{ "Import"|trans }}
     </a>
   {% endif %}
+{% endblock %}
+
+{% block breadcrumb_container %}
 {% endblock %}
 
 {% block main %}

@@ -122,12 +122,6 @@ class SecurityController extends Controller
 
                 if ($account) {
 
-                    if ($this->getParameter('jaccob_account.password_request_as_message')) {
-                        $password = Crypt::createPassword();
-                        $model->updatePassword($account, $password);
-                        $this->addFlash('danger', "Password is: " . $password);
-                    }
-
                     $token = Crypt::createRandomPlainToken();
 
                     $queryManager = $this
