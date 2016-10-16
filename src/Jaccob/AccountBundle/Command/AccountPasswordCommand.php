@@ -21,7 +21,7 @@ class AccountPasswordCommand extends ContainerAwareCommand
     {
         $this
             ->setName('account:password')
-            ->setDescription('List queued jobs')
+            ->setDescription('Change account password')
             ->addArgument('mail', InputArgument::REQUIRED, "User's mail for which to set password")
         ;
     }

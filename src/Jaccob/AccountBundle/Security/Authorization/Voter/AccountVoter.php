@@ -55,7 +55,7 @@ class AccountVoter extends Voter
             case self::EDIT:
 
                 // Either the user is owner, or user
-                if (!$subject->getId() === $user->getAccount()->getId()) {
+                if ($subject->getId() === $user->getAccount()->getId()) {
                     $isAuthorized = true;
                 } else {
                     // FIXME: use roles instead
