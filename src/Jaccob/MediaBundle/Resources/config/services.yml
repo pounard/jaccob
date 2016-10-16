@@ -43,20 +43,6 @@ services:
         tags:
             - { name: security.voter }
 
-    jaccob_media.menu_provider:
-        class: Jaccob\MediaBundle\Menu\MediaMenuProvider
-        arguments: ["@knp_menu.factory"]
-        calls:
-            - [setContainer, ["@service_container"]]
-        tags: [{ name: knp_menu.provider }]
-
-    jaccob_media.menu_listener:
-        class: Jaccob\MediaBundle\EventListener\ConfigureMenuListener
-        calls:
-            - [setContainer, ["@service_container"]]
-        tags:
-          - { name: kernel.event_listener, event: jaccob.menu_configure, method: onMenuConfigure }
-
     jaccob_media.media_listener:
         class: Jaccob\MediaBundle\EventListener\MediaListener
         calls:

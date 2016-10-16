@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}Welcome!{% endblock %}</title>
     {% block stylesheets %}
-    {% stylesheets '%kernel.root_dir%/Resources/public/less/style.less' filter='lessphp,cssrewrite' %} 
+    {% stylesheets '%kernel.root_dir%/Resources/public/less/style.less' filter='lessphp,cssrewrite' %}
         <link rel="stylesheet" href="{{ asset_url }}" />
       {% endstylesheets %}
     {% endblock %}
@@ -25,14 +25,28 @@
           </button>
           <a href="{{ path('_welcome') }}" class="navbar-brand">{% block brandname %}Jaccob{% endblock %}</a>
         </div>
-        {{ knp_menu_render('main',
-          {
-            'template': '::menu/mainMenu.html.twig',
-            'currentClass': 'active',
-            'ancestorClass': 'active',
-            'depth': 1
-          })
-        }}
+        <div class="navbar-collapse collapse" id="navbar">
+          <ul class="nav navbar-nav navbar-right">
+            {% if app.user %}
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                  Jean <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                  <li>
+                    <a href="{{ path('jaccob_media.home') }}">{{ "Medias"|trans }}</a>
+                  </li>
+                  <li role="separator" class="divider"></li>
+                  <li>
+                    <a href="{{ path('jaccob_account.logout') }}">{{ "Log-out"|trans }}</a>
+                  </li>
+                </ul>
+              </li>
+            {% else %}
+              <li><a href="{{ path('jaccob_account.login') }}">{{ "Sign-in"|trans }}</a></li>
+            {% endif %}
+          </ul>
+        </div>
       </div>
     </nav>
     {% if app.session.flashbag.peekAll %}

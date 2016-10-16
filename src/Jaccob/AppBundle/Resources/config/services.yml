@@ -9,13 +9,6 @@ parameters:
 
 services:
 
-    jaccob.menu_provider:
-        class: Jaccob\AppBundle\Menu\MainMenuProvider
-        arguments: ["@knp_menu.factory"]
-        calls:
-            - [setContainer, ["@service_container"]]
-        tags: [{ name: knp_menu.provider }]
-
     jaccob.redis.client:
         class: Redis
         calls:

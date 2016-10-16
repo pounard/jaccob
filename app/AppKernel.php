@@ -17,7 +17,6 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new PommProject\PommBundle\PommBundle(),
-            new Knp\Bundle\MenuBundle\KnpMenuBundle(),
             new Jaccob\AppBundle\JaccobAppBundle(),
             new Jaccob\AccountBundle\JaccobAccountBundle(),
             //new Jaccob\TaskBundle\JaccobTaskBundle(),

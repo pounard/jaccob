@@ -3,21 +3,7 @@ parameters:
 
 services:
 
-    jaccob_task.menu_provider:
-        class: Jaccob\TaskBundle\Menu\TaskMenuProvider
-        arguments: ["@knp_menu.factory"]
-        calls:
-            - [setContainer, ["@service_container"]]
-        tags: [{ name: knp_menu.provider }]
-
     jaccob_account.form.task:
         class: "%jaccob_task.form.task.class%"
         tags:
             - { name: form.type, alias: jaccob_taskbundle_task }
-
-    jaccob_task.menu_listener:
-        class: Jaccob\TaskBundle\EventListener\ConfigureMenuListener
-        calls:
-            - [setContainer, ["@service_container"]]
-        tags:
-          - { name: kernel.event_listener, event: jaccob.menu_configure, method: onMenuConfigure }

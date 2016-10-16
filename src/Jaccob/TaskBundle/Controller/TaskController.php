@@ -78,16 +78,6 @@ class TaskController extends Controller
     }
 
     /**
-     * Menu
-     */
-    public function menuAction()
-    {
-        $items = [];
-
-        return $this->render('JaccobTaskBundle:Task:menu.html.twig', ['items' => $items]);
-    }
-
-    /**
      * View task
      */
     public function viewAction($id)

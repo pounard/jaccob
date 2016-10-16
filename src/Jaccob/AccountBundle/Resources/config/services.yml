@@ -10,13 +10,6 @@ services:
         calls:
           - [setAccountSession, ["@=service('pomm').getSession('default')"]]
 
-    jaccob_account.menu_listener:
-        class: Jaccob\AccountBundle\EventListener\ConfigureMenuListener
-        calls:
-            - [setContainer, ["@service_container"]]
-        tags:
-          - { name: kernel.event_listener, event: jaccob.menu_configure, method: onMenuConfigure }
-
     jaccob.security.access.account_voter:
         class: Jaccob\AccountBundle\Security\Authorization\Voter\AccountVoter
         public: false

@@ -34,12 +34,6 @@ twig:
         - "bootstrap_3_layout.html.twig"
         - "bootstrap_3_horizontal_layout.html.twig"
 
-knp_menu:
-#    twig:
-#        template: knp_menu.html.twig
-    templating: false
-    default_renderer: twig
-
 # Assetic Configuration
 assetic:
     debug:          "%kernel.debug%"
