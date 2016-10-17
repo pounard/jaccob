@@ -44,11 +44,11 @@ jaccob_media.album.add:
 
 jaccob_media.album.external_import:
     path:     /import
-    defaults: { _controller: "JaccobMediaBundle:Album:import" }
+    defaults: { _controller: "JaccobMediaBundle:Import:import" }
 
 jaccob_media.album.create_from:
     path:     /import/local
-    defaults: { _controller: "JaccobMediaBundle:Album:createFrom" }
+    defaults: { _controller: "JaccobMediaBundle:Import:createFrom" }
 
 jaccob_media.media.view:
     path:     /view/{mediaId}
