@@ -15,6 +15,6 @@
     {% for derivative in derivatives %}
       <source srcset="{{ derivative.href }}" media="(max-width: {{ derivative.width }}px)"/>
     {% endfor %}
-    <img srcset="{{ default.href }}" alt="{{ media.displayName }}"/>
+    {% spaceless %}<img srcset="{{ default.href }}" alt="{{ media.displayName }}"/>{% endspaceless %}
   </picture>
 {% endblock %}

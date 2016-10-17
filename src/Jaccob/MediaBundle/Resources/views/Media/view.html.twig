@@ -4,9 +4,13 @@
   {% if canEdit %}
     <a href="{{ path('jaccob_media.media.edit', {mediaId: media.id}) }}" class="btn btn-warning">
       <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
-      Modify
+      {{ "Edit"|trans }}
     </a>
   {% endif %}
+  <a href="{{ path('jaccob_media.media.view.full', {mediaId: media.id}) }}" class="btn btn-primary">
+    <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
+    {{ "Fullscreen"|trans }}
+  </a>
 {% endblock %}
 
 {% block breadcrumb %}
@@ -17,13 +21,36 @@
 {% endblock %}
 
 {% block mainwapper %}
-  <div class="container-fluid">
+  <div class="container">
     <div class="row">
       <div class="col-md-9 media-view">
         {{ media_full(media) }}
       </div>
       <div class="col-md-3">
-        Sidebar
+        <h3>{{ "Information" }}</h3>
+        <dl>
+          <dt>{{ "Author"|trans }}</dt>
+          <dd>{{ owner.username }}</dd>
+        </dl>
+        <dl>
+          <dt>{{ "File name"|trans }}</dt>
+          <dd>{{ media.name }}</dd>
+        </dl>
+        <dl>
+          <dt>{{ "File size"|trans }}</dt>
+          <dd>{{ media.filesize }}</dd>
+        </dl>
+        <dl>
+          <dt>{{ "Original size"|trans }}</dt>
+          <dd>{{ media.width }}x{{ media.height }}</dd>
+        </dl>
+        {% if device %}
+          <dl>
+            <dt>{{ "Device"|trans }}</dt>
+            <dd>{{ device.name }}</dd>
+          </dl>
+        {% endif %}
+        <h3>{{ "Metadata" }}</h3>
       </div>
     </div>
   </div>

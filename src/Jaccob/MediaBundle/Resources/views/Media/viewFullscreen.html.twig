@@ -6,7 +6,7 @@
     <div class="image">
       {{ media_full(media) }}
 
-      <a class="close-button" href="{{ path('jaccob_media.album.view', {albumId: media.id_album}) }}">
+      <a class="close-button" href="{{ path('jaccob_media.media.view', {mediaId: media.id}) }}">
         <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
         Close
       </a>
